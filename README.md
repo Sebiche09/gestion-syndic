@@ -7,6 +7,7 @@ La version est décompoée en trois parties :
 - a => version majeur
 - b => version mineur
 - c => patch de version
+
 Par exemple :
 - la version avec le scan de facture fonctionnel serait nomée : 0.1.0 - scan de facture fonctionnel
 - la version avec les templates serait nomée : 0.2.0 - templates de facture fonctionnel
