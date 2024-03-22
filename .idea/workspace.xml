@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9acde0ce-bd09-4c00-a7fb-622056ad6ad0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/server/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/app/server/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/server/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/app/server/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/server/server.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,6 +42,8 @@
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "last_opened_file_path": "C:/Users/Sebas/Desktop/gestion-syndic",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm"
   }
 }]]></component>
