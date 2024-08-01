@@ -50,7 +50,23 @@ services:
       dockerfile: Dockerfile-angular 
     container_name: angular
     ports:
-      - "80:4200"  # HOTE:CONTAINER
+      - "80:4200"
+    networks:
+      - my_network
+
+  ftp:
+    image: stilliard/pure-ftpd:hardened
+    container_name: ftp
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    environment:
+      PUBLICHOST: "127.0.0.1"
+      FTP_USER_NAME: "user"
+      FTP_USER_PASS: "pass"
+      FTP_USER_HOME: "/home/ftpusers/user"
+    volumes:
+      - ftpdata:/home/ftpusers/user
     networks:
       - my_network
 
@@ -60,3 +76,4 @@ networks:
 
 volumes:
   pgdata:
+  ftpdata:
