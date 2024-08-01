@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres
+    container_name: postgres_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - my_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "81:80"   # HOTE:CONTAINER
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - db
+    networks:
+      - my_network
+
+  go_api:
+    build:
+      context: .
+      dockerfile: Dockerfile-go
+    container_name: go_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
+    networks:
+      - my_network
+  
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-angular 
+    container_name: angular
+    ports:
+      - "80:4200"  # HOTE:CONTAINER
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  pgdata:
