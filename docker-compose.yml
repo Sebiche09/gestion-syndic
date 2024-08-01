@@ -70,6 +70,17 @@ services:
     networks:
       - my_network
 
+  ocr:
+    build:
+      context: .
+      dockerfile: Dockerfile-ocr
+    container_name: ocr
+    volumes:
+      - ftpdata:/home/ftpusers/user
+    networks:
+      - my_network
+    restart: always
+
 networks:
   my_network:
     driver: bridge
