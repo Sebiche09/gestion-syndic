@@ -1,0 +1,99 @@
+services:
+  db:
+    image: postgres:13-alpine
+    container_name: postgres_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - my_network
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "81:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - my_network
+    restart: always
+
+  go_api:
+    build:
+      context: .
+      dockerfile: Dockerfile-go
+    container_name: go_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - my_network
+    restart: always
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-angular
+    container_name: angular
+    ports:
+      - "80:4200"
+    networks:
+      - my_network
+    deploy:
+      replicas: 3
+    restart: always
+
+  ftp:
+    image: stilliard/pure-ftpd:hardened
+    container_name: ftp
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    environment:
+      PUBLICHOST: "127.0.0.1"
+      FTP_USER_NAME: "user"
+      FTP_USER_PASS: "pass"
+      FTP_USER_HOME: "/home/ftpusers/user"
+    volumes:
+      - ftpdata:/home/ftpusers/user
+    networks:
+      - my_network
+    restart: always
+
+  ocr:
+    build:
+      context: .
+      dockerfile: Dockerfile-ocr
+    container_name: ocr
+    volumes:
+      - ftpdata:/home/ftpusers/user
+    networks:
+      - my_network
+    restart: always
+
+networks:
+  my_network:
+    driver: overlay
+
+volumes:
+  pgdata:
+    driver: local
+  ftpdata:
+    driver: local
