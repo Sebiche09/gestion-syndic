@@ -43,6 +43,9 @@ services:
       DB_NAME: postgres
     networks:
       - my_network
+    volumes:
+      - ./backend:/app 
+    command: air
   
   frontend:
     build:

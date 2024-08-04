@@ -2,12 +2,14 @@ FROM golang:1.22.5-alpine AS builder
 WORKDIR /app
 COPY backend/ .
 RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o go_api .
+RUN go install github.com/air-verse/air@latest
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /app/tmp/main .
 
-FROM alpine:latest
+FROM golang:1.22.5-alpine
 WORKDIR /app
-COPY --from=builder /app/go_api .
-RUN chmod +x /app/go_api
+COPY --from=builder /app/tmp/main /app/tmp/main  
+COPY --from=builder /go/bin/air /usr/local/bin/air 
+RUN chmod +x /app/tmp/main  
 EXPOSE 8080
-CMD ["./go_api"]
+CMD ["air"]
 
