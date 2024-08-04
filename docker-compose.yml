@@ -53,6 +53,11 @@ services:
       - "80:4200"
     networks:
       - my_network
+    volumes:
+      - ./frontend:/usr/src/app
+    command: npm start
+    environment:
+      - CHOKIDAR_USEPOLLING=true 
 
   ftp:
     image: stilliard/pure-ftpd:hardened
