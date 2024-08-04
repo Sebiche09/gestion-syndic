@@ -17,7 +17,7 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     ports:
-      - "81:80"   # HOTE:CONTAINER
+      - "81:80" 
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@gmail.com
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -35,12 +35,18 @@ services:
       - "8080:8080"
     depends_on:
       - db
+      - ftp
     environment:
       DB_HOST: db
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: postgres
+      APP_ENV: development
+      FTP_SERVER: ftp:21
+      FTP_USER: user
+      FTP_PASSWORD: pass
+      FTP_DIR: /home/ftpusers/user
     networks:
       - my_network
     volumes:
