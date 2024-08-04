@@ -1,0 +1,13 @@
+FROM stilliard/pure-ftpd:hardened
+
+# Copier le script d'entrée dans le conteneur
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Donner les permissions d'exécution au script
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Définir le script comme point d'entrée du conteneur
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Exécuter la commande par défaut (démarrer le serveur FTP)
+CMD ["pure-ftpd", "-c", "10", "-C", "5", "-l", "puredb:/etc/pure-ftpd/pureftpd.pdb", "-E", "-j", "-R"]

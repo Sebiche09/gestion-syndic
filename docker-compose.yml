@@ -63,7 +63,9 @@ services:
       - CHOKIDAR_USEPOLLING=true 
 
   ftp:
-    image: stilliard/pure-ftpd:hardened
+    build:
+      context: .
+      dockerfile: Dockerfile-ftp
     container_name: ftp
     ports:
       - "21:21"
