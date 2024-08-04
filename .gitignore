@@ -1,0 +1,42 @@
+# Ignorer les répertoires de build
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Ignorer les dépendances Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# Ignorer les fichiers spécifiques aux IDE
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Ignorer les fichiers spécifiques à Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Ignorer les fichiers générés par Angular
+/.angular/cache
+
+# Ignorer les caches et fichiers temporaires
+.sass-cache/
+.connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# Ignorer les fichiers systèmes
+.DS_Store
+Thumbs.db

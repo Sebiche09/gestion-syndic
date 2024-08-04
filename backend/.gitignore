@@ -1,0 +1,4 @@
+# backend/.gitignore
+/bin/
+pkg/
+*.log
