@@ -1,2 +1,6 @@
-pytesseract
+Flask
+paddlepaddle
+paddleocr>=2.8.1
 Pillow
+opencv-python-headless
+numpy

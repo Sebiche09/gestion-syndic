@@ -36,6 +36,7 @@ services:
     depends_on:
       - db
       - ftp
+      - ocr
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -93,9 +94,18 @@ services:
     container_name: ocr
     volumes:
       - ftpdata:/home/ftpusers/user
+    deploy:
+      resources:
+        limits:
+          memory: 2g 
+        reservations:
+          memory: 1g
     networks:
       - my_network
+    ports:
+      - "5000:5000"
     restart: always
+
 
 networks:
   my_network:

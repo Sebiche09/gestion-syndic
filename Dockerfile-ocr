@@ -1,17 +1,31 @@
 FROM python:3.9-slim
 
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
+# Mettre à jour et installer les bibliothèques nécessaires
+RUN apt-get update && \
+    apt-get install -y \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
+# Copier le fichier requirements.txt et installer les packages Python
 COPY ocr/requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Installer ou mettre à jour PaddleOCR et PaddlePaddle
+RUN pip install --upgrade paddleocr paddlepaddle
+
+# Copier le script Python dans le conteneur
 COPY ocr/ocr_script.py /app/ocr_script.py
 
+# Exposer le port 5000
+EXPOSE 5000
+
+# Définir la commande à exécuter
 CMD ["python", "ocr_script.py"]
-
-
