@@ -28,7 +28,7 @@ Dans un premier temps, il faudra utiliser un serveur chez Hostinger
 - container zabbix
 - Serveur isolé pour backups
 
-##Lancement du programme : 
+## Lancement du programme : 
 Dans le dossier principale gestion-syndic, faire la commande : docker-compose up -d
 une fois fini, 
 faire la commande : docker exec -it ollama ollama run llama3
