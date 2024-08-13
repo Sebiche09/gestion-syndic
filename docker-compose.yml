@@ -37,6 +37,7 @@ services:
       - db
       - ftp
       - ocr
+      - ollama
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -48,6 +49,7 @@ services:
       FTP_USER: user
       FTP_PASSWORD: pass
       FTP_DIR: /home/ftpusers/user
+      OLLAMA_URL: http://ollama:11434/api/generate
     networks:
       - my_network
     volumes:
@@ -106,6 +108,15 @@ services:
       - "5000:5000"
     restart: always
 
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    networks:
+      - my_network
 
 networks:
   my_network:
@@ -114,3 +125,4 @@ networks:
 volumes:
   pgdata:
   ftpdata:
+  ollama:

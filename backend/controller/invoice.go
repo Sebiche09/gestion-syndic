@@ -51,28 +51,45 @@ func sendToPaddleOCR(file io.Reader, filename string) (map[string]interface{}, e
 	return ocrResult, nil
 }
 
-// Fonction pour envoyer le texte extrait à Mistral
-/*func sendToMistral(text string) (map[string]interface{}, error) {
-	mistralData := map[string]string{"text": text}
-	mistralBody, err := json.Marshal(mistralData)
+// Fonction pour envoyer le texte extrait à Ollama
+func sendToOllama(prompt string, model string) (string, error) {
+	requestData := map[string]string{"prompt": prompt, "model": model}
+	requestBody, err := json.Marshal(requestData)
 	if err != nil {
-		return nil, err
+		return "", fmt.Errorf("failed to marshal request data: %w", err)
 	}
 
-	resp, err := http.Post("http://mistral:6000/process", "application/json", bytes.NewReader(mistralBody))
+	resp, err := http.Post("http://ollama:11434/api/generate", "application/json", bytes.NewReader(requestBody))
 	if err != nil {
-		return nil, err
+		return "", fmt.Errorf("failed to send request: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var mistralResult map[string]interface{}
-	err = json.NewDecoder(resp.Body).Decode(&mistralResult)
-	if err != nil {
-		return nil, err
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	return mistralResult, nil
-}*/
+	var responseMap map[string]interface{}
+	fullResponse := ""
+	for {
+		if err := json.NewDecoder(resp.Body).Decode(&responseMap); err != nil {
+			return "", fmt.Errorf("failed to decode response: %w", err)
+		}
+
+		// Collect the response part
+		if responsePart, ok := responseMap["response"].(string); ok {
+			fullResponse += responsePart
+		}
+
+		// Check if the response is complete
+		if done, ok := responseMap["done"].(bool); ok && done {
+			break
+		}
+		// Optionally wait a bit before polling again (implement a delay or use another approach if needed)
+	}
+
+	return fullResponse, nil
+}
 
 // Handler pour le endpoint de téléchargement
 func UploadHandler(c *gin.Context) {
@@ -102,15 +119,16 @@ func UploadHandler(c *gin.Context) {
 		handleError(c, nil, "Error extracting text from OCR response", http.StatusInternalServerError)
 		return
 	}
-
-	// Envoyer le texte extrait à Mistral
-	/*mistralResult, err := sendToMistral(text)
+	prompt := "peux tu récupérer le numéro de facture, le nom du fournisseur et me le structurer en tiret à partir du texte suivant : " + text
+	model := "llama3"
+	// Envoyer le texte extrait à Ollama
+	ollamaResult, err := sendToOllama(prompt, model)
 	if err != nil {
-	     handleError(c, err, "Error sending request to Mistral", http.StatusInternalServerError)
-	    return
-	}*/
+		handleError(c, err, "Error sending request to Mistral", http.StatusInternalServerError)
+		return
+	}
 
-	c.JSON(http.StatusOK, text)
+	c.JSON(http.StatusOK, ollamaResult)
 }
 
 // UploadHandler gère les requêtes d'upload de fichier
