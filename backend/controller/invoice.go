@@ -20,6 +20,7 @@ import (
 
 // UploadHandler gère les requêtes d'upload de fichier
 func UploadHandler(c *gin.Context) {
+	// permet de structurer la requête pour envoyer le fichier à PaddleOCR
 	err := c.Request.ParseMultipartForm(10 << 20)
 	if err != nil {
 		handleError(c, err, "Error parsing form data", http.StatusBadRequest)
@@ -84,11 +85,13 @@ func UploadHandler(c *gin.Context) {
 func sendToPaddleOCR(file io.Reader, filename string) (map[string]interface{}, error) {
 	//Permet de structurer la requête pour envoyer le fichier à PaddleOCR
 	var requestBody bytes.Buffer
+	// Créer un writer multipart pour la requête HTTP avec le fichier à envoyer à PaddleOCR
 	writer := multipart.NewWriter(&requestBody)
 	part, err := writer.CreateFormFile("file", filename)
 	if err != nil {
 		return nil, err
 	}
+	// Copier le contenu du fichier dans le writer
 	_, err = io.Copy(part, file)
 	if err != nil {
 		return nil, err

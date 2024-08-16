@@ -8,7 +8,7 @@ import gc
 app = Flask(__name__)
 
 # Initialisez PaddleOCR avec les paramètres appropriés
-ocr = PaddleOCR(use_angle_cls=True, lang='fr')  # Utilisez 'fr' pour la langue française
+ocr = PaddleOCR(use_angle_cls=True, lang='fr')
 
 @app.route('/ocr', methods=['POST'])
 def ocr_endpoint():
