@@ -55,7 +55,10 @@ services:
     volumes:
       - ./backend:/app 
     command: air
-  
+    security_opt:
+    - seccomp:unconfined 
+    privileged: true
+
   frontend:
     build:
       context: .

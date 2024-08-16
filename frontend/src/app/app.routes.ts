@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { InvoiceUploadComponent } from './components/invoice-upload/invoice-upload.component';
+import { FileUploadComponent } from './components/invoice-upload/invoice-upload.component';
 
 export const routes: Routes = [
-  { path: 'upload', component: InvoiceUploadComponent },
+  { path: 'upload', component: FileUploadComponent },
   { path: '', redirectTo: '/upload', pathMatch: 'full' }
 ];
