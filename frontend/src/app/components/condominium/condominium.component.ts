@@ -19,41 +19,41 @@ export class CondominiumComponent implements OnInit {
 
   private fromUrlCreateCondominium = environment.apiUrls.condominiumApi;
 
-  civilityTypes: any[] = [];
-  receivingMethods: any[] = [];
+  public civilityTypes: any[] = [];
+  public receivingMethods: any[] = [];
 
   formCategoriesName = {
     informations: [
-      {id: "name", name: "Name", type: "text", list: ""},
-      {id: "prefix", name: "Prefix", type: "text", list: ""},
-      {id: "description", name: "Description", type: "text", list: ""},
+      {id: "name", name: "Name", type: "text"},
+      {id: "prefix", name: "Prefix", type: "text"},
+      {id: "description", name: "Description", type: "text"},
     ],
 
     address: [
-      {id: "street", name: "Street", type: "text", list: ""},
-      {id: "number", name: "Number", type: "text", list: ""},
-      {id: "addressComplement", name: "Address Complement", type: "text", list: ""},
-      {id: "city", name: "City", type: "text", list: ""},
-      {id: "postalCode", name: "Postal code", type: "text", list: ""},
-      {id: "country", name: "Country", type: "text", list: ""},
+      {id: "street", name: "Street", type: "text"},
+      {id: "number", name: "Number", type: "text"},
+      {id: "addressComplement", name: "Address Complement", type: "text"},
+      {id: "city", name: "City", type: "text"},
+      {id: "postalCode", name: "Postal code", type: "text"},
+      {id: "country", name: "Country", type: "text"},
     ],
 
     ftpBlueprint: [
-      {id: "blueprint", name: "Blueprint FTP", type: "text", list: ""},
+      {id: "blueprint", name: "Blueprint FTP", type: "text"},
     ],
 
     concierge: [
-      {id: "name", name: "Name", type: "text", list: ""},
-      {id: "surname", name: "Surname", type: "text", list: ""},
-      {id: "email", name: "Email", type: "text", list: ""},
-      {id: "phone", name: "Phone", type: "text", list: ""},
-      {id: "corporation", name: "Corporation", type: "text", list: ""},
-      {id: "iban", name: "IBAN", type: "text", list: ""},
-      {id: "birthdate", name: "Birthdate", type: "text", list: ""},
-      {id: "civility", name: "Civility", type: "selector", list: this.civilityTypes},
-      {id: "documentReceivingMethod", name: "Document Receiving Method", type: "text", list: ""},
-      {id: "reminderDelay", name: "Reminder Delay", type: "text", list: ""},
-      {id: "reminderReceivingMethod", name: "Reminder Receiving Method", type: "text", list: ""},
+      {id: "name", name: "Name", type: "text"},
+      {id: "surname", name: "Surname", type: "text"},
+      {id: "email", name: "Email", type: "text"},
+      {id: "phone", name: "Phone", type: "text"},
+      {id: "corporation", name: "Corporation", type: "text"},
+      {id: "iban", name: "IBAN", type: "text"},
+      {id: "birthdate", name: "Birthdate", type: "text"},
+      {id: "civility", name: "Civility", type: "selector"},
+      {id: "documentReceivingMethod", name: "Document Receiving Method", type: "selector"},
+      {id: "reminderDelay", name: "Reminder Delay", type: "text"},
+      {id: "reminderReceivingMethod", name: "Reminder Receiving Method", type: "selector"},
     ],
   };
 

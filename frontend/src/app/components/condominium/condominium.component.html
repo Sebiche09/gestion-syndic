@@ -9,30 +9,38 @@
 
                     @if (element.type == "text") {
                         <input [id]="element.id" [type]="element.type" pInputText [formControlName]="element.id">
+                        
                     }
-                    @else if (element.type == "selector") {
+                    
+                    @else if (element.id == "civility") {
                         <select [name]="element.id">
-                            
-                            @for (option of element.list; track option.type) {
-                                
+                            <option [value]=""> {{ "" }} </option>
+                            @for (option of civilityTypes; track option.type) {
                                 <option [value]="option.type"> {{ option.type }} </option>
                             }
-
                         </select>
                     }
                     
+                    @else if (element.id == "documentReceivingMethod") {
+                        <select [name]="element.id">
+                            <option [value]=""> {{ "" }} </option>
+                            @for (option of receivingMethods; track option.type) {
+                                <option [value]="option.type"> {{ option.type }} </option>
+                            }
+                        </select>
+                    }
+                    
+                    @else if (element.id == "reminderReceivingMethod") {
+                        <select [name]="element.id">
+                            <option [value]=""> {{ "" }} </option>
+                            @for (option of receivingMethods; track option.type) {
+                                <option [value]="option.type"> {{ option.type }} </option>
+                            }
+                        </select>
+                    }
                 </p-floatLabel>
             }
-    
         </div>
     }
-
-    <select>
-
-        @for (option of civilityTypes; track option.type) {
-            <option [value]="option.type"> {{ option.type }} </option>
-        }
-    </select>
-
     <button type="submit" [disabled]="!createCondominiumForm.valid">submit</button>
 </form>
