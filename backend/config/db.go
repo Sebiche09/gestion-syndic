@@ -30,22 +30,38 @@ func SeedDatabase() {
 		log.Println("Civility data seeded successfully")
 	}
 
-	// Insert default receiving methods
-	if err := DB.Model(&models.ReceivingMethod{}).Count(&count).Error; err != nil {
-		log.Fatal("Failed to count receiving method entries: ", err)
+	// Insert default document receiving methods
+	if err := DB.Model(&models.DocumentReceivingMethod{}).Count(&count).Error; err != nil {
+		log.Fatal("Failed to count document receiving method entries: ", err)
 	}
 	if count == 0 {
-		receivingMethods := []models.ReceivingMethod{
+		documentReceivingMethods := []models.DocumentReceivingMethod{
+			{Type: "Email"},
+			{Type: "Courrier"},
+			{Type: "Fax"},
+			{Type: "Recommandé"},
+		}
+		if err := DB.Create(&documentReceivingMethods).Error; err != nil {
+			log.Fatal("Failed to seed receiving method data: ", err)
+		}
+		log.Println("Document receiving method data seeded successfully")
+	}
+	// Insert default reminder receiving methods
+	if err := DB.Model(&models.ReminderReceivingMethod{}).Count(&count).Error; err != nil {
+		log.Fatal("Failed to count reminder receiving method entries: ", err)
+	}
+	if count == 0 {
+		reminderReceivingMethods := []models.ReminderReceivingMethod{
 			{Type: "Email"},
 			{Type: "Courrier"},
 			{Type: "SMS"},
 			{Type: "Fax"},
 			{Type: "Recommandé"},
 		}
-		if err := DB.Create(&receivingMethods).Error; err != nil {
+		if err := DB.Create(&reminderReceivingMethods).Error; err != nil {
 			log.Fatal("Failed to seed receiving method data: ", err)
 		}
-		log.Println("Receiving method data seeded successfully")
+		log.Println("Reminder receiving method data seeded successfully")
 	}
 }
 
@@ -74,7 +90,8 @@ func Connect() {
 		&models.Occupant{},
 		&models.Civility{},
 		&models.Address{},
-		&models.ReceivingMethod{},
+		&models.DocumentReceivingMethod{},
+		&models.ReminderReceivingMethod{},
 		&models.OccupantPossessionOnProperty{},
 		&models.OccupantType{},
 		&models.Property{},
