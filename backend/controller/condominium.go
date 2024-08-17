@@ -30,37 +30,35 @@ func CreateCondominium(c *gin.Context) {
 			Description string `json:"description"`
 		} `json:"informations"`
 		Address struct {
-			Street     string `json:"street"`
-			Number     string `json:"number"`
-			Complement string `json:"complement"`
-			City       string `json:"city"`
-			PostalCode string `json:"postal_code"`
-			Country    string `json:"country"`
+			Street            string `json:"street"`
+			Number            string `json:"number"`
+			AddressComplement string `json:"address_complement"`
+			City              string `json:"city"`
+			PostalCode        string `json:"postal_code"`
+			Country           string `json:"country"`
 		} `json:"address"`
 		FtpBlueprint struct {
 			Blueprint string `json:"blueprint"`
 		} `json:"ftpBlueprint"`
 		Concierge struct {
-			Name                    string `json:"name"`
-			Surname                 string `json:"surname"`
-			Email                   string `json:"email"`
-			Corporation             bool   `json:"corporation"`
-			Phone                   string `json:"phone"`
-			Iban                    string `json:"iban"`
-			BirthDate               string `json:"birth_date"` // Consider using time.Time and parsing it
-			Civility                string `json:"civility"`
-			DocumentReceivingMethod string `json:"document_receiving_method"`
-			ReminderDelay           int    `json:"reminder_delay"`
-			ReminderReceivingMethod string `json:"reminder_receiving_method"`
+			Name                       string `json:"name"`
+			Surname                    string `json:"surname"`
+			Email                      string `json:"email"`
+			Corporation                bool   `json:"corporation"`
+			Phone                      string `json:"phone"`
+			Iban                       string `json:"iban"`
+			BirthDate                  string `json:"birthdate"` // Consider using time.Time and parsing it
+			Civility                   string `json:"civility"`
+			DocumentReceivingMethod    string `json:"document_receiving_method"`
+			ReminderDelay              int    `json:"reminder_delay"`
+			ReminderReceivingMethod    string `json:"reminder_receiving_method"`
+			Street                     string `json:"street_concierge"`
+			Number                     string `json:"number_concierge"`
+			AddressComplementConcierge string `json:"address_complement_concierge"`
+			City                       string `json:"city_concierge"`
+			PostalCode                 string `json:"postal_code_concierge"`
+			Country                    string `json:"country_concierge"`
 		} `json:"concierge"`
-		AddressConcierge struct {
-			Street     string `json:"street"`
-			Number     string `json:"number"`
-			Complement string `json:"complement"`
-			City       string `json:"city"`
-			PostalCode string `json:"postal_code"`
-			Country    string `json:"country"`
-		} `json:"address_concierge"`
 	}
 
 	if err := c.BindJSON(&requestData); err != nil {
@@ -74,7 +72,7 @@ func CreateCondominium(c *gin.Context) {
 	address := models.Address{
 		Street:     requestData.Address.Street,
 		Number:     requestData.Address.Number,
-		Complement: requestData.Address.Complement,
+		Complement: requestData.Address.AddressComplement,
 		City:       requestData.Address.City,
 		PostalCode: requestData.Address.PostalCode,
 		Country:    requestData.Address.Country,
@@ -84,12 +82,12 @@ func CreateCondominium(c *gin.Context) {
 		return
 	}
 	address_concierge := models.Address{
-		Street:     requestData.AddressConcierge.Street,
-		Number:     requestData.AddressConcierge.Number,
-		Complement: requestData.AddressConcierge.Complement,
-		City:       requestData.AddressConcierge.City,
-		PostalCode: requestData.AddressConcierge.PostalCode,
-		Country:    requestData.AddressConcierge.Country,
+		Street:     requestData.Concierge.Street,
+		Number:     requestData.Concierge.Number,
+		Complement: requestData.Concierge.AddressComplementConcierge,
+		City:       requestData.Concierge.City,
+		PostalCode: requestData.Concierge.PostalCode,
+		Country:    requestData.Concierge.Country,
 	}
 	if err := db.Create(&address_concierge).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create concierge address"})
