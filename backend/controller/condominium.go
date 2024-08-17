@@ -25,3 +25,23 @@ func CreateCondominium(c *gin.Context) {
 	// Return the created condominium
 	c.JSON(http.StatusCreated, condominium)
 }
+
+func GetCivilities(c *gin.Context) {
+	var civilities []models.Civility
+	if err := config.DB.Find(&civilities).Error; err != nil {
+		handleError(c, err, "Error fetching civilities", http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, civilities)
+}
+
+func GetReceivingMethods(c *gin.Context) {
+	var receivingMethods []models.ReceivingMethod
+	if err := config.DB.Find(&receivingMethods).Error; err != nil {
+		handleError(c, err, "Error fetching receiving methods", http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, receivingMethods)
+}

@@ -49,7 +49,7 @@ type Address struct {
 }
 
 type ReceivingMethod struct {
-	gorm.Model
+	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id"`
 	Type string `json:"type" gorm:"not null"`
 }
 
