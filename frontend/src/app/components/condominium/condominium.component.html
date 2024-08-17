@@ -3,42 +3,59 @@
     @for (category of getCategories(); track category.key) {
         <div [formGroupName]="category.key" class="card flex justify-content-center">
 
-            @for (element of category.value; track element.id) {
-                <p-floatLabel>
-                    <label [for]="element.id"> {{ element.name }} </label>
+            <p class="section_title"> {{ category.key }} </p>
 
-                    @if (element.type == "text") {
-                        <input [id]="element.id" [type]="element.type" pInputText [formControlName]="element.id">
+            @if (category.key == "conciergeeee") {
+
+                <label>
+                    <input type="checkbox" [(ngModel)]="isChecked">
+                    Cocher pour afficher du texte
+                </label>
+
+                @if (isChecked) {
+                    <p>TESTE</p>
+                }
+
+                <p>TESTE</p>
+            }
+            @else {
+                @for (element of category.value; track element.id) {
+                    <div class="inputLabelduo">
+                        <label [for]="element.id"> {{ element.name }} </label>
+    
+                        @if (element.type == "text" || element.type == "date" || element.type == "number" || element.type == "email") {
+                            <input [id]="element.id" [type]="element.type" pInputText [formControlName]="element.id">
+                            
+                        }
                         
-                    }
-                    
-                    @else if (element.id == "civility") {
-                        <select [name]="element.id">
-                            <option [value]=""> {{ "" }} </option>
-                            @for (option of civilityTypes; track option.type) {
-                                <option [value]="option.type"> {{ option.type }} </option>
-                            }
-                        </select>
-                    }
-                    
-                    @else if (element.id == "documentReceivingMethod") {
-                        <select [name]="element.id">
-                            <option [value]=""> {{ "" }} </option>
-                            @for (option of receivingMethods; track option.type) {
-                                <option [value]="option.type"> {{ option.type }} </option>
-                            }
-                        </select>
-                    }
-                    
-                    @else if (element.id == "reminderReceivingMethod") {
-                        <select [name]="element.id">
-                            <option [value]=""> {{ "" }} </option>
-                            @for (option of receivingMethods; track option.type) {
-                                <option [value]="option.type"> {{ option.type }} </option>
-                            }
-                        </select>
-                    }
-                </p-floatLabel>
+                        @else if (element.id == "civility") {
+                            <select [name]="element.id">
+                                <option [value]=""> {{ "" }} </option>
+                                @for (option of civilityTypes; track option.type) {
+                                    <option [value]="option.type"> {{ option.type }} </option>
+                                }
+                            </select>
+                        }
+                        
+                        @else if (element.id == "documentReceivingMethod") {
+                            <select [name]="element.id">
+                                <option [value]=""> {{ "" }} </option>
+                                @for (option of documentReceivingMethods; track option.type) {
+                                    <option [value]="option.type"> {{ option.type }} </option>
+                                }
+                            </select>
+                        }
+                        
+                        @else if (element.id == "reminderReceivingMethod") {
+                            <select [name]="element.id">
+                                <option [value]=""> {{ "" }} </option>
+                                @for (option of reminderReceivingMethods; track option.type) {
+                                    <option [value]="option.type"> {{ option.type }} </option>
+                                }
+                            </select>
+                        }
+                    </div>
+                }
             }
         </div>
     }

@@ -11,7 +11,8 @@ export class CondominiumService {
   private apiUrl = 'http://your-backend-api-url';
 
   private getCivilities = environment.apiUrls.getCivilities;
-  private getRemindingMethod = environment.apiUrls.getRemindingMethod;
+  private getDocumentRemindingMethod = environment.apiUrls.getDocumentRemindingMethod;
+  private getReminderRemindingMethod = environment.apiUrls.getReminderRemindingMethod;
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +20,11 @@ export class CondominiumService {
     return this.http.get<any[]>(this.getCivilities);
   }
 
-  getReceivingMethodOptions(): Observable<any[]> {
-    return this.http.get<any[]>(this.getRemindingMethod);
+  getDocumentReceivingMethodOptions(): Observable<any[]> {
+    return this.http.get<any[]>(this.getDocumentRemindingMethod);
+  }
+
+  getReminderReceivingMethodOptions(): Observable<any[]> {
+    return this.http.get<any[]>(this.getReminderRemindingMethod);
   }
 }

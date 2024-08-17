@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CondominiumService } from '../../services/condominium.service';
-import { FormControl, FormGroup, TouchedChangeEvent, Validators, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
     templateUrl: './condominium.component.html',
     styleUrl: './condominium.component.scss',
     standalone: true,
-    imports: [ReactiveFormsModule, FloatLabelModule],
+    imports: [ReactiveFormsModule, FloatLabelModule, FormsModule],
     providers: [HttpClient]
 })
 
@@ -19,8 +19,11 @@ export class CondominiumComponent implements OnInit {
 
   private fromUrlCreateCondominium = environment.apiUrls.condominiumApi;
 
+  isChecked: boolean = false;
+
   public civilityTypes: any[] = [];
-  public receivingMethods: any[] = [];
+  public reminderReceivingMethods: any[] = [];
+  public documentReceivingMethods: any[] = [];
 
   formCategoriesName = {
     informations: [
@@ -32,9 +35,9 @@ export class CondominiumComponent implements OnInit {
     address: [
       {id: "street", name: "Street", type: "text"},
       {id: "number", name: "Number", type: "text"},
-      {id: "addressComplement", name: "Address Complement", type: "text"},
+      {id: "address_complement", name: "Address Complement", type: "text"},
       {id: "city", name: "City", type: "text"},
-      {id: "postalCode", name: "Postal code", type: "text"},
+      {id: "postal_code", name: "Postal code", type: "text"},
       {id: "country", name: "Country", type: "text"},
     ],
 
@@ -45,39 +48,47 @@ export class CondominiumComponent implements OnInit {
     concierge: [
       {id: "name", name: "Name", type: "text"},
       {id: "surname", name: "Surname", type: "text"},
-      {id: "email", name: "Email", type: "text"},
+      {id: "email", name: "Email", type: "email"},
       {id: "phone", name: "Phone", type: "text"},
       {id: "corporation", name: "Corporation", type: "text"},
       {id: "iban", name: "IBAN", type: "text"},
-      {id: "birthdate", name: "Birthdate", type: "text"},
+      {id: "birthdate", name: "Birthdate", type: "date"},
       {id: "civility", name: "Civility", type: "selector"},
-      {id: "documentReceivingMethod", name: "Document Receiving Method", type: "selector"},
-      {id: "reminderDelay", name: "Reminder Delay", type: "text"},
-      {id: "reminderReceivingMethod", name: "Reminder Receiving Method", type: "selector"},
+      {id: "document_receiving_method", name: "Document Receiving Method", type: "selector"},
+      {id: "reminder_delay", name: "Reminder Delay", type: "number"},
+      {id: "reminder_receiving_method", name: "Reminder Receiving Method", type: "selector"},
+
+      // Concierge address
+      {id: "street_concierge", name: "Street", type: "text"},
+      {id: "number_concierge", name: "Number", type: "text"},
+      {id: "address_complement_concierge", name: "Address Complement", type: "text"},
+      {id: "city_concierge", name: "City", type: "text"},
+      {id: "postal_code_concierge", name: "Postal code", type: "text"},
+      {id: "country_concierge", name: "Country", type: "text"},
     ],
   };
 
   createCondominiumForm = new FormGroup({
-    informations : new FormGroup({
-      name : new FormControl(''),
-      prefix : new FormControl(''),
+    informations: new FormGroup({
+      name: new FormControl(''),
+      prefix: new FormControl(''),
       description : new FormControl(''),
     }),
 
-    address : new FormGroup({
+    address: new FormGroup({
       street: new FormControl(''),
-      number : new FormControl(''),
-      addressComplement : new FormControl(''),
+      number: new FormControl(''),
+      address_complement: new FormControl(''),
       city: new FormControl(''),
-      postalCode: new FormControl(''),
-      country : new FormControl(''),
+      postal_code: new FormControl(''),
+      country: new FormControl(''),
     }),
 
-    ftpBlueprint : new FormGroup({
+    ftpBlueprint: new FormGroup({
       blueprint: new FormControl(''),
     }),
 
-    concierge : new FormGroup({
+    concierge: new FormGroup({
       name: new FormControl(''),
       surname: new FormControl(''),
       email: new FormControl(''),
@@ -86,9 +97,17 @@ export class CondominiumComponent implements OnInit {
       iban: new FormControl(''),
       birthdate: new FormControl(''),
       civility: new FormControl(''), //requête pour le selecteur (la table est pré-remplie)
-      documentReceivingMethod: new FormControl(''), // ""
-      reminderDelay: new FormControl(''),
-      reminderReceivingMethod: new FormControl(''),
+      document_receiving_method: new FormControl(''), // ""
+      reminder_delay: new FormControl(''),
+      reminder_receiving_method: new FormControl(''),
+
+      //concierge address
+      street_concierge: new FormControl(''),
+      number_concierge: new FormControl(''),
+      address_complement_concierge: new FormControl(''),
+      city_concierge: new FormControl(''),
+      postal_code_concierge: new FormControl(''),
+      country_concierge: new FormControl(''),
     }),
   });
 
@@ -105,9 +124,18 @@ export class CondominiumComponent implements OnInit {
       }
     });
 
-    this.condominiumService.getReceivingMethodOptions().subscribe({
+    this.condominiumService.getReminderReceivingMethodOptions().subscribe({
       next: (data) => {
-        this.receivingMethods = data;
+        this.reminderReceivingMethods = data;
+      },
+      error: (error) => {
+        console.error('Failed to load reminder receiving method options', error);
+      }
+    });
+
+    this.condominiumService.getDocumentReceivingMethodOptions().subscribe({
+      next: (data) => {
+        this.documentReceivingMethods = data;
       },
       error: (error) => {
         console.error('Failed to load receiving method options', error);
