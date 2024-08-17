@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CondominiumComponent } from './condominium.component';
 
-import { FileUploadComponent } from './invoice-upload.component';
-
-describe('InvoiceUploadComponent', () => {
-  let component: FileUploadComponent;
-  let fixture: ComponentFixture<FileUploadComponent>;
+describe('CondominiumComponent', () => {
+  let component: CondominiumComponent;
+  let fixture: ComponentFixture<CondominiumComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FileUploadComponent]
+      imports: [CondominiumComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FileUploadComponent);
+    fixture = TestBed.createComponent(CondominiumComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FileUploadComponent } from './invoice-upload.component';
+import { FloatLabelComponent } from './float-label.component';
 
-describe('InvoiceUploadComponent', () => {
-  let component: FileUploadComponent;
-  let fixture: ComponentFixture<FileUploadComponent>;
+describe('FloatLabelComponent', () => {
+  let component: FloatLabelComponent;
+  let fixture: ComponentFixture<FloatLabelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FileUploadComponent]
+      imports: [FloatLabelComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FileUploadComponent);
+    fixture = TestBed.createComponent(FloatLabelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

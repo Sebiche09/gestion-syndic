@@ -1,0 +1,58 @@
+<form [formGroup]="createCondominiumForm" (ngSubmit)="onSubmit()">
+
+    @for (category of getCategories(); track category.key) {
+        <div [formGroupName]="category.key" class="card flex justify-content-center">
+
+            @for (element of category.value; track element.id) {
+                <p-floatLabel>
+                    <label [for]="element.id"> {{ element.name }} </label>
+                    <input [id]="element.id" [type]="element.type" [formControlName]="element.id">
+                </p-floatLabel>
+            }
+    
+        </div>
+    }
+
+    <!--
+    <div formGroupName="informations" class="card flex justify-content-center">
+
+        @for (item of formInformationsElements; track item.id) {
+            <p-floatLabel>
+                <label [for]="item.id"> {{ item.name }} </label>
+                <input [id]="item.id" [type]="item.type" [formControlName]="item.id">
+            </p-floatLabel>
+        }
+
+    </div>
+
+    <div formGroupName="address" class="card flex justify-content-center">
+
+        @for (item of formAddressElements; track item.id) {
+            <p-floatLabel>
+                <label [for]="item.id"> {{ item.name }} </label>
+                <input [id]="item.id" [type]="item.type" [formControlName]="item.id">
+            </p-floatLabel>
+        }
+    </div>
+
+    <div formGroupName="ftpBlueprint" class="card flex justify-content-center">
+
+        <p-floatLabel>
+            <label for="blueprint">Blueprint: </label>
+            <input id="blueprint" type="text" formControlName="blueprint">
+        </p-floatLabel>
+    </div>
+
+    <div formGroupName="concierge" class="card flex justify-content-center">
+
+        @for (item of formConciergeElements; track item.id) {
+            <p-floatLabel>
+                <label [for]="item.id"> {{ item.name }} </label>
+                <input [id]="item.id" [type]="item.type" [formControlName]="item.id">
+            </p-floatLabel>
+        }
+
+    </div>-->
+
+    <button type="submit">submit</button>
+</form>
