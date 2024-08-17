@@ -6,5 +6,6 @@ import (
 )
 
 func ReceivingMethodRoute(router *gin.Engine) {
-	router.GET("/getreceivingmethods", controller.GetReceivingMethods)
+	router.GET("/getdocumentreceivingmethods", controller.GetDocumentReceivingMethods)
+	router.GET("/getreminderreceivingmethods", controller.GetReminderReceivingMethods)
 }

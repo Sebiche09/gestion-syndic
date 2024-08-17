@@ -15,22 +15,22 @@ type GormModel struct {
 
 type Occupant struct {
 	gorm.Model
-	Name                      string          `json:"name" gorm:"not null"`
-	Surname                   string          `json:"surname" gorm:"not null"`
-	Email                     string          `json:"email"`
-	Corporation               bool            `json:"corporation" gorm:"default:false"`
-	Phone                     string          `json:"phone"`
-	Iban                      string          `json:"iban"`
-	BirthDate                 time.Time       `json:"birth_date" gorm:"not null"`
-	CivilityID                int             `json:"civility_id" gorm:"not null"`
-	Civility                  Civility        `gorm:"foreignKey:CivilityID"`
-	DomicileAddressID         int             `json:"domicile_address_id" gorm:"not null"`
-	DomicileAddress           Address         `gorm:"foreignKey:DomicileAddressID"`
-	DocumentReceivingMethodID int             `json:"document_receiving_method_id" gorm:"default:0"`
-	DocumentReceivingMethod   ReceivingMethod `gorm:"foreignKey:DocumentReceivingMethodID"`
-	ReminderDelay             int             `json:"reminder_delay" gorm:"default:10"`
-	ReminderReceivingMethodID int             `json:"reminder_receiving_method_id" gorm:"default:0"`
-	ReminderReceivingMethod   ReceivingMethod `gorm:"foreignKey:ReminderReceivingMethodID"`
+	Name                      string                  `json:"name" gorm:"not null"`
+	Surname                   string                  `json:"surname" gorm:"not null"`
+	Email                     string                  `json:"email"`
+	Corporation               bool                    `json:"corporation" gorm:"default:false"`
+	Phone                     string                  `json:"phone"`
+	Iban                      string                  `json:"iban"`
+	BirthDate                 time.Time               `json:"birth_date" gorm:"not null"`
+	CivilityID                int                     `json:"civility_id" gorm:"not null"`
+	Civility                  Civility                `gorm:"foreignKey:CivilityID"`
+	DomicileAddressID         uint                    `json:"domicile_address_id" gorm:"not null"`
+	DomicileAddress           Address                 `gorm:"foreignKey:DomicileAddressID"`
+	DocumentReceivingMethodID int                     `json:"document_receiving_method_id" gorm:"default:0"`
+	DocumentReceivingMethod   DocumentReceivingMethod `gorm:"foreignKey:DocumentReceivingMethodID"`
+	ReminderDelay             int                     `json:"reminder_delay" gorm:"default:10"`
+	ReminderReceivingMethodID int                     `json:"reminder_receiving_method_id" gorm:"default:0"`
+	ReminderReceivingMethod   ReminderReceivingMethod `gorm:"foreignKey:ReminderReceivingMethodID"`
 }
 
 type Civility struct {
@@ -48,7 +48,11 @@ type Address struct {
 	Country    string `json:"country" gorm:"not null"`
 }
 
-type ReceivingMethod struct {
+type DocumentReceivingMethod struct {
+	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id"`
+	Type string `json:"type" gorm:"not null"`
+}
+type ReminderReceivingMethod struct {
 	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id"`
 	Type string `json:"type" gorm:"not null"`
 }
