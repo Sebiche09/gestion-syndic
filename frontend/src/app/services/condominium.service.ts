@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -8,41 +8,18 @@ import { environment } from '../../environments/environment';
 })
 
 export class CondominiumService {
-  private uploadUrl = environment.apiUrls.condominiumApi;
+  private apiUrl = 'http://your-backend-api-url';
 
-  ticketInformation = {
-    personalInformation: {
-        firstname: '',
-        lastname: '',
-        age: null
-    },
-    seatInformation: {
-        class: null,
-        wagon: null,
-        seat: null
-    },
-    paymentInformation: {
-        cardholderName: '',
-        cardholderNumber: '',
-        date: '',
-        cvv: '',
-        remember: false
-    }
-  };
+  private getCivilities = environment.apiUrls.getCivilities;
+  private getRemindingMethod = environment.apiUrls.getRemindingMethod;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getTicketInformation() {
-    return this.ticketInformation;
+  getCivilityOptions(): Observable<any[]> {
+    return this.http.get<any[]>(this.getCivilities);
   }
 
-  setTicketInformation(ticketInformation: { personalInformation: { firstname: string; lastname: string; age: null; }; seatInformation: { class: null; wagon: null; seat: null; }; paymentInformation: { cardholderName: string; cardholderNumber: string; date: string; cvv: string; remember: boolean; }; }) {
-    this.ticketInformation = ticketInformation;
-  }
-
-  submitForm(formData: any): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    
-    return this.http.post<any>(this.uploadUrl, formData, { headers });
+  getReceivingMethodOptions(): Observable<any[]> {
+    return this.http.get<any[]>(this.getRemindingMethod);
   }
 }
