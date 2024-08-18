@@ -11,6 +11,10 @@ import (
 	"gorm.io/gorm"
 )
 
+// CheckIfExists vérifie si une valeur existe déjà dans une table donnée.
+// tableName : Nom de la table
+// columnName : Nom de la colonne
+// value : Valeur à vérifier
 func getIdByType(db *gorm.DB, tableName, typeName string) (int, error) {
 	var result struct {
 		ID int
@@ -21,6 +25,15 @@ func getIdByType(db *gorm.DB, tableName, typeName string) (int, error) {
 		return 0, err
 	}
 	return result.ID, nil
+}
+
+func CheckIfExists(db *gorm.DB, tableName string, conditions map[string]interface{}) (bool, error) {
+	var count int64
+	query := db.Table(tableName).Where(conditions).Count(&count)
+	if query.Error != nil {
+		return false, query.Error
+	}
+	return count > 0, nil
 }
 
 func CreateCondominium(c *gin.Context) {
@@ -62,17 +75,54 @@ func CreateCondominium(c *gin.Context) {
 		} `json:"concierge"`
 	}
 
+	db := config.DB
+
 	if err := c.BindJSON(&requestData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	reminderDelay, err := strconv.Atoi(requestData.Concierge.ReminderDelay)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid reminder_delay format"})
+		c.JSON(http.StatusBadRequest, gin.H{"Error": "Invalid reminder_delay format"})
+		return
+	}
+	birthDate, err := time.Parse("2006-01-02", requestData.Concierge.BirthDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid birthdate format"})
 		return
 	}
 
-	db := c.MustGet("db").(*gorm.DB)
+	// Vérifier si un condominium existe déjà
+	conditionsCondominium := map[string]interface{}{
+		"name":   requestData.Informations.Name,
+		"prefix": requestData.Informations.Prefix,
+	}
+	existsNameCondominium, err := CheckIfExists(db, "condominia", conditionsCondominium)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": "Error checking condominium existence"})
+		return
+	}
+	if existsNameCondominium {
+		c.JSON(http.StatusConflict, gin.H{"Error": "Condominium with this name already exists"})
+		return
+	}
+
+	// Vérifier si un occupant avec le même nom existe déjà
+	conditionsOccupant := map[string]interface{}{
+		"name":       requestData.Concierge.Name,
+		"surname":    requestData.Concierge.Surname,
+		"birth_date": birthDate,
+	}
+	existsOccupant, err := CheckIfExists(db, "occupants", conditionsOccupant)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": "Error checking occupant existence"})
+		return
+	}
+	if existsOccupant {
+		c.JSON(http.StatusConflict, gin.H{"Error": "this occupant already exists"})
+		return
+	}
 
 	// Insert Address
 	address := models.Address{
@@ -110,14 +160,9 @@ func CreateCondominium(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find document receiving method"})
 		return
 	}
-	reminderReceivingMethodID, err := getIdByType(db, "reminder_receiving_method", requestData.Concierge.ReminderReceivingMethod)
+	reminderReceivingMethodID, err := getIdByType(db, "reminder_receiving_methods", requestData.Concierge.ReminderReceivingMethod)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find reminder receiving method"})
-		return
-	}
-	birthDate, err := time.Parse("2006-01-02", requestData.Concierge.BirthDate)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid birthdate format"})
 		return
 	}
 

@@ -34,3 +34,15 @@ Dans le dossier principale gestion-syndic, faire la commande :
 - docker exec -it ollama ollama run llama3
 - /exit
 
+## Code d'erreur : 
+
+Le code d'erreur est divisé en 3 parties
+le code commence par la lettre E
+Le premier chiffre désigne si la catégorie d'erreur (go - 1, angular - 2, base de donnée - 3). 
+Le deuxième chiffre désigne la nature de l'erreur : 
+| code erreur | nature |
+| ----------- | ------ |
+| 1           | erreur de format|
+| 2           | donnée deja existante|
+| 3           | Problème d'accès à la db|
+|4            | Problème avec une fonction de golang|
