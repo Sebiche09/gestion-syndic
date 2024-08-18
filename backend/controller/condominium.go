@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/Sebiche09/gestion-syndic/config"
@@ -50,7 +51,7 @@ func CreateCondominium(c *gin.Context) {
 			BirthDate                  string `json:"birthdate"` // Consider using time.Time and parsing it
 			Civility                   string `json:"civility"`
 			DocumentReceivingMethod    string `json:"document_receiving_method"`
-			ReminderDelay              int    `json:"reminder_delay"`
+			ReminderDelay              string `json:"reminder_delay"`
 			ReminderReceivingMethod    string `json:"reminder_receiving_method"`
 			Street                     string `json:"street_concierge"`
 			Number                     string `json:"number_concierge"`
@@ -63,6 +64,11 @@ func CreateCondominium(c *gin.Context) {
 
 	if err := c.BindJSON(&requestData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	reminderDelay, err := strconv.Atoi(requestData.Concierge.ReminderDelay)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid reminder_delay format"})
 		return
 	}
 
@@ -126,7 +132,7 @@ func CreateCondominium(c *gin.Context) {
 		CivilityID:                civilityID,
 		DomicileAddressID:         address_concierge.ID,
 		DocumentReceivingMethodID: documentReceivingMethodID,
-		ReminderDelay:             requestData.Concierge.ReminderDelay,
+		ReminderDelay:             reminderDelay,
 		ReminderReceivingMethodID: reminderReceivingMethodID,
 	}
 
