@@ -19,7 +19,7 @@ export class CondominiumComponent implements OnInit {
 
   private fromUrlCreateCondominium = environment.apiUrls.condominiumApi;
 
-  isChecked: boolean = false;
+  isCheckboxChecked: boolean = false;
 
   public civilityTypes: any[] = [];
   public reminderReceivingMethods: any[] = [];
@@ -50,7 +50,7 @@ export class CondominiumComponent implements OnInit {
       {id: "surname", name: "Surname", type: "text"},
       {id: "email", name: "Email", type: "email"},
       {id: "phone", name: "Phone", type: "text"},
-      {id: "corporation", name: "Corporation", type: "text"},
+      {id: "corporation", name: "Corporation", type: "checkbox"},
       {id: "iban", name: "IBAN", type: "text"},
       {id: "birthdate", name: "Birthdate", type: "date"},
       {id: "civility", name: "Civility", type: "selector"},
@@ -92,7 +92,7 @@ export class CondominiumComponent implements OnInit {
       name: new FormControl(''),
       surname: new FormControl(''),
       email: new FormControl(''),
-      corporation: new FormControl(''), //false par défaut
+      corporation: new FormControl(false), //false par défaut
       phone: new FormControl(''),
       iban: new FormControl(''),
       birthdate: new FormControl(''),
@@ -112,6 +112,11 @@ export class CondominiumComponent implements OnInit {
   });
 
   constructor(private http: HttpClient, private condominiumService: CondominiumService) {}
+
+  //fonction init
+  ngOnInit(): void {
+    this.loadOptions();
+  }
 
   //Get civilities types and receiving methods from DB
   loadOptions(): void {
@@ -143,12 +148,12 @@ export class CondominiumComponent implements OnInit {
     });
   }
 
-  getCategories() {
-    return Object.entries(this.formCategoriesName).map(([key, value]) => ({ key, value }));
+  onCheckboxChange(event: any) {
+    this.isCheckboxChecked = event.target.checked;
   }
 
-  ngOnInit(): void {
-    this.loadOptions();
+  getCategories() {
+    return Object.entries(this.formCategoriesName).map(([key, value]) => ({ key, value }));
   }
 
   onSubmit(): void {
@@ -167,6 +172,6 @@ export class CondominiumComponent implements OnInit {
       }
     });
 
-    this.createCondominiumForm.reset();
+    //this.createCondominiumForm.reset();
   }
 }
