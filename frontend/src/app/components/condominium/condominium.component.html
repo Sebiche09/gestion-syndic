@@ -26,13 +26,18 @@
                     <div class="inputLabelduo">
                         <label [for]="element.id"> {{ element.name }} </label>
     
-                        @if (element.type == "text" || element.type == "date" || element.type == "number" || element.type == "email" || element.type == "checkbox") {
+                        @if (element.type == "text" || element.type == "date" || element.type == "email" || element.type == "checkbox") {
+                            <input [id]="element.id" [type]="element.type" pInputText [formControlName]="element.id">
+                            
+                        }
+
+                        @else if (element.type == "number") {
                             <input [id]="element.id" [type]="element.type" pInputText [formControlName]="element.id">
                             
                         }
                         
                         @else if (element.id == "civility") {
-                            <select [name]="element.id">
+                            <select [id]="element.id" [formControlName]="element.id">
                                 <option [value]="null"> {{ "" }} </option>
                                 @for (option of civilityTypes; track option.type) {
                                     <option [value]="option.type"> {{ option.type }} </option>
@@ -41,7 +46,7 @@
                         }
                         
                         @else if (element.id == "document_receiving_method") {
-                            <select [name]="element.id">
+                            <select [id]="element.id" [formControlName]="element.id">
                                 <option [value]="null"> {{ "" }} </option>
                                 @for (option of documentReceivingMethods; track option.type) {
                                     <option [value]="option.type"> {{ option.type }} </option>
@@ -50,7 +55,7 @@
                         }
                         
                         @else if (element.id == "reminder_receiving_method") {
-                            <select [name]="element.id">
+                            <select [id]="element.id" [formControlName]="element.id">
                                 <option [value]="null"> {{ "" }} </option>
                                 @for (option of reminderReceivingMethods; track option.type) {
                                     <option [value]="option.type"> {{ option.type }} </option>
@@ -62,5 +67,6 @@
             }
         </div>
     }
-    <button type="submit" [disabled]="!createCondominiumForm.valid">submit</button>
+    <!--<button type="submit" [disabled]="!createCondominiumForm.valid">submit</button>-->
+    <button type="submit">submit</button>
 </form>

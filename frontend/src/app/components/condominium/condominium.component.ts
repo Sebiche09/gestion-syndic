@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CondominiumService } from '../../services/condominium.service';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { HttpClient } from '@angular/common/http';
@@ -70,44 +70,44 @@ export class CondominiumComponent implements OnInit {
 
   createCondominiumForm = new FormGroup({
     informations: new FormGroup({
-      name: new FormControl(''),
-      prefix: new FormControl(''),
-      description : new FormControl(''),
+      name: new FormControl('aaaaaaaaaaa'),
+      prefix: new FormControl('aaaaaaaaaaa'),
+      description : new FormControl('aaaaaaaaaaa'),
     }),
 
     address: new FormGroup({
-      street: new FormControl(''),
-      number: new FormControl(''),
-      address_complement: new FormControl(''),
-      city: new FormControl(''),
-      postal_code: new FormControl(''),
-      country: new FormControl(''),
+      street: new FormControl('aaaaaaaaaaa'),
+      number: new FormControl('aaaaaaaaaaa'),
+      address_complement: new FormControl('aaaaaaaaaaa'),
+      city: new FormControl('aaaaaaaaaaa'),
+      postal_code: new FormControl('aaaaaaaaaaa'),
+      country: new FormControl('aaaaaaaaaaa'),
     }),
 
     ftpBlueprint: new FormGroup({
-      blueprint: new FormControl(''),
+      blueprint: new FormControl('aaaaaaaaaaa'),
     }),
 
     concierge: new FormGroup({
-      name: new FormControl(''),
-      surname: new FormControl(''),
-      email: new FormControl(''),
+      name: new FormControl('aaaaaaaaaaa'),
+      surname: new FormControl('aaaaaaaaaaa'),
+      email: new FormControl('aaaaaaaaaaa'),
       corporation: new FormControl(false), //false par défaut
-      phone: new FormControl(''),
-      iban: new FormControl(''),
-      birthdate: new FormControl(''),
+      phone: new FormControl('aaaaaaaaaaa'),
+      iban: new FormControl('aaaaaaaaaaa'),
+      birthdate: new FormControl('aaaaaaaaaaa'),
       civility: new FormControl(''), //requête pour le selecteur (la table est pré-remplie)
       document_receiving_method: new FormControl(''), // ""
-      reminder_delay: new FormControl(''),
+      reminder_delay: new FormControl('40'),
       reminder_receiving_method: new FormControl(''),
 
       //concierge address
-      street_concierge: new FormControl(''),
-      number_concierge: new FormControl(''),
-      address_complement_concierge: new FormControl(''),
-      city_concierge: new FormControl(''),
-      postal_code_concierge: new FormControl(''),
-      country_concierge: new FormControl(''),
+      street_concierge: new FormControl('aaaaaaaaaaa'),
+      number_concierge: new FormControl('aaaaaaaaaaa'),
+      address_complement_concierge: new FormControl('aaaaaaaaaaa'),
+      city_concierge: new FormControl('aaaaaaaaaaa'),
+      postal_code_concierge: new FormControl('aaaaaaaaaaa'),
+      country_concierge: new FormControl('aaaaaaaaaaa'),
     }),
   });
 
@@ -160,7 +160,12 @@ export class CondominiumComponent implements OnInit {
     console.log('Form Data:', this.createCondominiumForm.value);
 
     // Récupérer les données du formulaire
-    const formData = this.createCondominiumForm.value;
+    let formData = this.createCondominiumForm.value;
+
+    // convert in boolean
+    if(formData.concierge) {
+      formData.concierge.corporation = !!formData.concierge.corporation;
+    }
 
     // Envoyer une requête HTTP POST avec les données du formulaire
     this.http.post(this.fromUrlCreateCondominium, formData).subscribe({
