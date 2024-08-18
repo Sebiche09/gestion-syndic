@@ -11,10 +11,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// CheckIfExists vérifie si une valeur existe déjà dans une table donnée.
-// tableName : Nom de la table
-// columnName : Nom de la colonne
-// value : Valeur à vérifier
 func getIdByType(db *gorm.DB, tableName, typeName string) (int, error) {
 	var result struct {
 		ID int
@@ -27,6 +23,10 @@ func getIdByType(db *gorm.DB, tableName, typeName string) (int, error) {
 	return result.ID, nil
 }
 
+// CheckIfExists vérifie si une valeur existe déjà dans une table donnée.
+// tableName : Nom de la table
+// columnName : Nom de la colonne
+// value : Valeur à vérifier
 func CheckIfExists(db *gorm.DB, tableName string, conditions map[string]interface{}) (bool, error) {
 	var count int64
 	query := db.Table(tableName).Where(conditions).Count(&count)
@@ -84,7 +84,7 @@ func CreateCondominium(c *gin.Context) {
 
 	reminderDelay, err := strconv.Atoi(requestData.Concierge.ReminderDelay)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"Error": "Invalid reminder_delay format"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid reminder_delay format"})
 		return
 	}
 	birthDate, err := time.Parse("2006-01-02", requestData.Concierge.BirthDate)
@@ -100,11 +100,11 @@ func CreateCondominium(c *gin.Context) {
 	}
 	existsNameCondominium, err := CheckIfExists(db, "condominia", conditionsCondominium)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": "Error checking condominium existence"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking condominium existence"})
 		return
 	}
 	if existsNameCondominium {
-		c.JSON(http.StatusConflict, gin.H{"Error": "Condominium with this name already exists"})
+		c.JSON(http.StatusConflict, gin.H{"error": "Condominium with this name already exists"})
 		return
 	}
 
