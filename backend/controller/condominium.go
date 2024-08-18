@@ -93,14 +93,13 @@ func CreateCondominium(c *gin.Context) {
 		return
 	}
 
-	// Vérifier si un condominium existe déjà
-	conditionsCondominium := map[string]interface{}{
-		"name":   requestData.Informations.Name,
-		"prefix": requestData.Informations.Prefix,
+	// Vérifier si un condominium existe déjà avec le même nom
+	conditionsCondominiumName := map[string]interface{}{
+		"name": requestData.Informations.Name,
 	}
-	existsNameCondominium, err := CheckIfExists(db, "condominia", conditionsCondominium)
+	existsNameCondominium, err := CheckIfExists(db, "condominia", conditionsCondominiumName)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking condominium existence"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking condominium name existence"})
 		return
 	}
 	if existsNameCondominium {
@@ -108,7 +107,21 @@ func CreateCondominium(c *gin.Context) {
 		return
 	}
 
-	// Vérifier si un occupant avec le même nom existe déjà
+	// Vérifier si un condominium existe déjà avec le même préfixe
+	conditionsCondominiumPrefix := map[string]interface{}{
+		"prefix": requestData.Informations.Prefix,
+	}
+	existsPrefixCondominium, err := CheckIfExists(db, "condominia", conditionsCondominiumPrefix)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking condominium prefix existence"})
+		return
+	}
+	if existsPrefixCondominium {
+		c.JSON(http.StatusConflict, gin.H{"error": "Condominium with this prefix already exists"})
+		return
+	}
+
+	// Vérifier si un occupant existe deja avec le même nom et prénom et date de naissance
 	conditionsOccupant := map[string]interface{}{
 		"name":       requestData.Concierge.Name,
 		"surname":    requestData.Concierge.Surname,
