@@ -12,6 +12,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface Country {
   name: string;
@@ -38,7 +39,7 @@ export class CondominiumComponent implements OnInit {
 
   private fromUrlCreateCondominium = environment.apiUrls.condominiumApi;
 
-  isCheckboxChecked: boolean = false;
+  isThereConcierge: boolean = false;
 
   public civilityTypes: any[] = [];
   public reminderReceivingMethods: any[] = [];
@@ -111,13 +112,13 @@ export class CondominiumComponent implements OnInit {
       name: new FormControl('aaaaaaaaaaa'),
       surname: new FormControl('aaaaaaaaaaa'),
       email: new FormControl('aaaaaaaaaaa'),
-      corporation: new FormControl(false), //false par défaut
+      corporation: new FormControl<boolean>(false), //false par défaut
       phone: new FormControl('aaaaaaaaaaa'),
       iban: new FormControl('aaaaaaaaaaa'),
       birthdate: new FormControl('aaaaaaaaaaa'),
       civility: new FormControl(''), //requête pour le selecteur (la table est pré-remplie)
       document_receiving_method: new FormControl(''), // ""
-      reminder_delay: new FormControl('40'),
+      reminder_delay: new FormControl<number>(40),
       reminder_receiving_method: new FormControl(''),
 
       //concierge address
@@ -218,17 +219,17 @@ export class CondominiumComponent implements OnInit {
     });
   }
 
-  onCheckboxChange(event: any) {
-    this.isCheckboxChecked = event.target.checked;
+  //check if there is a concierge
+  conciergeCheckBox(event: any) {
+    this.isThereConcierge = event.target.checked;
   }
 
+  // get categories of formCategoriesName
   getCategories() {
     return Object.entries(this.formCategoriesName).map(([key, value]) => ({ key, value }));
   }
 
   onSubmit(): void {
-    console.log('Form Data:', this.createCondominiumForm.value);
-
     // Récupérer les données du formulaire
     let formData = this.createCondominiumForm.value;
 
@@ -241,12 +242,32 @@ export class CondominiumComponent implements OnInit {
     this.http.post(this.fromUrlCreateCondominium, formData).subscribe({
       next: (response) => {
         console.log('Réponse de l\'API:', response);
+
+        //efface le contenu du formulaire
+        this.createCondominiumForm.reset();
       },
       error: (error) => {
         console.error('Erreur lors de l\'envoi:', error);
+
+        this.getErrorSubmit(error);
       }
     });
-
-    //this.createCondominiumForm.reset();
+  }
+  getErrorSubmit(error: HttpErrorResponse) {
+    if(error.error.error == "Invalid birthdate format"){
+      alert("Veuillez entrer une date de naissance valide");
+    }
+    else if(error.error.error == "Condominium with this name already exists"){
+      alert("Une co-propriété existe déjà avec ce nom");
+    }
+    else if(error.error.error == "Condominium with this prefix already exists"){
+      alert("Une co-propriété existe déjà avec ce préfixe");
+    }
+    else if(error.error.error == "this occupant already exists"){
+      alert("Cette occupant existe déjà avec le même nom, prénom et date de naissance");
+    }
+    else if(/^Failed to/.test(error.error.error)){
+      alert("Une erreur du serveur est survenue, veuillez recharger la page et réessayer ou contacter le support");
+    }
   }
 }
