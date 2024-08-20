@@ -1,21 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { CondominiumService } from '../../services/condominium.service';
+import { CountryService } from '../../services/country.service';
+import { CityService } from '../../services/city.services';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
+interface Country {
+  name: string;
+  code: string;
+}
+interface City {
+  name: string;
+}
 @Component({
     selector: 'condominium',
     templateUrl: './condominium.component.html',
     styleUrl: './condominium.component.scss',
     standalone: true,
-    imports: [ReactiveFormsModule, FloatLabelModule, FormsModule],
+    imports: [ReactiveFormsModule, FloatLabelModule, FormsModule, InputTextModule, InputGroupModule, InputGroupAddonModule, DropdownModule, InputTextareaModule],
     providers: [HttpClient]
 })
 
 export class CondominiumComponent implements OnInit {
+  countries: Country[] = [];
+  selectedCountry?: Country;
+
+  cities: City[] = [];
+  selectedCity?: City; 
 
   private fromUrlCreateCondominium = environment.apiUrls.condominiumApi;
 
@@ -111,11 +130,62 @@ export class CondominiumComponent implements OnInit {
     }),
   });
 
-  constructor(private http: HttpClient, private condominiumService: CondominiumService) {}
-
+  constructor(private http: HttpClient, private condominiumService: CondominiumService, private countryService : CountryService, private cityService : CityService) {}
   //fonction init
-  ngOnInit(): void {
-    this.loadOptions();
+  ngOnInit(): void{
+      this.loadOptions();
+      this.loadCountries();
+  }
+
+  //Get countries from DB
+  loadCountries(): void {
+    this.countryService.getCountries().subscribe({
+      next: (data) => {
+        console.log('Countries:', data);
+        // Assurez-vous que `data` est un tableau
+        if (Array.isArray(data)) {
+          this.countries = data.map((country: any) => ({
+            name: country.name.common, 
+            code: country.cca2
+          }));
+          if (this.countries.length > 0) {
+            this.selectedCountry = this.countries[0];
+            this.loadCities();
+          }
+        } else {
+          console.error('Data format is incorrect', data);
+        }
+      },
+      error: (error) => {
+        console.error('Failed to load countries', error);
+      }
+    });
+  }
+  //Get cities from DB
+  loadCities(): void {
+    if (this.selectedCountry) {
+      this.cityService.getCities(this.selectedCountry.code).subscribe({
+        next: (data) => {
+          console.log('Cities:', data);
+          // Si `data` est un tableau de villes
+          if (Array.isArray(data)) {
+            this.cities = data.map((city: any) => ({
+              name: city.name, // Assurez-vous que `name` est la propriété correcte
+            }));
+          } else {
+            console.error('Data format is incorrect', data);
+          }
+        },
+        error: (error) => {
+          console.error('Failed to load cities', error);
+        }
+      });
+    }
+  }
+  onCountryChange(event: any): void {
+    const selectedCountryCode = event.value; // assuming value contains country code
+    this.selectedCountry = this.countries.find(country => country.code === selectedCountryCode);
+    this.loadCities();
   }
 
   //Get civilities types and receiving methods from DB

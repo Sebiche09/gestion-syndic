@@ -1,72 +1,132 @@
 <form [formGroup]="createCondominiumForm" (ngSubmit)="onSubmit()">
 
-    @for (category of getCategories(); track category.key) {
-        <div [formGroupName]="category.key" class="card flex justify-content-center">
+    <!-- Informations Section -->
+    <div class="card flex flex-wrap gap-3 mb-4">
+      <div class="flex-auto">
+        <p-floatLabel>
+            <input type="name" pInputText formControlName="informations.name"/>
+            <label for="name">Name</label>
+        </p-floatLabel>
+      </div>
+      <div class="flex-auto">
+        <p-floatLabel>
+            <input id="prefix" pInputText formControlName="informations.prefix" />
+            <label for="prefix">Prefix</label>
+        </p-floatLabel>
+      </div>
+      <div class="flex-auto">
+        <p-floatLabel>
+          <textarea 
+            variant="filled"
+            id="float-input"
+            rows="5" 
+            cols="30" 
+            pInputTextarea 
+            formControlName="informations.description">      
+          </textarea>
+          <label for="float-input">Description</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  
+    <!-- Address Section -->
+    <div class="card flex flex-wrap gap-3 mb-4">
+      <div class="flex-wrap">
+        <p-floatLabel>
+            <input id="street" pInputText formControlName="address.street" />
+            <label for="street">Street</label>
+        </p-floatLabel>
+      </div>
+      <div class="flex-wrap">
+        <p-floatLabel>
+        <input id="number" pInputText formControlName="address.number" />
+        <label for="number">Number</label>
+        </p-floatLabel>
+      </div>
+      <div class="flex-wrap">
+        <p-floatLabel>
+            <input id="address_complement" pInputText formControlName="address.address_complement" />
+            <label for="address_complement">Address Complement</label>
+        </p-floatLabel>
+      </div>
 
-            <p class="section_title"> {{ category.key }} </p>
-
-            @if (category.key == "concierge" && !isCheckboxChecked) {
-
-                <label>
-                    <input type="checkbox" (change)="onCheckboxChange($event)">
-                    <p>Il n'y a pas de concierge pour cette co-propriété</p>
-                </label>
-            }
-            @else {
-
-                @if (category.key == "concierge" && isCheckboxChecked) {
-
-                    <label>
-                        <input type="checkbox" (change)="onCheckboxChange($event)">
-                        <p>il y a un concierge pour cette co-propriété</p>
-                    </label>
-                }
-
-                @for (element of category.value; track element.id) {
-                    <div class="inputLabelduo">
-                        <label [for]="element.id"> {{ element.name }} </label>
+      <div class="flex-wrap">
+          <p-dropdown 
+            [options]="countries" 
+            formControlName="address.country" 
+            optionLabel="name" 
+            [filter]="true" 
+            filterBy="name" 
+            [showClear]="true"
+            placeholder="Select a Country"
+          >
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+                <div class="flex align-items-center gap-2">
+                    <img 
+                        src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                        [class]="'flag flag-' + (selectedCountry?.code?.toLowerCase() || '')"
+                        style="width: 18px" 
+                      />
+                    <div>{{ selectedOption.name }}</div>
+                  </div>
+            </ng-template>
+            <ng-template let-country pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                    <img 
+                        src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                        [class]="'flag flag-' + country.code.toLowerCase()"
+                        style="width: 18px" 
+                      />
+                    <div>{{ country.name }}</div>
+                </div>
+            </ng-template>
+            
+          </p-dropdown>
+      </div>
+      
+      <div class="flex-wrap">
+        <p-dropdown 
+          [options]="cities" 
+          formControlName="address.city" 
+          optionLabel="name" 
+          [filter]="true" 
+          filterBy="name" 
+          [showClear]="true"
+          placeholder="Select a City"
+        >
+          <ng-template pTemplate="selectedItem" let-selectedOption>
+              <div class="flex align-items-center gap-2">
+                  <img 
+                      src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                      [class]="'flag flag-' + (selectedCity?.name?.toLowerCase() || '')"
+                      style="width: 18px" 
+                    />
+                  <div>{{ selectedOption.name }}</div>
+                </div>
+          </ng-template>
+          <ng-template let-city pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                  <img 
+                      src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                      [class]="'flag flag-' + city.name.toLowerCase()"
+                      style="width: 18px" 
+                    />
+                  <div>{{ city.name }}</div>
+              </div>
+          </ng-template>
+          
+        </p-dropdown>
+    </div>
     
-                        @if (element.type == "text" || element.type == "date" || element.type == "email" || element.type == "checkbox") {
-                            <input [id]="element.id" [type]="element.type" pInputText [formControlName]="element.id">
-                            
-                        }
+      
 
-                        @else if (element.type == "number") {
-                            <input [id]="element.id" [type]="element.type" pInputText [formControlName]="element.id">
-                            
-                        }
-                        
-                        @else if (element.id == "civility") {
-                            <select [id]="element.id" [formControlName]="element.id">
-                                <option [value]="null"> {{ "" }} </option>
-                                @for (option of civilityTypes; track option.type) {
-                                    <option [value]="option.type"> {{ option.type }} </option>
-                                }
-                            </select>
-                        }
-                        
-                        @else if (element.id == "document_receiving_method") {
-                            <select [id]="element.id" [formControlName]="element.id">
-                                <option [value]="null"> {{ "" }} </option>
-                                @for (option of documentReceivingMethods; track option.type) {
-                                    <option [value]="option.type"> {{ option.type }} </option>
-                                }
-                            </select>
-                        }
-                        
-                        @else if (element.id == "reminder_receiving_method") {
-                            <select [id]="element.id" [formControlName]="element.id">
-                                <option [value]="null"> {{ "" }} </option>
-                                @for (option of reminderReceivingMethods; track option.type) {
-                                    <option [value]="option.type"> {{ option.type }} </option>
-                                }
-                            </select>
-                        }
-                    </div>
-                }
-            }
-        </div>
-    }
-    <!--<button type="submit" [disabled]="!createCondominiumForm.valid">submit</button>-->
-    <button type="submit">submit</button>
-</form>
+      <div class="flex-wrap">
+        <label for="postal_code">Postal Code</label>
+        <input id="postal_code" pInputText formControlName="address.postal_code" />
+      </div>
+  
+
+
+
+
+

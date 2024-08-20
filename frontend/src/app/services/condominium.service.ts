@@ -8,7 +8,6 @@ import { environment } from '../../environments/environment';
 })
 
 export class CondominiumService {
-  private apiUrl = 'http://your-backend-api-url';
 
   private getCivilities = environment.apiUrls.getCivilities;
   private getDocumentRemindingMethod = environment.apiUrls.getDocumentRemindingMethod;
