@@ -1,0 +1,206 @@
+<p-card header="Concierge">
+<div class="card flex flex-wrap gap-3 mb-4">
+    <div class="flex-wrap">
+      <p-inputSwitch 
+        [ngModel]="conciergeForm.get('isThereConcierge')?.value" 
+        (onChange)="conciergeSwitch($event)" />
+      <label for="conciergeSwitch">Concierge</label>
+    </div>
+  </div>
+  
+  <div class="card flex flex-wrap gap-3 mb-4" [formGroup]="conciergeForm">
+    <!-- Activer les champs si isThereConcierge est true -->
+    @if (conciergeForm.get('isThereConcierge')?.value) {
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <input type="text" pInputText formControlName="name" />
+          <label for="name">{{ getLabel('name') }}</label>
+        </p-floatLabel>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <input type="text" pInputText formControlName="surname" />
+          <label for="surname">{{ getLabel('surname') }}</label>
+        </p-floatLabel>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <input type="email" pInputText formControlName="email" />
+          <label for="email">{{ getLabel('email') }}</label>
+        </p-floatLabel>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-inputSwitch formControlName="corporation" />
+        <label for="corporation">{{ getLabel('corporation') }}</label>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-inputMask 
+            mask="(+99) 999-99-99-99" 
+            formControlName="phone"
+            placeholder="(99) 999-99-99-99" />
+          <label for="phone">{{ getLabel('phone') }}</label>
+        </p-floatLabel>
+      </div>  
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-inputMask 
+            mask="(a*)99-9999-9999-9999" 
+            formControlName="iban"
+            placeholder="(BE)XX-XXXX-XXXX-XXXX" />
+          <label for="iban">{{ getLabel('iban') }}</label>
+        </p-floatLabel>
+      </div>  
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-calendar
+            formControlName="birthdate"
+            dateFormat="dd.mm.yy"/>
+          <label for="birthdate">{{ getLabel('birthdate') }}</label>
+        </p-floatLabel>
+      </div>  
+      
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-dropdown
+            formControlName="civility"
+            [options]="civilityTypes"
+            optionLabel="type"
+            placeholder="Selectionner une civilité" />
+          <label for="civility">{{ getLabel('civility') }}</label>
+        </p-floatLabel>
+      </div>  
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-dropdown
+            formControlName="document_receiving_method"
+            [options]="documentReceivingMethods"
+            optionLabel="type"
+            placeholder="Selectionner une méthode d'envoi des documents" />
+          <label for="document_receiving_method">{{ getLabel('document_receiving_method') }}</label>
+        </p-floatLabel>
+      </div>  
+      
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <input type="text" pInputText formControlName="reminder_delay" pKeyFilter="int" />
+          <label for="reminder_delay">{{ getLabel('reminder_delay') }}</label>
+        </p-floatLabel>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-dropdown
+            formControlName="reminder_receiving_method"
+            [options]="reminderReceivingMethods"
+            optionLabel="type"
+            placeholder="Selectionner une méthode d'envoi des rappels" />
+          <label for="reminder_receiving_method">{{ getLabel('reminder_receiving_method') }}</label>
+        </p-floatLabel>
+      </div>  
+      
+    <!-- Désactiver les champs si isThereConcierge est false -->
+    } @else {
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <input type="text" pInputText [disabled]="true" />
+          <label for="name">{{ getLabel('name') }}</label>
+        </p-floatLabel>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <input type="text" pInputText [disabled]="true" />
+          <label for="surname">{{ getLabel('surname') }}</label>
+        </p-floatLabel>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <input type="email" pInputText [disabled]="true" />
+          <label for="email">{{ getLabel('email') }}</label>
+        </p-floatLabel>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-inputSwitch [disabled]="true" />
+        <label for="corporation">{{ getLabel('corporation') }}</label>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-inputMask 
+            mask="(+99) 999-99-99-99" 
+            [disabled]="true" />
+          <label for="phone">{{ getLabel('phone') }}</label>
+        </p-floatLabel>
+      </div> 
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-inputMask 
+            mask="(a*)99-9999-9999-9999" 
+            [disabled]="true" />
+          <label for="iban">{{ getLabel('iban') }}</label>
+        </p-floatLabel>
+      </div> 
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-calendar
+            formControlName="birthdate"
+            dateFormat="dd.mm.yy"
+            [disabled]="true" />
+          <label for="birthdate">{{ getLabel('birthdate') }}</label>
+        </p-floatLabel>
+      </div>  
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-dropdown
+            [options]="civilityTypes"
+            optionLabel="type"
+            placeholder="Selectionner une civilité" 
+            [disabled]="true"/>
+          <label for="civility">{{ getLabel('civility') }}</label>
+        </p-floatLabel>
+      </div>  
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-dropdown
+            [options]="documentReceivingMethods"
+            optionLabel="type"
+            placeholder="Selectionner une méthode d'envoi des documents"
+            [disabled]="true" />
+          <label for="document_receiving_method">{{ getLabel('document_receiving_method') }}</label>
+        </p-floatLabel>
+      </div>  
+      
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <input type="text" pInputText pKeyFilter="int" [disabled]="true" />
+          <label for="reminder_delay">{{ getLabel('reminder_delay') }}</label>
+        </p-floatLabel>
+      </div>
+  
+      <div class="flex-wrap">
+        <p-floatLabel>
+          <p-dropdown
+            [options]="reminderReceivingMethods"
+            optionLabel="type"
+            placeholder="Selectionner une méthode d'envoi des rappels"
+            [disabled]="true" />
+          <label for="reminder_receiving_method">{{ getLabel('reminder_receiving_method') }}</label>
+        </p-floatLabel>
+      </div>  
+    }
+  </div>
+</p-card>
