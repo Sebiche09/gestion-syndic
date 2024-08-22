@@ -17,7 +17,7 @@
             <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" />
             
             <span class="p-input-icon-left ml-auto">
-                <p-button label="Ajouter une co-propriété" icon="pi pi-plus" (onClick)="GoToAddCondominium()"/>
+                <p-button label="Ajouter une co-propriété" icon="pi pi-plus" (onClick)="openDialog()"/>
             </span>
         </div>
     </ng-template>
@@ -95,7 +95,10 @@
     </ng-template>
 </p-table>
 
-
+<!-- Sidebar contenant le formulaire pour ajouter une co-propriété -->
+<p-dialog header="Ajouter une nouvelle co-propriété" [(visible)]="displayDialog" [modal]="true" [style]="{width: '50vw'}" (onHide)="closeDialog()">
+    <app-condominium (closeDialog)="closeDialog()"></app-condominium>
+</p-dialog>
 <!--
 
     - nom

@@ -14,16 +14,20 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { NgModel, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
+import { CondominiumComponent } from '../condominium/condominium.component';
 
 @Component({
     selector: 'displayCondominium',
     templateUrl: 'display-condominium.component.html',
     standalone: true,
     imports: [TableModule, HttpClientModule, CommonModule, InputTextModule, TagModule, 
-    DropdownModule, MultiSelectModule, ProgressBarModule, ButtonModule, FormsModule ],
+    DropdownModule, MultiSelectModule, ProgressBarModule, ButtonModule, FormsModule, DialogModule, CondominiumComponent ],
     providers: [DisplayCondominiumService, NgModel]
 })
 export class DisplayCondominiumComponent implements OnInit {
+    displayDialog: boolean = false;
+
     customers!: Customer[];
     representatives!: Representative[];
 
@@ -72,7 +76,12 @@ export class DisplayCondominiumComponent implements OnInit {
         table.clear();
         this.searchValue = ''
     }
-
+    openDialog() {
+        this.displayDialog = true;
+    }
+    closeDialog() {
+        this.displayDialog = false;
+      }
     getSeverity(status: string) {
         switch (status.toLowerCase()) {
             case 'unqualified':
@@ -92,9 +101,5 @@ export class DisplayCondominiumComponent implements OnInit {
             default:
               return null;
         }
-    }
-
-    GoToAddCondominium() {
-        this.router.navigate(['/createcondominium']);
     }
 }

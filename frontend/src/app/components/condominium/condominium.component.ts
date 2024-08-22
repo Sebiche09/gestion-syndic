@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , Output, EventEmitter} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -10,9 +10,10 @@ import { ButtonModule } from 'primeng/button';
 import { StepsModule } from 'primeng/steps';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: 'condominium',
+  selector: 'app-condominium',
   templateUrl: './condominium.component.html',
   styleUrls: ['./condominium.component.scss'],
   standalone: true,
@@ -24,11 +25,13 @@ import { ToastModule } from 'primeng/toast';
     FtpblueprintComponent,
     ConciergeComponent,
     StepsModule,
-    ToastModule
+    ToastModule,
+    DialogModule
   ],
   providers: [MessageService]
 })
 export class CondominiumComponent {
+  @Output() closeDialog = new EventEmitter<void>();
   items: MenuItem[] = [];
   activeIndex: number = 0;
   createCondominiumForm: FormGroup;
@@ -102,7 +105,6 @@ export class CondominiumComponent {
   onActiveIndexChange(event: number) {
     this.activeIndex = event;
   }
-
   ngOnInit() {
     this.items = [
         {
@@ -124,6 +126,7 @@ export class CondominiumComponent {
     ];
   }
   onSubmit(): void {
+    this.closeDialog.emit();
     console.log('Formulaire soumis:', this.createCondominiumForm.value);
     let formData = this.createCondominiumForm.value;
 
