@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Customer, Representative } from '../../domain/diplayCondominium.domain';
 import { DisplayCondominiumService } from '../../services/display-condominium.service';
 import { DataViewModule } from 'primeng/dataview';
@@ -27,6 +27,7 @@ import { CondominiumComponent } from '../condominium/condominium.component';
 })
 export class DisplayCondominiumComponent implements OnInit {
     displayDialog: boolean = false;
+    @ViewChild('condo') condoComponent!: CondominiumComponent;
 
     customers!: Customer[];
     representatives!: Representative[];
@@ -81,6 +82,10 @@ export class DisplayCondominiumComponent implements OnInit {
     }
     closeDialog() {
         this.displayDialog = false;
+      }
+    handleDialogHide() {
+        // Appeler la méthode resetActiveIndex lorsque le dialog se ferme
+        this.condoComponent.resetActiveIndex();
       }
     getSeverity(status: string) {
         switch (status.toLowerCase()) {

@@ -32,3 +32,15 @@
 .form-container {
     margin-top: 150px; /* Décalage pour ne pas chevaucher le steps */
 }
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px; 
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto; 
+}

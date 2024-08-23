@@ -86,25 +86,26 @@ export class CondominiumComponent {
   get informationsForm(): FormGroup {
     return this.createCondominiumForm.get('informations') as FormGroup;
   }
-
   // Getter pour le formGroup 'address'
   get addressForm(): FormGroup {
     return this.createCondominiumForm.get('address') as FormGroup;
   }
-
   // Getter pour le formGroup 'ftpBlueprint'
   get ftpBlueprintForm(): FormGroup {
     return this.createCondominiumForm.get('ftpBlueprint') as FormGroup;
   }
-
   // Getter pour le formGroup 'concierge'
   get conciergeForm(): FormGroup {
     return this.createCondominiumForm.get('concierge') as FormGroup;
   }
-
+  
   onActiveIndexChange(event: number) {
     this.activeIndex = event;
   }
+  resetActiveIndex() {
+    this.activeIndex = 0;
+  }
+
   ngOnInit() {
     this.items = [
         {

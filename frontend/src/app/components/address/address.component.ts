@@ -20,6 +20,8 @@ interface City {
   selector: 'app-address',
   standalone: true,
   imports: [
+    ReactiveFormsModule,
+    FormsModule,
     InputTextModule,
     FloatLabelModule,
     DropdownModule,

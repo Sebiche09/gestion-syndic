@@ -15,4 +15,5 @@ import { CardModule } from 'primeng/card';
 })
 export class FtpblueprintComponent {
   @Input() ftpBlueprintForm!: FormGroup;
+  
 } 
