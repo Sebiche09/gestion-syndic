@@ -4,7 +4,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
-
+import { CommonModule } from '@angular/common';
 import { CountryService } from '../../services/country.service';
 import { CityService } from '../../services/city.services';
 
@@ -22,6 +22,7 @@ interface City {
   imports: [
     ReactiveFormsModule,
     FormsModule,
+    CommonModule,
     InputTextModule,
     FloatLabelModule,
     DropdownModule,

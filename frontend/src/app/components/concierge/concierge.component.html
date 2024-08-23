@@ -8,7 +8,7 @@
     </div>
   </div>
   
-  <div class="card flex flex-wrap gap-3 mb-4" [formGroup]="conciergeForm" >
+  <div class="card flex flex-wrap gap-4 mb-4" [formGroup]="conciergeForm" >
     <!-- Activer les champs si isThereConcierge est true -->
     @if (conciergeForm.get('isThereConcierge')?.value) {
       <div class="flex-wrap">

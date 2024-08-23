@@ -1,13 +1,21 @@
 <p-card header="Information">
-<div class="card flex flex-wrap gap-3 mb-4" class="form" [formGroup]="informationForm">
-    <div class="flex-auto">
+  <div class="card flex flex-wrap gap-4 mb-4" [formGroup]="informationForm">
+    
+    <div class="flex-item" style="flex: 1;">
       <p-floatLabel>
         <input type="text" pInputText formControlName="name" />
         <label for="name">Name</label>
       </p-floatLabel>
     </div>
-  
-    <div class="flex-auto">
+    
+    <div class="flex-item" style="flex: 1;">
+      <p-floatLabel>
+        <input type="text" id="prefix" pInputText formControlName="prefix" />
+        <label for="prefix">Prefix</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="flex-item" style="flex: 1;">
       <p-floatLabel>
         <textarea
           id="description"
@@ -19,13 +27,5 @@
         <label for="description">Description</label>
       </p-floatLabel>
     </div>
-  
-    <div class="flex-auto">
-      <p-floatLabel>
-        <input type="text" id="prefix" pInputText formControlName="prefix" />
-        <label for="prefix">Prefix</label>
-      </p-floatLabel>
-    </div>
   </div>
 </p-card>
-  

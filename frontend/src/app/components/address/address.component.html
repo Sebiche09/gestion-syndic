@@ -1,97 +1,99 @@
 <p-card header="Adresse">
-<div class="card flex flex-wrap gap-4 mb-4" class="form" [formGroup]="addressForm">
-    <div class="flex-wrap">
+    <div class="card flex flex-wrap gap-4 mb-4" [formGroup]="addressForm">
+      
+      <div class="flex-item" style="flex: 1;">
         <p-floatLabel>
-            <input id="stree    t" pInputText formControlName="street" />
-            <label for="street">Street</label>
+          <input id="street" pInputText formControlName="street" />
+          <label for="street">Street</label>
         </p-floatLabel>
-    </div>
-    <div class="flex-wrap">
+      </div>
+      
+      <div class="flex-item" style="flex: 1;">
         <p-floatLabel>
-        <input id="number" pInputText formControlName="number" />
-        <label for="number">Number</label>
+          <input id="number" pInputText formControlName="number" />
+          <label for="number">Number</label>
         </p-floatLabel>
-    </div>
-    <div class="flex-wrap">
+      </div>
+      
+      <div class="flex-item" style="flex: 1;">
         <p-floatLabel>
-            <input id="address_complement" pInputText formControlName="address_complement" />
-            <label for="address_complement">Address Complement</label>
+          <input id="address_complement" pInputText formControlName="address_complement" />
+          <label for="address_complement">Address Complement</label>
         </p-floatLabel>
-    </div>
+      </div>
+      
+      <div class="flex-item" style="flex: 1;">
+        <p-floatLabel>
+          <input id="postal_code" pInputText formControlName="postal_code" />
+          <label for="postal_code">Postal Code</label>
+        </p-floatLabel>
+      </div>
 
-    <div class="flex-wrap">
+      <div class="flex-item" style="flex: 1;">
         <p-dropdown 
-            [options]="countries" 
-            formControlName="country" 
-            optionLabel="name" 
-            [filter]="true" 
-            filterBy="name" 
-            [showClear]="true"
-            placeholder="Select a Country"
+          [options]="countries" 
+          formControlName="country" 
+          optionLabel="name" 
+          [filter]="true" 
+          filterBy="name" 
+          [showClear]="true"
+          placeholder="Select a Country"
         >
-            <ng-template pTemplate="selectedItem" let-selectedOption>
-                <div class="flex align-items-center gap-2">
-                    <img 
-                        src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                        [class]="'flag flag-' + (selectedCountry?.code?.toLowerCase() || '')"
-                        style="width: 18px" 
-                    />
-                    <div>{{ selectedOption.name }}</div>
-                </div>
-            </ng-template>
-            <ng-template let-country pTemplate="item">
-                <div class="flex align-items-center gap-2">
-                    <img 
-                        src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                        [class]="'flag flag-' + country.code.toLowerCase()"
-                        style="width: 18px" 
-                    />
-                    <div>{{ country.name }}</div>
-                </div>
-            </ng-template>
-            
-        </p-dropdown>
-    </div>
-
-    <div class="flex-wrap">
-        <p-dropdown 
-        [options]="cities" 
-        formControlName="city" 
-        optionLabel="name" 
-        [filter]="true" 
-        filterBy="name" 
-        [showClear]="true"
-        placeholder="Select a City"
-        >
-        <ng-template pTemplate="selectedItem" let-selectedOption>
+          <ng-template pTemplate="selectedItem" let-selectedOption>
             <div class="flex align-items-center gap-2">
-                <img 
-                    src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                    [class]="'flag flag-' + (selectedCity?.name?.toLowerCase() || '')"
-                    style="width: 18px" 
-                    />
-                <div>{{ selectedOption.name }}</div>
-                </div>
-        </ng-template>
-        <ng-template let-city pTemplate="item">
-            <div class="flex align-items-center gap-2">
-                <img 
-                    src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                    [class]="'flag flag-' + city.name.toLowerCase()"
-                    style="width: 18px" 
-                    />
-                <div>{{ city.name }}</div>
+              <img 
+                src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                [class]="'flag flag-' + (selectedCountry?.code?.toLowerCase() || '')"
+                style="width: 18px" 
+              />
+              <div>{{ selectedOption.name }}</div>
             </div>
-        </ng-template>
-        
+          </ng-template>
+          <ng-template let-country pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <img 
+                src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                [class]="'flag flag-' + country.code.toLowerCase()"
+                style="width: 18px" 
+              />
+              <div>{{ country.name }}</div>
+            </div>
+          </ng-template>
         </p-dropdown>
+      </div>
+  
+      <div class="flex-item" style="flex: 1;">
+        <p-dropdown 
+          [options]="cities" 
+          formControlName="city" 
+          optionLabel="name" 
+          [filter]="true" 
+          filterBy="name" 
+          [showClear]="true"
+          placeholder="Select a City"
+        >
+          <ng-template pTemplate="selectedItem" let-selectedOption>
+            <div class="flex align-items-center gap-2">
+              <img 
+                src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                [class]="'flag flag-' + (selectedCity?.name?.toLowerCase() || '')"
+                style="width: 18px" 
+              />
+              <div>{{ selectedOption.name }}</div>
+            </div>
+          </ng-template>
+          <ng-template let-city pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <img 
+                src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                [class]="'flag flag-' + city.name.toLowerCase()"
+                style="width: 18px" 
+              />
+              <div>{{ city.name }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
     </div>
-
-    <div class="flex-wrap">
-        <p-floatLabel>
-        <input id="postal_code" pInputText formControlName="postal_code" />
-        <label for="postal_code">Postal Code</label>
-    </p-floatLabel>
-    </div>
-</div>
-</p-card>
+  </p-card>
+  
