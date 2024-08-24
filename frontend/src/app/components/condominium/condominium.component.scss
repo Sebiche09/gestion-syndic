@@ -21,7 +21,6 @@
 
 .card {
     width: 100%;
-    max-width: 1200px;
     padding: 20px;
     background: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -29,7 +28,7 @@
     margin-top: 20px;
 }
 .card form {
-    height: 54vh;
+    height: 59vh;
 }
 .form-container {
     margin-top: 150px; /* Décalage pour ne pas chevaucher le steps */
@@ -37,7 +36,7 @@
 .button-group {
     
     position: absolute;
-    bottom: 50px;
+    bottom: 30px;
     right: 4%;
     width: 92%;
     display: flex;

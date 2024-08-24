@@ -8,8 +8,10 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { KeyFilterModule } from 'primeng/keyfilter';
-
+import { BlockUIModule } from 'primeng/blockui';
+import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
+import { TooltipModule } from 'primeng/tooltip';
 
 
 import { CondominiumService } from '../../services/condominium.service';
@@ -28,31 +30,27 @@ import { CondominiumService } from '../../services/condominium.service';
     CalendarModule, 
     DropdownModule, 
     KeyFilterModule,
-    CardModule],
+    CardModule,
+    BlockUIModule,
+    TooltipModule],
   templateUrl: './concierge.component.html',
   styleUrl: './concierge.component.scss'
 })
 export class ConciergeComponent implements OnInit{
   @Input() conciergeForm!: FormGroup;
-  isThereConcierge = false;
+  isThereConcierge = false ;
+  ConciergeMessage = "Il n'y a pas de concierge dans cette copropriété";
 
 
   // Function to switch the concierge form
   conciergeSwitch(event: any) {
-    const isThereConciergeControl = this.conciergeForm.get('isThereConcierge');
-    if (isThereConciergeControl) {
-      isThereConciergeControl.setValue(event.checked);
-      
-      if (event.checked) {
-        // Activer tous les contrôles du formulaire concierge
-        this.conciergeForm.enable();
-      } else {
-        // Désactiver tous les contrôles du formulaire concierge
-        this.conciergeForm.disable();
-        // Garder le contrôle `isThereConcierge` activé pour que l'utilisateur puisse réactiver le formulaire
-        isThereConciergeControl.enable();
-      }
+    this.isThereConcierge! = event.checked;
+    if (event.checked == true){
+      this.ConciergeMessage = "Il y a un concierge dans cette copropriété";
+    }else {
+      this.ConciergeMessage = "Il n'y a pas de concierge dans cette copropriété";
     }
+    
   }
 
   constructor(private condominiumService: CondominiumService) {}

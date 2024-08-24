@@ -31,8 +31,9 @@
             @if (activeIndex < items.length - 1) {
                 <p-button label="Suivant" (click)="activeIndex = activeIndex + 1"></p-button>
             }
+            <p-confirmPopup />
             @if (activeIndex === items.length - 1){
-                <p-button type="submit" label="Submit" icon="pi pi-check" iconPos="right" />
+                <p-button type="button" label="Submit" icon="pi pi-check" iconPos="right" (onClick)="confirmation($event)"/>
             }
         </div>
     </div>

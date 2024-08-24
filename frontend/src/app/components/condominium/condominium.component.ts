@@ -8,9 +8,11 @@ import { ConciergeComponent } from '../concierge/concierge.component';
 import { InformationComponent } from '../information/information.component';
 import { ButtonModule } from 'primeng/button';
 import { StepsModule } from 'primeng/steps';
-import { MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+
 
 @Component({
   selector: 'app-condominium',
@@ -26,9 +28,10 @@ import { DialogModule } from 'primeng/dialog';
     ConciergeComponent,
     StepsModule,
     ToastModule,
-    DialogModule
+    DialogModule,
+    ConfirmPopupModule
   ],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
 export class CondominiumComponent {
   @Output() closeDialog = new EventEmitter<void>();
@@ -38,7 +41,7 @@ export class CondominiumComponent {
 
   private fromUrlCreateCondominium = environment.apiUrls.condominiumApi;
 
-  constructor(private http: HttpClient, private fb: FormBuilder, public messageService: MessageService) {
+  constructor(private http: HttpClient, private fb: FormBuilder, public messageService: MessageService, private confirmationService: ConfirmationService) {
     this.createCondominiumForm = this.fb.group({
       informations: this.fb.group({
         name: ['', Validators.required],
@@ -105,6 +108,20 @@ export class CondominiumComponent {
   resetActiveIndex() {
     this.activeIndex = 0;
   }
+  confirmation(event: Event) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: "Etes-vous sur de confirmer l'envoi du formulaire?",
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Formulaire confirmé', life: 3000 });
+            this.onSubmit();
+        },
+        reject: () => {
+            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'Formulaire rejeté', life: 3000 });
+        }
+    });
+}
 
   ngOnInit() {
     this.items = [
