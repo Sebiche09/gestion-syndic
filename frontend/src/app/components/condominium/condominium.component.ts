@@ -1,4 +1,4 @@
-import { Component , Output, EventEmitter} from '@angular/core';
+import { Component , Output, EventEmitter, signal, computed } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -6,14 +6,17 @@ import { AddressComponent } from '../address/address.component';
 import { FtpblueprintComponent } from '../ftpblueprint/ftpblueprint.component';
 import { ConciergeComponent } from '../concierge/concierge.component';
 import { InformationComponent } from '../information/information.component';
+import { CadastreComponent } from '../cadastre/cadastre.component';
+import { LotComponent } from '../lot/lot.component';
 import { ButtonModule } from 'primeng/button';
 import { StepsModule } from 'primeng/steps';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-
-
+import { CoproprietaireComponent } from "../coproprietaire/coproprietaire.component";
+import { UniqueCheckService } from '../../services/unique-check.service';
+import { UniqueValidator } from '../../validators/unique-validator';
 @Component({
   selector: 'app-condominium',
   templateUrl: './condominium.component.html',
@@ -26,27 +29,34 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     InformationComponent,
     FtpblueprintComponent,
     ConciergeComponent,
+    CadastreComponent,
+    LotComponent,
     StepsModule,
     ToastModule,
     DialogModule,
-    ConfirmPopupModule
-  ],
+    ConfirmPopupModule,
+    CoproprietaireComponent
+],
   providers: [MessageService, ConfirmationService]
 })
 export class CondominiumComponent {
   @Output() closeDialog = new EventEmitter<void>();
   items: MenuItem[] = [];
-  activeIndex: number = 0;
+  activeIndex = signal(0);
   createCondominiumForm: FormGroup;
 
   private fromUrlCreateCondominium = environment.apiUrls.condominiumApi;
 
-  constructor(private http: HttpClient, private fb: FormBuilder, public messageService: MessageService, private confirmationService: ConfirmationService) {
+  constructor(private http: HttpClient,
+     private fb: FormBuilder,
+     public messageService: MessageService,
+     private confirmationService: ConfirmationService,
+    private uniqueCheckService: UniqueCheckService) {
     this.createCondominiumForm = this.fb.group({
       informations: this.fb.group({
-        name: ['', Validators.required],
-        prefix: ['', Validators.required],
-        description: ['']
+        name: ['', [Validators.required, Validators.minLength(3)],[UniqueValidator.checkNameUniqueness(this.uniqueCheckService)]],
+        prefix: ['', [Validators.required], [UniqueValidator.checkPrefixUniqueness(this.uniqueCheckService)]],
+        description: ['', [Validators.maxLength(500)]]
       }),
 
       address: this.fb.group({
@@ -102,11 +112,30 @@ export class CondominiumComponent {
     return this.createCondominiumForm.get('concierge') as FormGroup;
   }
   
-  onActiveIndexChange(event: number) {
-    this.activeIndex = event;
+  isStepValid(): boolean {
+    // Vérifiez les validations pour chaque étape en fonction de l'index actif
+    if (this.activeIndex() === 0) {
+      const informationsForm = this.createCondominiumForm.get('informations');
+      return informationsForm?.valid ?? false;
+    } else if (this.activeIndex() === 1) {
+      const cadastreForm = this.createCondominiumForm.get('cadastre');
+      return cadastreForm?.valid ?? false;
+    }
+    return true;
   }
-  resetActiveIndex() {
-    this.activeIndex = 0;
+
+  onActiveIndexChange(index: number) {
+    this.activeIndex.set(index);
+  }
+  resetStep(){
+    this.activeIndex.set(0);
+  }
+  nextStep() {
+    this.activeIndex.update(i => i + 1);
+  }
+
+  previousStep() {
+    this.activeIndex.update(i => i - 1);
   }
   confirmation(event: Event) {
     this.confirmationService.confirm({
@@ -126,16 +155,28 @@ export class CondominiumComponent {
   ngOnInit() {
     this.items = [
         {
-            label: 'Information',
+            label: 'Informations',
             command: (event: any) => this.messageService.add({severity:'info', summary:'Information Step', detail: event.item.label})
         },
         {
-            label: 'Address',
+          label: 'Cadastre',
+          command: (event: any) => this.messageService.add({severity:'info', summary:'Cadastre Step', detail: event.item.label})
+        },
+        {
+            label: 'Adresse',
             command: (event: any) => this.messageService.add({severity:'info', summary:'Address Step', detail: event.item.label})
         },
         {
-            label: 'FTP Blueprint',
+            label: 'Plans',
             command: (event: any) => this.messageService.add({severity:'info', summary:'FTP Blueprint Step', detail: event.item.label})
+        },
+        {
+          label: 'Lots',
+          command: (event: any) => this.messageService.add({severity:'info', summary:'Lot Step', detail: event.item.label})
+        },
+        {
+          label: 'Co-propriétaires',
+          command: (event: any) => this.messageService.add({severity:'info', summary:'Co-propriétaire Step', detail: event.item.label})
         },
         {
             label: 'Concierge',

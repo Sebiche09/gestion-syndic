@@ -85,7 +85,7 @@ export class DisplayCondominiumComponent implements OnInit {
       }
     handleDialogHide() {
         // Appeler la méthode resetActiveIndex lorsque le dialog se ferme
-        this.condoComponent.resetActiveIndex();
+        this.condoComponent.resetStep();
       }
     getSeverity(status: string) {
         switch (status.toLowerCase()) {

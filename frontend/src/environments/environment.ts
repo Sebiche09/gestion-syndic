@@ -8,6 +8,7 @@ export const environment = {
       getDocumentRemindingMethod : 'http://localhost:8080/getdocumentreceivingmethods',
       getCountries: 'https://restcountries.com/v3.1/independent?status=true&fields=name,cca2',
       getCitiesBase: 'http://api.geonames.org/searchJSON',
-      username: 'sebastien.vlmnckx'
+      username: 'sebastien.vlmnckx',
+      checkUniqueness: 'http://localhost:8080/check-uniqueness',
     }
-  };
+  };  

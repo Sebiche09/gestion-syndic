@@ -1,0 +1,14 @@
+.full-width {
+    width: 100%;
+}
+
+.form-field {
+    margin-bottom: 25px; /* Ajoute de l'espace vertical entre les champs */
+    width: 100%;
+  }
+  
+  .error-message {
+    min-height: 20px; /* Réserver de l'espace pour les messages d'erreur */
+    color: red; /* Couleur des messages d'erreur */
+    margin-top: 10px; /* Espacement entre le champ et le message d'erreur */
+  }

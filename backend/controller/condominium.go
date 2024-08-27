@@ -245,3 +245,44 @@ func GetReminderReceivingMethods(c *gin.Context) {
 
 	c.JSON(http.StatusOK, reminderReceivingMethods)
 }
+func CheckUniqueness(c *gin.Context) {
+	db := config.DB
+
+	// Récupérer les paramètres de la requête
+	name := c.Query("name")
+	prefix := c.Query("prefix")
+
+	var exists bool
+	var err error
+
+	// Vérifier l'unicité du nom
+	if name != "" {
+		conditions := map[string]interface{}{
+			"name": name,
+		}
+		exists, err = CheckIfExists(db, "condominia", conditions)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking name uniqueness"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"isTaken": exists})
+		return
+	}
+
+	// Vérifier l'unicité du préfixe
+	if prefix != "" {
+		conditions := map[string]interface{}{
+			"prefix": prefix,
+		}
+		exists, err = CheckIfExists(db, "condominia", conditions)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking prefix uniqueness"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"isTaken": exists})
+		return
+	}
+
+	// Si ni `name` ni `prefix` n'ont été fournis
+	c.JSON(http.StatusBadRequest, gin.H{"error": "Either name or prefix must be provided"})
+}
