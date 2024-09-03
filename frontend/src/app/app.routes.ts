@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { FileUploadComponent } from './components/invoice-upload/invoice-upload.component';
+import { FileUploadComponent } from './components/upload/upload.component';
 import { CondominiumComponent } from './components/condominium/condominium.component';
 import { DisplayCondominiumComponent } from './components/display-condominium/display-condominium.component';
 

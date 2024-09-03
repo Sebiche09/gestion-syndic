@@ -1,48 +1,96 @@
-from flask import Flask, request, jsonify
+import fitz  # PyMuPDF
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from paddleocr import PaddleOCR
 from PIL import Image
 import io
 import numpy as np
+from pdf2image import convert_from_bytes
+from typing import Dict
 import gc
 
-app = Flask(__name__)
+app = FastAPI()
 
-# Initialisez PaddleOCR avec les paramètres appropriés
+# Initialiser PaddleOCR
 ocr = PaddleOCR(use_angle_cls=True, lang='fr')
 
-@app.route('/ocr', methods=['POST'])
-def ocr_endpoint():
-    if 'file' not in request.files:
-        return jsonify({'error': 'Aucun fichier fourni'}), 400
+def is_text_pdf(doc) -> bool:
+    """Vérifie si le PDF contient principalement du texte."""
+    text = ""
+    for page_num in range(len(doc)):
+        page = doc.load_page(page_num)
+        text += page.get_text("text")
+    return len(text.strip()) > 100  # Adjust threshold as needed
 
-    file = request.files['file']
+@app.post("/ocr")
+async def ocr_endpoint(file: UploadFile = File(...)) -> Dict[str, str]:
     if file.filename == '':
-        return jsonify({'error': 'Aucun fichier sélectionné'}), 400
+        raise HTTPException(status_code=400, detail="Aucun fichier sélectionné")
 
     try:
-        # Lire l'image depuis le fichier
-        image = Image.open(io.BytesIO(file.read()))
+        contents = await file.read()
 
-        # Convertir l'image PIL en tableau NumPy
-        image_np = np.array(image)
+        # Détection du type de fichier
+        file_extension = file.filename.lower().split(".")[-1]
 
-        # Effectuer l'OCR avec PaddleOCR
-        result = ocr.ocr(image_np, cls=True)
+        if file_extension in ["pdf"]:
+            # Ouvrir le fichier PDF avec PyMuPDF
+            doc = fitz.open("pdf", contents)
 
-        # Préparer le texte extrait
-        text = '\n'.join([line[1][0] for line in result[0]])
+            if is_text_pdf(doc):
+                print("Text PDF detected")
+                # Extraction directe du texte avec PyMuPDF
+                text = ""
+                for page_num in range(len(doc)):
+                    page = doc.load_page(page_num)
+                    text += page.get_text("text")
+                return {"text": text.strip()}
+            else:
+                # Conversion en images et OCR avec PaddleOCR
+                images = convert_from_bytes(contents)
+                text = ""
+                for page_number, image in enumerate(images, start=1):
+                    if image.mode in ("RGBA", "LA") or (image.mode == "P" and "transparency" in image.info):
+                        image = image.convert("RGB")
+                    image_np = np.array(image)
+                    result = ocr.ocr(image_np, cls=True)
+                    page_text = ""
+                    for line in result:
+                        page_text += ('\n' + line[1][0])
+                    text += f"\n\n--- Texte de la page {page_number} ---\n" + page_text.strip()
+                    image.close()
+                    gc.collect()
+                return {"text": text.strip()}
 
-        # Nettoyer les ressources temporaires
-        del image_np
-        del result
-        image.close()
+        elif file_extension in ["png", "jpeg", "jpg"]:
+            # Traiter les images (PNG, JPEG) directement avec PaddleOCR
+            image = Image.open(io.BytesIO(contents))
 
-        # Forcer la collecte des déchets pour libérer la mémoire
-        gc.collect()
+            # Convertir l'image en mode RGB si nécessaire
+            if image.mode in ("RGBA", "LA") or (image.mode == "P" and "transparency" in image.info):
+                image = image.convert("RGB")
 
-        return jsonify({'text': text}), 200
+            # Convertir l'image PIL en tableau NumPy
+            image_np = np.array(image)
+
+            # Effectuer l'OCR avec PaddleOCR
+            result = ocr.ocr(image_np, cls=True)
+
+            text = ""
+            # Extraire uniquement le texte des résultats
+            for line in result:
+                text += ('\n' + line[1][0])
+
+            image.close()
+
+            return {"text": text.strip()}
+
+        else:
+            raise HTTPException(status_code=400, detail="Type de fichier non supporté")
+
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f"Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    import uvicorn
+    uvicorn.run(app, host='0.0.0.0', port=5000)

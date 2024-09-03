@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-# Mettre à jour et installer les bibliothèques nécessaires
+# Install necessary libraries
 RUN apt-get update && \
     apt-get install -y \
     libglib2.0-0 \
@@ -13,19 +13,16 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Copier le fichier requirements.txt et installer les packages Python
+# Copy the requirements.txt file and install Python packages
 COPY ocr/requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Installer ou mettre à jour PaddleOCR et PaddlePaddle
-RUN pip install --upgrade paddleocr paddlepaddle
-
-# Copier le script Python dans le conteneur
+# Copy the FastAPI script into the container
 COPY ocr/ocr_script.py /app/ocr_script.py
 
-# Exposer le port 5000
+# Expose port 5000
 EXPOSE 5000
 
-# Définir la commande à exécuter
-CMD ["python", "ocr_script.py"]
+# Start the FastAPI application using Uvicorn
+CMD ["uvicorn", "ocr_script:app", "--host", "0.0.0.0", "--port", "5000"]
