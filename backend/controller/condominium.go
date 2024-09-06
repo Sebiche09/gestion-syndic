@@ -6,7 +6,9 @@ import (
 	"time"
 
 	"github.com/Sebiche09/gestion-syndic/config"
+	"github.com/Sebiche09/gestion-syndic/controller/errors"
 	"github.com/Sebiche09/gestion-syndic/models"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -221,7 +223,7 @@ func CreateCondominium(c *gin.Context) {
 func GetCivilities(c *gin.Context) {
 	var civilities []models.Civility
 	if err := config.DB.Find(&civilities).Error; err != nil {
-		handleError(c, err, "Error fetching civilities", http.StatusInternalServerError)
+		errors.HandleError(c, err, "Error fetching civilities", http.StatusInternalServerError)
 		return
 	}
 
@@ -230,7 +232,7 @@ func GetCivilities(c *gin.Context) {
 func GetDocumentReceivingMethods(c *gin.Context) {
 	var documentReceivingMethods []models.DocumentReceivingMethod
 	if err := config.DB.Find(&documentReceivingMethods).Error; err != nil {
-		handleError(c, err, "Error fetching document receiving methods", http.StatusInternalServerError)
+		errors.HandleError(c, err, "Error fetching document receiving methods", http.StatusInternalServerError)
 		return
 	}
 
@@ -239,7 +241,7 @@ func GetDocumentReceivingMethods(c *gin.Context) {
 func GetReminderReceivingMethods(c *gin.Context) {
 	var reminderReceivingMethods []models.ReminderReceivingMethod
 	if err := config.DB.Find(&reminderReceivingMethods).Error; err != nil {
-		handleError(c, err, "Error fetching reminder receiving methods", http.StatusInternalServerError)
+		errors.HandleError(c, err, "Error fetching reminder receiving methods", http.StatusInternalServerError)
 		return
 	}
 

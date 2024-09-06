@@ -1,11 +1,13 @@
 package upload
 
 import (
-	"log"
+	"fmt"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
 	"strings"
+
+	"github.com/Sebiche09/gestion-syndic/controller/errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,31 +25,54 @@ const (
 func UploadHandler(c *gin.Context) {
 	fileType := c.PostForm("type")
 	if fileType == "" {
-		handleError(c, nil, ErrFileTypeMissing, http.StatusBadRequest)
+		// Utilisation correcte de errors.handleError au lieu de HandleErrorc
+		errors.HandleError(c, nil, ErrFileTypeMissing, http.StatusBadRequest)
 		return
 	}
 
 	file, err := c.FormFile("file")
 	if err != nil {
-		handleError(c, err, ErrFileMissing, http.StatusInternalServerError)
+		errors.HandleError(c, fmt.Errorf("erreur lors de la récupération du fichier : %w", err), ErrFileMissing, http.StatusInternalServerError)
 		return
 	}
 
 	if !isValidFileType(fileType, file) {
-		handleError(c, nil, ErrInvalidFileType, http.StatusBadRequest)
+		errors.HandleError(c, nil, ErrInvalidFileType, http.StatusBadRequest)
 		return
 	}
 
 	switch fileType {
 	case FileTypeCadastre:
-		handleCadastreUpload(c, file)
+		err = handleCadastreUpload(c, file)
+		if err != nil {
+			errors.HandleError(c, fmt.Errorf("échec du traitement du fichier cadastre : %w", err), "Erreur lors du traitement du fichier", http.StatusInternalServerError)
+			return
+		}
 	default:
-		handleError(c, nil, ErrUnknownFileType, http.StatusBadRequest)
+		errors.HandleError(c, nil, ErrUnknownFileType, http.StatusBadRequest)
 	}
-	log.Print("UploadHandler terminé")
 }
 
-// isValidFileType vérifie si le fichier est du bon type basé sur son extension
+// HandleCadastreUpload gère l'upload de fichiers cadastre
+func handleCadastreUpload(c *gin.Context, file *multipart.FileHeader) error {
+	// Envoyer le fichier à PaddleOCR
+	ocrResult, err := sendToPaddleOCR(file)
+	if err != nil {
+		// Ajouter du contexte à l'erreur renvoyée
+		return fmt.Errorf("échec lors de l'envoi du fichier à PaddleOCR : %w", err)
+	}
+
+	cadastralData := extractCadastralData(ocrResult["text"].(string))
+	// Retourner le résultat OCR
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Fichier cadastre uploadé avec succès",
+		"text":    cadastralData,
+	})
+
+	return nil
+}
+
+// isValidFileType vérifie si le fichier est du bon type selon son extension
 func isValidFileType(fileType string, fileHeader *multipart.FileHeader) bool {
 	fileExt := strings.ToLower(filepath.Ext(fileHeader.Filename))
 
@@ -59,21 +84,4 @@ func isValidFileType(fileType string, fileHeader *multipart.FileHeader) bool {
 	default:
 		return false
 	}
-}
-
-// Gestion spécifique pour les fichiers PDF
-func handleCadastreUpload(c *gin.Context, file *multipart.FileHeader) {
-	ocrResult, err := sendToPaddleOCR(file)
-	if err != nil {
-		handleError(c, err, "Erreur lors de l'envoi à PaddleOCR", http.StatusInternalServerError)
-		return
-	}
-
-	// Extraire les informations spécifiques du résultat OCR
-	cadastralData := extractCadastralData(ocrResult["text"].(string))
-	// Retourner le résultat de l'OCR
-	c.JSON(http.StatusOK, gin.H{
-		"message": "PDF upload handled",
-		"text":    cadastralData,
-	})
 }
