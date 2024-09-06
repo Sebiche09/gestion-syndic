@@ -1,6 +1,7 @@
 package upload
 
 import (
+	"log"
 	"regexp"
 	"strings"
 )
@@ -11,18 +12,35 @@ func extractCadastralData(ocrText string) map[string][]OwnerInfo {
 
 	normalizedText := normalizeText(ocrText)
 
-	// Mise à jour de la regex pour capturer un ou deux chiffres avant 'INFORMATION CADASTRALE...'
+	// Mise à jour de la regex pour capturer un identifiant après le #
 	natureDetailRegex := regexp.MustCompile(`Fin\s+exonération[\s\S]+?#([\s\S]+?)(?:RÉSULTAT\s*:|\d{1,2}\s+INFORMATION\s+CADASTRALE\s+ET\s+PATRIMONIALE\s+DE\s+LA\s+PARCELLE)`)
 	matches := natureDetailRegex.FindAllStringSubmatch(normalizedText, -1)
-
+	log.Print(matches)
 	for _, match := range matches {
 		if len(match) > 1 {
 			fullDetail := strings.TrimSpace(match[1])
 			lines := strings.Split(fullDetail, " ")
+
 			if len(lines) > 0 {
-				natureDetail := strings.TrimSpace(lines[0])
-				owners := extractOwners(fullDetail)
-				extractedData[natureDetail] = owners
+				// Suppression des espaces dans l'identifiant
+				identifier := strings.ReplaceAll(strings.TrimSpace(lines[0]), " ", "")
+
+				// Vérifier si le premier mot est "Cave" ou simplement un identifiant
+				if strings.HasPrefix(identifier, "Cave") {
+					// Si c'est une "Cave", traiter l'identifiant après "Cave"
+					caveKey := strings.TrimSpace(lines[1]) // Par exemple "3.SS2"
+					fullKey := "Cave " + caveKey           // Concaténer "Cave" avec l'identifiant
+					owners := extractOwners(fullDetail)
+
+					// Ajouter les propriétaires avec la clé complète
+					extractedData[fullKey] = owners
+				} else {
+					// Cas général où il n'y a pas "Cave"
+					owners := extractOwners(fullDetail)
+
+					// Ajouter l'identifiant sans espaces comme clé
+					extractedData[identifier] = owners
+				}
 			}
 		}
 	}
@@ -30,20 +48,19 @@ func extractCadastralData(ocrText string) map[string][]OwnerInfo {
 	return extractedData
 }
 
+// extractOwners extrait les informations des propriétaires du détail complet
 func extractOwners(fullDetail string) []OwnerInfo {
 	var owners []OwnerInfo
 
-	// Regex amélioré pour capturer les informations du propriétaire avec adresse ou tiret
-	ownerRegex := regexp.MustCompile(`(\d+)\s+([A-Za-zÀ-ÖØ-öø-ÿ' -]+),\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)\s+((?:Rue|Avenue|Boulevard|Chemin|Place|Chaussée|Route).+?|-\s+)(?:\s+-\s+(\d{4,5}))?\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)?\s*(PP\s+\d+/\d+|NP\s+\d+/\d+|US\s+\d+/\d+|Ust\s+\d+/\d+)`)
+	// Regex pour capturer les informations du propriétaire avec adresse ou tiret
+	ownerRegex := regexp.MustCompile(`(\d+)\s+([A-Za-zÀ-ÖØ-öø-ÿ' -]+),\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)\s+((?:Rue|Avenue|Boulevard|Chemin|Place|Chaussée|Route|Clos).+?|-\s+)(?:\s+-\s+(\d{4,5}))?\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)?\s*(PP\s+\d+/\d+|NP\s+\d+/\d+|US\s+\d+/\d+|Ust\s+\d+/\d+)`)
 	ownerMatches := ownerRegex.FindAllStringSubmatch(fullDetail, -1)
 
 	for _, match := range ownerMatches {
-		// Vérification des groupes capturés pour assurer que le titre est présent
 		if len(match) >= 7 {
-			// Si l'adresse est un tiret, on met une adresse vide ou un placeholder
 			var street string
 			if strings.TrimSpace(match[4]) == "-" {
-				street = "Adresse non disponible" // Vous pouvez utiliser une autre valeur par défaut si nécessaire
+				street = "Adresse non disponible"
 			} else {
 				street = strings.TrimSpace(match[4])
 			}
@@ -58,7 +75,7 @@ func extractOwners(fullDetail string) []OwnerInfo {
 				LastName:  strings.TrimSpace(match[2]),
 				FirstName: strings.TrimSpace(match[3]),
 				Address:   address,
-				Title:     strings.TrimSpace(match[7]), // Capturer le titre ici
+				Title:     strings.TrimSpace(match[7]),
 			}
 			owners = append(owners, owner)
 		}
