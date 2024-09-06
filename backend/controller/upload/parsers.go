@@ -1,7 +1,6 @@
 package upload
 
 import (
-	"log"
 	"regexp"
 	"strings"
 )
@@ -13,7 +12,7 @@ func extractCadastralData(ocrText string) map[string][]OwnerInfo {
 	normalizedText := normalizeText(ocrText)
 
 	// Mise à jour de la regex pour capturer un ou deux chiffres avant 'INFORMATION CADASTRALE...'
-	natureDetailRegex := regexp.MustCompile(`ENTITÉ PRIV.#(.*?)(?:RÉSULTAT\s*:|\d{1,2}\s+INFORMATION\s+CADASTRALE\s+ET\s+PATRIMONIALE\s+DE\s+LA\s+PARCELLE)`)
+	natureDetailRegex := regexp.MustCompile(`Fin\s+exonération[\s\S]+?#([\s\S]+?)(?:RÉSULTAT\s*:|\d{1,2}\s+INFORMATION\s+CADASTRALE\s+ET\s+PATRIMONIALE\s+DE\s+LA\s+PARCELLE)`)
 	matches := natureDetailRegex.FindAllStringSubmatch(normalizedText, -1)
 
 	for _, match := range matches {
@@ -31,23 +30,30 @@ func extractCadastralData(ocrText string) map[string][]OwnerInfo {
 	return extractedData
 }
 
-// extractOwners extrait les propriétaires du détail complet
 func extractOwners(fullDetail string) []OwnerInfo {
 	var owners []OwnerInfo
 
-	// Regex amélioré pour capturer les informations du propriétaire avec titre
-	ownerRegex := regexp.MustCompile(`(\d+)\s+([A-Za-zÀ-ÖØ-öø-ÿ' -]+),\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)\s+((?:Rue|Avenue|Boulevard|Chemin|Place|Chaussée|R|RUE|ROUTE|Route).+?)\s+-\s+(\d{4,5})?\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)?\s*(PP\s+\d+/\d+|NP\s+\d+/\d+|US\s+\d+/\d+)`)
-	log.Print(fullDetail)
+	// Regex amélioré pour capturer les informations du propriétaire avec adresse ou tiret
+	ownerRegex := regexp.MustCompile(`(\d+)\s+([A-Za-zÀ-ÖØ-öø-ÿ' -]+),\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)\s+((?:Rue|Avenue|Boulevard|Chemin|Place|Chaussée|Route).+?|-\s+)(?:\s+-\s+(\d{4,5}))?\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)?\s*(PP\s+\d+/\d+|NP\s+\d+/\d+|US\s+\d+/\d+|Ust\s+\d+/\d+)`)
 	ownerMatches := ownerRegex.FindAllStringSubmatch(fullDetail, -1)
 
 	for _, match := range ownerMatches {
 		// Vérification des groupes capturés pour assurer que le titre est présent
 		if len(match) >= 7 {
+			// Si l'adresse est un tiret, on met une adresse vide ou un placeholder
+			var street string
+			if strings.TrimSpace(match[4]) == "-" {
+				street = "Adresse non disponible" // Vous pouvez utiliser une autre valeur par défaut si nécessaire
+			} else {
+				street = strings.TrimSpace(match[4])
+			}
+
 			address := AddressInfo{
-				Street:     strings.TrimSpace(match[4]),
+				Street:     street,
 				PostalCode: strings.TrimSpace(match[5]),
 				City:       cleanCityName(strings.TrimSpace(match[6])),
 			}
+
 			owner := OwnerInfo{
 				LastName:  strings.TrimSpace(match[2]),
 				FirstName: strings.TrimSpace(match[3]),
@@ -95,7 +101,7 @@ func parseAddress(fullAddress string) AddressInfo {
 // cleanCityName nettoie les informations superflues après la ville
 func cleanCityName(city string) string {
 	// Liste des mots-clés qui peuvent indiquer la fin de la ville et l'apparition d'informations superflues
-	invalidInfo := []string{"PP", "NP", "US", "PROPRIÉTAIRE", "PROPRIETAIRE", "FRANCE"}
+	invalidInfo := []string{"PP", "NP", "US", "Ust", "SUPERF", "USA/HAB", "EMPH", "PROPRIÉTAIRE", "PROPRIETAIRE", "FRANCE"}
 
 	for _, word := range invalidInfo {
 		if idx := strings.Index(city, word); idx != -1 {
