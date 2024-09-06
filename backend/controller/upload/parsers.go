@@ -35,23 +35,24 @@ func extractCadastralData(ocrText string) map[string][]OwnerInfo {
 func extractOwners(fullDetail string) []OwnerInfo {
 	var owners []OwnerInfo
 
-	// Regex pour extraire les informations du propriétaire
-	ownerRegex := regexp.MustCompile(`(\d+)\s+([A-Za-zÀ-ÖØ-öø-ÿ' -]+),\s+([A-Za-zÀ-ÖØ-öø-ÿ' -]+)\s+((?:Rue|Avenue|Boulevard|Chemin|Place|Chaussée).+?)\s+-\s+(\d{4,5})\s+([A-Za-zÀ-ÖØ-öø-ÿ' -]+)\s+(PP\s+\d+/\d+|NP\s+\d+/\d+|US\s+\d+/\d+)`)
+	// Regex amélioré pour capturer les informations du propriétaire avec titre
+	ownerRegex := regexp.MustCompile(`(\d+)\s+([A-Za-zÀ-ÖØ-öø-ÿ' -]+),\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)\s+((?:Rue|Avenue|Boulevard|Chemin|Place|Chaussée|R|RUE|ROUTE|Route).+?)\s+-\s+(\d{4,5})?\s*([A-Za-zÀ-ÖØ-öø-ÿ' -]+)?\s*(PP\s+\d+/\d+|NP\s+\d+/\d+|US\s+\d+/\d+)`)
 	log.Print(fullDetail)
 	ownerMatches := ownerRegex.FindAllStringSubmatch(fullDetail, -1)
 
 	for _, match := range ownerMatches {
-		if len(match) > 7 {
+		// Vérification des groupes capturés pour assurer que le titre est présent
+		if len(match) >= 7 {
 			address := AddressInfo{
 				Street:     strings.TrimSpace(match[4]),
 				PostalCode: strings.TrimSpace(match[5]),
-				City:       strings.TrimSpace(match[6]),
+				City:       cleanCityName(strings.TrimSpace(match[6])),
 			}
 			owner := OwnerInfo{
 				LastName:  strings.TrimSpace(match[2]),
 				FirstName: strings.TrimSpace(match[3]),
 				Address:   address,
-				Title:     strings.TrimSpace(match[7]),
+				Title:     strings.TrimSpace(match[7]), // Capturer le titre ici
 			}
 			owners = append(owners, owner)
 		}
@@ -94,7 +95,7 @@ func parseAddress(fullAddress string) AddressInfo {
 // cleanCityName nettoie les informations superflues après la ville
 func cleanCityName(city string) string {
 	// Liste des mots-clés qui peuvent indiquer la fin de la ville et l'apparition d'informations superflues
-	invalidInfo := []string{"PP", "NP", "US", "PROPRIÉTAIRE", "PROPRIETAIRE", "LEBRUN", "MARIE", "R DES THERMES", "FRANCE"}
+	invalidInfo := []string{"PP", "NP", "US", "PROPRIÉTAIRE", "PROPRIETAIRE", "FRANCE"}
 
 	for _, word := range invalidInfo {
 		if idx := strings.Index(city, word); idx != -1 {
