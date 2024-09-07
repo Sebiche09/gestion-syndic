@@ -15,3 +15,8 @@ type AddressInfo struct {
 	City       string `json:"city"`
 	Country    string `json:"country"`
 }
+
+// PostalInfo représente les informations récupérées depuis l'API, comme le code postal.
+type PostalInfo struct {
+	PostalCode string `json:"code_postal"`
+}

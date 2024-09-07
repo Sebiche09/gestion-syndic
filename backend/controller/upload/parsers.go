@@ -1,59 +1,94 @@
 package upload
 
 import (
-	"log"
 	"regexp"
 	"strings"
 )
 
+// extractMainAddress extrait l'adresse principale du bâtiment à partir du texte OCR.
+// Si aucun pays n'est précisé, on ajoute "Belgique" à l'adresse.
+func extractMainAddress(ocrText string) AddressInfo {
+	// Expression régulière pour capturer l'adresse entre les deux balises.
+	addressRegex := regexp.MustCompile(`INFORMATION\s+CADASTRALE\s+ET\s+PATRIMONIALE\s+DE\s+LA\s+PARCELLE\s+([\s\S]+?)\s+Section\s+et\s+n°\s+de\s+parcelle`)
+	addressMatch := addressRegex.FindStringSubmatch(ocrText)
+
+	// Si une correspondance est trouvée, on procède à l'extraction des détails de l'adresse.
+	if len(addressMatch) > 1 {
+		fullAddress := strings.TrimSpace(addressMatch[1])
+
+		// On capture deux parties : la rue avec le numéro et la ville avec le code postal.
+		addressParts := regexp.MustCompile(`(.+?)\s+(\d{4,5})\s+([A-Za-zÀ-ÖØ-öø-ÿ -]+)`).FindStringSubmatch(fullAddress)
+
+		if len(addressParts) > 3 {
+			// Crée un objet AddressInfo avec les informations extraites.
+			address := AddressInfo{
+				Street:     strings.TrimSpace(addressParts[1]),                // Rue + numéro
+				PostalCode: strings.TrimSpace(addressParts[2]),                // Code postal
+				City:       cleanCityName(strings.TrimSpace(addressParts[3])), // Ville
+			}
+
+			// Si aucun pays n'est précisé, on ajoute "Belgique".
+			// On peut vérifier s'il y a un pays dans la ville. Si non, on ajoute Belgique.
+			if !strings.Contains(ocrText, "FRANCE") && !strings.Contains(ocrText, "GERMANY") && !strings.Contains(ocrText, "LUXEMBOURG") && !strings.Contains(ocrText, "PAYS-BAS") {
+				address.Country = "BELGIQUE"
+			}
+
+			// Retourne l'adresse principale extraite.
+			return address
+		}
+	}
+
+	// Si l'adresse n'est pas trouvée, on retourne une adresse vide.
+	return AddressInfo{}
+}
+
 // extractCadastralData extrait les informations cadastrales d'un texte OCR.
 // Il s'appuie sur des expressions régulières pour capturer les identifiants de parcelles
 // et associer les propriétaires trouvés dans le texte au bon identifiant.
-func extractCadastralData(ocrText string) map[string][]OwnerInfo {
-	// Crée une map pour stocker les informations extraites, avec l'identifiant de la parcelle comme clé.
-	extractedData := make(map[string][]OwnerInfo)
+func extractCadastralData(ocrText string) map[string]interface{} {
+	// Crée une map pour stocker les informations extraites.
+	extractedData := make(map[string]interface{})
 
 	// Normalise le texte pour supprimer les retours à la ligne et les espaces multiples.
 	normalizedText := normalizeText(ocrText)
 
+	// Extrait l'adresse principale du texte OCR.
+	mainAddress := extractMainAddress(normalizedText)
+	extractedData["address"] = mainAddress
+
 	// Expression régulière pour capturer les identifiants après le # dans le texte OCR.
-	// Elle tente de capturer les informations entre "Fin exonération" et un mot clé spécifique ou un numéro.
 	natureDetailRegex := regexp.MustCompile(`Fin\s+exonération[\s\S]+?#([\s\S]+?)(?:RÉSULTAT\s*:|\d{1,2}\s+INFORMATION\s+CADASTRALE\s+ET\s+PATRIMONIALE\s+DE\s+LA\s+PARCELLE)`)
 	matches := natureDetailRegex.FindAllStringSubmatch(normalizedText, -1)
 
-	// Logue les résultats des correspondances pour le débogage.
-	log.Print(matches)
+	// Map pour stocker les informations des parcelles et propriétaires.
+	informations := make(map[string][]OwnerInfo)
 
 	// Boucle sur chaque correspondance pour extraire les informations.
 	for _, match := range matches {
 		if len(match) > 1 {
-			// Supprime les espaces inutiles dans le texte correspondant.
 			fullDetail := strings.TrimSpace(match[1])
 			lines := strings.Split(fullDetail, " ")
 
 			if len(lines) > 0 {
-				// Enlève les espaces dans l'identifiant pour standardiser le format.
 				identifier := strings.ReplaceAll(strings.TrimSpace(lines[0]), " ", "")
 
-				// Vérifie si l'identifiant correspond à une "Cave".
 				if strings.HasPrefix(identifier, "Cave") {
-					// Si c'est une "Cave", récupère l'identifiant associé après le mot "Cave".
 					caveKey := strings.TrimSpace(lines[1])
 					fullKey := "Cave " + caveKey
 					owners := extractOwners(fullDetail)
-
-					// Ajoute les propriétaires à la clé complète.
-					extractedData[fullKey] = owners
+					informations[fullKey] = owners
 				} else {
-					// Cas général : extrait les propriétaires et les associe à l'identifiant.
 					owners := extractOwners(fullDetail)
-					extractedData[identifier] = owners
+					informations[identifier] = owners
 				}
 			}
 		}
 	}
 
-	// Retourne la map des données cadastrales extraites.
+	// Ajoute les informations des parcelles au résultat final.
+	extractedData["informations"] = informations
+
+	// Retourne le résultat final avec l'adresse principale et les informations cadastrales.
 	return extractedData
 }
 

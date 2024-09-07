@@ -11,6 +11,8 @@
         }
         @if (activeIndex() === 1) {
             <app-cadastre></app-cadastre>
+        }@if (activeIndex() === 2) {
+            <app-address [addressForm]="addressForm"></app-address>
         }
         <!-- Ajoutez les autres composants conditionnellement ici -->
 

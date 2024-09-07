@@ -67,10 +67,14 @@ func UploadHandler(c *gin.Context) {
 // handleCadastreUpload gère l'upload et le traitement des fichiers cadastre.
 // Il envoie le fichier à un service OCR (PaddleOCR), extrait les données cadastrales et retourne les résultats.
 func handleCadastreUpload(c *gin.Context, file *multipart.FileHeader) error {
+	// Stockage temporaire du fichier sur le serveur
+	tempFilePath := "/tmp/" + file.Filename
+	err := c.SaveUploadedFile(file, tempFilePath)
+	if err != nil {
+	}
 	// Envoie le fichier au service PaddleOCR pour analyse OCR
 	ocrResult, err := sendToPaddleOCR(file)
 	if err != nil {
-		// Si l'envoi échoue, retourne une erreur avec un message descriptif
 		return fmt.Errorf("échec lors de l'envoi du fichier à PaddleOCR : %w", err)
 	}
 
@@ -79,11 +83,11 @@ func handleCadastreUpload(c *gin.Context, file *multipart.FileHeader) error {
 
 	// Retourne les données OCR au client sous forme de JSON
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Fichier cadastre uploadé avec succès",
-		"text":    cadastralData,
+		"message":  "Fichier cadastre uploadé avec succès",
+		"text":     cadastralData,
+		"filePath": tempFilePath,
 	})
 
-	// Si tout s'est bien passé, retourne nil
 	return nil
 }
 
