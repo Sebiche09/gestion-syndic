@@ -92,11 +92,11 @@ func Connect() {
 		&models.Address{},
 		&models.DocumentReceivingMethod{},
 		&models.ReminderReceivingMethod{},
-		&models.OccupantPossessionOnProperty{},
+		&models.OccupantPossessionOnUnit{},
 		&models.OccupantType{},
-		&models.Property{},
+		&models.Unit{},
 		&models.ElectricGazMeter{},
-		&models.PropertyType{},
+		&models.UnitType{},
 		&models.Condominium{},
 		&models.Exercice{},
 		&models.Contract{},
@@ -114,7 +114,7 @@ func Connect() {
 		&models.Remender{},
 		&models.AllocationKey{},
 		&models.AllocationKeyTemplate{},
-		&models.KeyProperty{},
+		&models.KeyUnit{},
 	)
 	if err != nil {
 		log.Fatal("Failed to migrate database schema: ", err)

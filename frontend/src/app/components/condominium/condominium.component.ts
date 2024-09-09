@@ -7,7 +7,7 @@ import { FtpblueprintComponent } from '../ftpblueprint/ftpblueprint.component';
 import { ConciergeComponent } from '../concierge/concierge.component';
 import { InformationComponent } from '../information/information.component';
 import { CadastreComponent } from '../cadastre/cadastre.component';
-import { LotComponent } from '../lot/lot.component';
+import { UnitComponent } from '../unit/unit.component';
 import { ButtonModule } from 'primeng/button';
 import { StepsModule } from 'primeng/steps';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
@@ -30,7 +30,7 @@ import { UniqueValidator } from '../../validators/unique-validator';
     FtpblueprintComponent,
     ConciergeComponent,
     CadastreComponent,
-    LotComponent,
+    UnitComponent,
     StepsModule,
     ToastModule,
     DialogModule,
@@ -72,7 +72,7 @@ export class CondominiumComponent {
         blueprint: ['']
       }),
 
-      lots: this.fb.array([]),
+      units: this.fb.array([]),
 
       concierge: this.fb.group({
         isThereConcierge: [false],
@@ -109,8 +109,8 @@ export class CondominiumComponent {
     return this.createCondominiumForm.get('ftpBlueprint') as FormGroup;
   }
   // Getter pour le formGroup 'lot'
-  get lots(): FormArray {
-    return this.createCondominiumForm.get('lots') as FormArray;
+  get units(): FormArray {
+    return this.createCondominiumForm.get('units') as FormArray;
   }
   // Getter pour le formGroup 'concierge'
   get conciergeForm(): FormGroup {
@@ -209,7 +209,6 @@ export class CondominiumComponent {
       }
     });
   }
-
   onAddressExtracted(address: any) {
     if (address) {
       // Met à jour le formulaire d'adresse avec les valeurs récupérées
@@ -221,11 +220,39 @@ export class CondominiumComponent {
       });
     }
   }
-  onLotExtracted(lot: any) {
-    if (lot) {
+  onUnitExtracted(unit: any) {
+    // Vider les unités existantes avant d'ajouter de nouvelles données
+    this.units.clear();  
+    if (unit && typeof unit === 'object') {
+      // Parcourir les clés de l'objet 'unit'
+      Object.keys(unit).forEach((unitKey: string) => {
+        const unitDataArray = unit[unitKey];
+    
+        // Vérifier si la valeur associée à la clé est un tableau (et non 'null')
+        if (Array.isArray(unitDataArray) && unitDataArray.length > 0) {
+          unitDataArray.forEach((unitData: any) => {
+            console.log(unitData.title)
+            // Créer un nouveau FormGroup pour chaque unité
+            const newUnit = this.fb.group({
+              cadastralReference: [unitKey || '', Validators.required],
+              unitType: [unitData.title || '', Validators.required],
+              unitAddress: this.fb.group({
+                street: [unitData.address?.street || '', Validators.required],
+                postal_code: [unitData.address?.postal_code || '', Validators.required],
+                city: [unitData.address?.city || '', Validators.required],
+                country: [unitData.address?.country || '', Validators.required],
+              }),
+            });
+    
+            // Ajouter le nouveau lot au FormArray
+            this.units.push(newUnit);
+          });
+        }
+      });
     }
+    
   }
-
+  
   getErrorSubmit(error: HttpErrorResponse) {
     // Gestion des erreurs
   }

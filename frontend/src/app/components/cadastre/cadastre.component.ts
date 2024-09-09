@@ -10,16 +10,16 @@ import { CardModule } from 'primeng/card';
 })
 export class CadastreComponent {
   @Output() addressExtracted = new EventEmitter<any>();
-  @Output() lotExtracted = new EventEmitter<any>();
+  @Output() unitExtracted = new EventEmitter<any>();
   
   // Méthode pour recevoir les données de l'upload depuis FileUploadComponent
   onFileUploaded(response: any) {
-    if (response && response.text && response.text.address) {
+    if (response && response.text && response.text.address && response.text.unit) {
       const address = response.text.address;
-      const lot = response.text.lot;
+      const unit = response.text.unit;
       // Émet les données d'adresse vers CondominiumComponent
       this.addressExtracted.emit(address);
-      this.lotExtracted.emit(lot);
+      this.unitExtracted.emit(unit);
     }
   }
 }

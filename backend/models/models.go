@@ -56,11 +56,11 @@ type ReminderReceivingMethod struct {
 	Type string `json:"type" gorm:"not null"`
 }
 
-type OccupantPossessionOnProperty struct {
+type OccupantPossessionOnUnit struct {
 	OccupantID    uint         `json:"occupant_id" gorm:"not null"`
 	Occupant      Occupant     `gorm:"foreignKey:OccupantID"`
-	PropertyID    uint         `json:"property_id" gorm:"not null"`
-	Property      Property     `gorm:"foreignKey:PropertyID"`
+	UnitID        uint         `json:"unit_id" gorm:"not null"`
+	Unit          Unit         `gorm:"foreignKey:UnitID"`
 	Quota         float64      `json:"quota" gorm:"not null, default:0"`
 	Administrator bool         `json:"administrator" gorm:"default:false"`
 	OccupantType  uint         `json:"occupant_type" gorm:"not null"`
@@ -72,15 +72,15 @@ type OccupantType struct {
 	Label string `json:"label" gorm:"not null"`
 }
 
-type Property struct {
+type Unit struct {
 	gorm.Model
 	CondominiumID      uint             `json:"condominium_id" gorm:"not null"`
 	Condominium        Condominium      `gorm:"foreignKey:CondominiumID"`
 	AddressID          uint             `json:"address_id" gorm:"not null"`
 	Address            Address          `gorm:"foreignKey:AddressID"`
 	CadastralReference string           `json:"internal_reference" gorm:"not null"`
-	PropertyType       uint             `json:"property_type" gorm:"not null"`
-	PropertyTypes      PropertyType     `gorm:"foreignKey:PropertyType"`
+	UnitType           uint             `json:"unit_type" gorm:"not null"`
+	UnitTypes          UnitType         `gorm:"foreignKey:UnitType"`
 	Floor              uint             `json:"floor" gorm:"not null"`
 	Description        string           `json:"description"`
 	Quota              float64          `json:"quota" gorm:"not null, default:0"`
@@ -94,7 +94,7 @@ type ElectricGazMeter struct {
 	FtpImagePath string `json:"ftp_image_path" gorm:"not null"`
 }
 
-type PropertyType struct {
+type UnitType struct {
 	ID    uint   `gorm:"primaryKey;autoIncrement" json:"id"`
 	Label string `json:"label" gorm:"not null"`
 }
@@ -266,9 +266,9 @@ type AllocationKeyTemplate struct {
 	VAT   float64 `json:"vat" gorm:"not null"`
 }
 
-type KeyProperty struct {
-	KeyID      uint                  `json:"key_id" gorm:"not null"`
-	Key        AllocationKeyTemplate `gorm:"foreignKey:KeyID"`
-	PropertyID uint                  `json:"property_id" gorm:"not null"`
-	Property   Property              `gorm:"foreignKey:PropertyID"`
+type KeyUnit struct {
+	KeyID  uint                  `json:"key_id" gorm:"not null"`
+	Key    AllocationKeyTemplate `gorm:"foreignKey:KeyID"`
+	UnitID uint                  `json:"unit_id" gorm:"not null"`
+	Unit   Unit                  `gorm:"foreignKey:UnitID"`
 }

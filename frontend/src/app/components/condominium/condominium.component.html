@@ -9,13 +9,16 @@
         <app-information [informationForm]="informationsForm"></app-information>
     }
     @if (activeIndex() === 1) {
-        <app-cadastre (addressExtracted)="onAddressExtracted($event)"></app-cadastre>
+        <app-cadastre 
+            (cadastreExtracted)="onAddressExtracted($event)"
+            (unitExtracted)="onUnitExtracted($event)">
+        </app-cadastre>
     }@if (activeIndex() === 2) {
         <app-address [addressForm]="addressForm"></app-address>
     }@if (activeIndex() === 3) {
         <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm"></app-ftpblueprint>
     }@if (activeIndex() === 4) {
-        <app-lot [lots]="lots"></app-lot>
+        <app-unit [units]="units"></app-unit>
     }
     <!-- Ajoutez les autres composants conditionnellement ici -->
 

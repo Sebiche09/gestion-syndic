@@ -1,0 +1,33 @@
+<div class="card">
+    <p-table [value]="unitControls" [tableStyle]="{'min-width': '60rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nom du lot</th>
+          <th>Référence cadastrale</th>
+          <th>Adresse</th>
+          <th>Type de lot</th>
+          <th>Quota</th>
+          <th></th> <!-- Pour les actions comme supprimer -->
+        </tr>
+      </ng-template>
+  
+      <ng-template pTemplate="body" let-unit let-rowIndex="rowIndex">
+        <tr>
+          <td>{{ unit.get('unitName')?.value }}</td>
+          <td>{{ unit.get('cadastralReference')?.value }}</td>
+          <td>
+            {{ unit.get('unitAddress')?.get('street')?.value }}, 
+            {{ unit.get('unitAddress')?.get('city')?.value }}, 
+            {{ unit.get('unitAddress')?.get('postal_code')?.value }}, 
+            {{ unit.get('unitAddress')?.get('country')?.value }}
+          </td>
+          <td>{{ unit.get('unitType')?.value }}</td>
+          <td>{{ unit.get('quota')?.value }}</td>
+          <td>
+            <button (click)="removeUnit(rowIndex)" type="button" class="btn btn-danger">Supprimer</button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  

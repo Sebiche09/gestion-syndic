@@ -61,7 +61,7 @@ func extractCadastralData(ocrText string) map[string]interface{} {
 	matches := natureDetailRegex.FindAllStringSubmatch(normalizedText, -1)
 
 	// Map pour stocker les informations des parcelles et propriétaires.
-	lot := make(map[string][]OwnerInfo)
+	unit := make(map[string][]OwnerInfo)
 
 	// Boucle sur chaque correspondance pour extraire les informations.
 	for _, match := range matches {
@@ -76,17 +76,17 @@ func extractCadastralData(ocrText string) map[string]interface{} {
 					caveKey := strings.TrimSpace(lines[1])
 					fullKey := "Cave " + caveKey
 					owners := extractOwners(fullDetail)
-					lot[fullKey] = owners
+					unit[fullKey] = owners
 				} else {
 					owners := extractOwners(fullDetail)
-					lot[identifier] = owners
+					unit[identifier] = owners
 				}
 			}
 		}
 	}
 
 	// Ajoute les informations des parcelles au résultat final.
-	extractedData["lot"] = lot
+	extractedData["unit"] = unit
 
 	// Retourne le résultat final avec l'adresse principale et les informations cadastrales.
 	return extractedData
@@ -118,6 +118,11 @@ func extractOwners(fullDetail string) []OwnerInfo {
 				Street:     street,
 				PostalCode: strings.TrimSpace(match[5]),
 				City:       cleanCityName(strings.TrimSpace(match[6])),
+			}
+
+			// Vérifie si le pays est vide, si c'est le cas, assigne "Belgique" par défaut.
+			if address.Country == "" {
+				address.Country = "Belgique"
 			}
 
 			// Crée l'objet OwnerInfo avec les données extraites.
