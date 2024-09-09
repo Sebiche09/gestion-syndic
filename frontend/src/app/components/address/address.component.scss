@@ -1,0 +1,32 @@
+.p-mb-3 {
+    margin-bottom: 1.6rem;
+}
+.p-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+.p-field {
+    padding-right: 1rem;    
+}
+.p-col-custom-12 {
+    flex: 0 0 100%; /* 100% de la largeur */
+    max-width: 100%;
+}
+.p-col-custom-8 {
+    flex: 0 0 66.66%; /* 2/3 de la largeur */
+    max-width: 66.66%;
+}
+  
+.p-col-custom-4 {
+    flex: 0 0 33.33%; /* 1/3 de la largeur */
+    max-width: 33.33%;
+}
+.p-col-custom-6 {
+    flex: 0 0 50%; /* 1/2 de la largeur */
+    max-width: 50%;
+}
+
+.p-field .p-dropdown {
+    width: 100%;
+}
+  

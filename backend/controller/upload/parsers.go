@@ -29,8 +29,8 @@ func extractMainAddress(ocrText string) AddressInfo {
 
 			// Si aucun pays n'est précisé, on ajoute "Belgique".
 			// On peut vérifier s'il y a un pays dans la ville. Si non, on ajoute Belgique.
-			if !strings.Contains(ocrText, "FRANCE") && !strings.Contains(ocrText, "GERMANY") && !strings.Contains(ocrText, "LUXEMBOURG") && !strings.Contains(ocrText, "PAYS-BAS") {
-				address.Country = "BELGIQUE"
+			if !strings.Contains(ocrText, "FR") {
+				address.Country = "BE"
 			}
 
 			// Retourne l'adresse principale extraite.
@@ -61,7 +61,7 @@ func extractCadastralData(ocrText string) map[string]interface{} {
 	matches := natureDetailRegex.FindAllStringSubmatch(normalizedText, -1)
 
 	// Map pour stocker les informations des parcelles et propriétaires.
-	informations := make(map[string][]OwnerInfo)
+	lot := make(map[string][]OwnerInfo)
 
 	// Boucle sur chaque correspondance pour extraire les informations.
 	for _, match := range matches {
@@ -76,17 +76,17 @@ func extractCadastralData(ocrText string) map[string]interface{} {
 					caveKey := strings.TrimSpace(lines[1])
 					fullKey := "Cave " + caveKey
 					owners := extractOwners(fullDetail)
-					informations[fullKey] = owners
+					lot[fullKey] = owners
 				} else {
 					owners := extractOwners(fullDetail)
-					informations[identifier] = owners
+					lot[identifier] = owners
 				}
 			}
 		}
 	}
 
 	// Ajoute les informations des parcelles au résultat final.
-	extractedData["informations"] = informations
+	extractedData["lot"] = lot
 
 	// Retourne le résultat final avec l'adresse principale et les informations cadastrales.
 	return extractedData

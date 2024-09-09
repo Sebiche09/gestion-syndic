@@ -1,53 +1,59 @@
-<div class="card flex flex-wrap gap-4 mb-4" [formGroup]="informationForm" class="full-width">
-  <div class="p-grid">
-    <!-- Name Field -->
-    <div class="p-col-12 p-md-6 form-field">
-      <p-floatLabel>
-        <input type="text" pInputText formControlName="name" class="full-width" />
-        <label for="name">Name</label>
-      </p-floatLabel>
-      @if (informationForm.get('name')?.invalid && informationForm.get('name')?.touched) {
-        <div class="error-message">
-          @if (informationForm.get('name')?.errors?.['required']) {<small>Le nom est requis.</small>}
-          @if (informationForm.get('name')?.errors?.['minlength']) {<small>Le nom doit avoir au moins 3 caractères.</small>}
-          @if (informationForm.get('name')?.errors?.['nameTaken']) {<small>Ce nom est déjà pris.</small>}
-        </div>
-      }
+<p-card header="Informations">
+  <div class="card p-fluid" [formGroup]="informationForm" >
+
+    <div class="p-grid p-mb-3"> 
+      <!-- Name Field -->
+      <div class="p-col-custom-12">
+        <p-floatLabel>
+          <input type="text" pInputText formControlName="name"  />
+          <label for="name">Name</label>
+        </p-floatLabel>
+        @if (informationForm.get('name')?.invalid && informationForm.get('name')?.touched) {
+          <div class="error-message">
+            @if (informationForm.get('name')?.errors?.['required']) {<small>Le nom est requis.</small>}
+            @if (informationForm.get('name')?.errors?.['minlength']) {<small>Le nom doit avoir au moins 3 caractères.</small>}
+            @if (informationForm.get('name')?.errors?.['nameTaken']) {<small>Ce nom est déjà pris.</small>}
+          </div>
+        }
+      </div>
     </div>
 
+    <div class="p-grid p-mb-3"> 
     <!-- Prefix Field -->
-    <div class="p-col-12 p-md-6 form-field">
-      <p-floatLabel>
-        <input type="text" id="prefix" pInputText formControlName="prefix" class="full-width" />
-        <label for="prefix">Prefix</label>
-      </p-floatLabel>
-      @if (informationForm.get('prefix')?.invalid && informationForm.get('prefix')?.touched) {
-        <div class="error-message">
-          @if (informationForm.get('prefix')?.errors?.['required']) {<small>Le préfixe est requis.</small>}
-          @if (informationForm.get('prefix')?.errors?.['nameTaken']) {<small>Ce préfixe est déjà pris.</small>}
-        </div>
-      }
+      <div class="p-col-custom-12">
+        <p-floatLabel>
+          <input type="text" id="prefix" pInputText formControlName="prefix" />
+          <label for="prefix">Prefix</label>
+        </p-floatLabel>
+        @if (informationForm.get('prefix')?.invalid && informationForm.get('prefix')?.touched) {
+          <div class="error-message">
+            @if (informationForm.get('prefix')?.errors?.['required']) {<small>Le préfixe est requis.</small>}
+            @if (informationForm.get('prefix')?.errors?.['nameTaken']) {<small>Ce préfixe est déjà pris.</small>}
+          </div>
+        }
+      </div>
     </div>
 
-    <!-- Description Field -->
-    <div class="p-col-12 form-field">
-      <p-floatLabel>
-        <textarea
-          id="description"
-          rows="5"
-          cols="30"
-          pInputTextarea
-          formControlName="description"
-          class="full-width">
-        </textarea>
-        <label for="description">Description</label>
-      </p-floatLabel>
-      @if (informationForm.get('description')?.invalid && informationForm.get('description')?.touched) {
-        <div class="error-message">
-          @if (informationForm.get('description')?.errors?.['maxlength']) {
-            <small>La description ne peut pas dépasser 500 caractères.</small>}
-        </div>
-      }
+    <div class="p-grid p-mb-3">
+      <!-- Description Field -->
+      <div class="p-col-custom-12">
+        <p-floatLabel>
+          <textarea
+            id="description"
+            rows="5"
+            cols="30"
+            pInputTextarea
+            formControlName="description">
+          </textarea>
+          <label for="description">Description</label>
+        </p-floatLabel>
+        @if (informationForm.get('description')?.invalid && informationForm.get('description')?.touched) {
+          <div class="error-message">
+            @if (informationForm.get('description')?.errors?.['maxlength']) {
+              <small>La description ne peut pas dépasser 500 caractères.</small>}
+          </div>
+        }
+      </div>
     </div>
   </div>
-</div>
+</p-card>

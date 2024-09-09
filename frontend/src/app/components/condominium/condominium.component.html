@@ -4,32 +4,35 @@
     </p-steps>
 </div>
 
-<div class="card">
-    <form [formGroup]="createCondominiumForm" (ngSubmit)="onSubmit()">
-        @if (activeIndex() === 0) {
-            <app-information [informationForm]="informationsForm"></app-information>
-        }
-        @if (activeIndex() === 1) {
-            <app-cadastre></app-cadastre>
-        }@if (activeIndex() === 2) {
-            <app-address [addressForm]="addressForm"></app-address>
-        }
-        <!-- Ajoutez les autres composants conditionnellement ici -->
+<form [formGroup]="createCondominiumForm" (ngSubmit)="onSubmit()">
+    @if (activeIndex() === 0) {
+        <app-information [informationForm]="informationsForm"></app-information>
+    }
+    @if (activeIndex() === 1) {
+        <app-cadastre (addressExtracted)="onAddressExtracted($event)"></app-cadastre>
+    }@if (activeIndex() === 2) {
+        <app-address [addressForm]="addressForm"></app-address>
+    }@if (activeIndex() === 3) {
+        <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm"></app-ftpblueprint>
+    }@if (activeIndex() === 4) {
+        <app-lot [lots]="lots"></app-lot>
+    }
+    <!-- Ajoutez les autres composants conditionnellement ici -->
 
-        <div class="button-group">
-            @if (activeIndex() > 0) {
-                <p-button label="Précédent" (click)="previousStep()"></p-button>
+    <div class="button-group">
+        @if (activeIndex() > 0) {
+            <p-button label="Précédent" (click)="previousStep()"></p-button>
+        }
+
+        <div class="right-buttons">
+            <!-- Bouton suivant toujours visible, mais désactivé si le formulaire n'est pas valide -->
+            <p-button label="Suivant" [disabled]="!isStepValid()" (click)="nextStep()"></p-button>
+
+            <p-confirmPopup></p-confirmPopup>
+            @if (activeIndex() === items.length - 1) {
+                <p-button type="button" label="Submit" icon="pi pi-check" iconPos="right" [disabled]="!createCondominiumForm.valid" (click)="confirmation($event)"></p-button>
             }
-
-            <div class="right-buttons">
-                <!-- Bouton suivant toujours visible, mais désactivé si le formulaire n'est pas valide -->
-                <p-button label="Suivant" [disabled]="!isStepValid()" (click)="nextStep()"></p-button>
-
-                <p-confirmPopup></p-confirmPopup>
-                @if (activeIndex() === items.length - 1) {
-                    <p-button type="button" label="Submit" icon="pi pi-check" iconPos="right" [disabled]="!createCondominiumForm.valid" (click)="confirmation($event)"></p-button>
-                }
-            </div>
         </div>
-    </form>
-</div>
+    </div>
+</form>
+

@@ -1,51 +1,52 @@
 <p-card header="Adresse">
-    <div class="card flex flex-wrap gap-4 mb-4" [formGroup]="addressForm">
-      
-      <div class="flex-item" style="flex: 1;">
+  <div class="card p-fluid" [formGroup]="addressForm">
+    
+    <div class="p-grid p-mb-3"> 
+      <!-- Street Input -->
+      <div class="p-col-custom-12"> 
         <p-floatLabel>
           <input id="street" pInputText formControlName="street" />
           <label for="street">Street</label>
         </p-floatLabel>
       </div>
-      
-      <div class="flex-item" style="flex: 1;">
-        <p-floatLabel>
-          <input id="number" pInputText formControlName="number" />
-          <label for="number">Number</label>
-        </p-floatLabel>
-      </div>
-      
-      <div class="flex-item" style="flex: 1;">
+    </div> 
+
+    <div class="p-grid p-mb-3">
+      <!-- Address Complement -->
+      <div class="p-field p-col-custom-8">
         <p-floatLabel>
           <input id="address_complement" pInputText formControlName="address_complement" />
           <label for="address_complement">Address Complement</label>
         </p-floatLabel>
       </div>
-      
-      <div class="flex-item" style="flex: 1;">
+
+      <!-- Postal Code -->
+      <div class="p-col-custom-4">
         <p-floatLabel>
           <input id="postal_code" pInputText formControlName="postal_code" />
           <label for="postal_code">Postal Code</label>
         </p-floatLabel>
       </div>
+    </div>
 
-      <div class="flex-item" style="flex: 1;">
+    <div class="p-grid p-mb-3">
+      <!-- Country Dropdown -->
+      <div class="p-field p-col-custom-6">
         <p-dropdown 
           [options]="countries" 
           formControlName="country" 
           optionLabel="name" 
+          optionValue="code" 
           [filter]="true" 
           filterBy="name" 
           [showClear]="true"
-          placeholder="Select a Country"
-        >
+          placeholder="Select a Country">
           <ng-template pTemplate="selectedItem" let-selectedOption>
             <div class="flex align-items-center gap-2">
               <img 
                 src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
                 [class]="'flag flag-' + (selectedCountry?.code?.toLowerCase() || '')"
-                style="width: 18px" 
-              />
+                style="width: 18px" />
               <div>{{ selectedOption.name }}</div>
             </div>
           </ng-template>
@@ -54,15 +55,15 @@
               <img 
                 src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
                 [class]="'flag flag-' + country.code.toLowerCase()"
-                style="width: 18px" 
-              />
+                style="width: 18px" />
               <div>{{ country.name }}</div>
             </div>
           </ng-template>
         </p-dropdown>
       </div>
-  
-      <div class="flex-item" style="flex: 1;">
+
+      <!-- City Dropdown -->
+      <div class="p-col-custom-6"> <!-- 1/2 de la largeur -->
         <p-dropdown 
           [options]="cities" 
           formControlName="city" 
@@ -70,15 +71,13 @@
           [filter]="true" 
           filterBy="name" 
           [showClear]="true"
-          placeholder="Select a City"
-        >
+          placeholder="Select a City">
           <ng-template pTemplate="selectedItem" let-selectedOption>
             <div class="flex align-items-center gap-2">
               <img 
                 src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
                 [class]="'flag flag-' + (selectedCity?.name?.toLowerCase() || '')"
-                style="width: 18px" 
-              />
+                style="width: 18px" />
               <div>{{ selectedOption.name }}</div>
             </div>
           </ng-template>
@@ -87,13 +86,12 @@
               <img 
                 src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
                 [class]="'flag flag-' + city.name.toLowerCase()"
-                style="width: 18px" 
-              />
+                style="width: 18px" />
               <div>{{ city.name }}</div>
             </div>
           </ng-template>
         </p-dropdown>
       </div>
-    </div>
-  </p-card>
-  
+    </div> <!-- Fin de la troisième ligne -->
+  </div>
+</p-card>

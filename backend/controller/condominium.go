@@ -47,7 +47,6 @@ func CreateCondominium(c *gin.Context) {
 		} `json:"informations"`
 		Address struct {
 			Street            string `json:"street"`
-			Number            string `json:"number"`
 			AddressComplement string `json:"address_complement"`
 			City              string `json:"city"`
 			PostalCode        string `json:"postal_code"`
@@ -69,7 +68,6 @@ func CreateCondominium(c *gin.Context) {
 			ReminderDelay              string `json:"reminder_delay"`
 			ReminderReceivingMethod    string `json:"reminder_receiving_method"`
 			Street                     string `json:"street_concierge"`
-			Number                     string `json:"number_concierge"`
 			AddressComplementConcierge string `json:"address_complement_concierge"`
 			City                       string `json:"city_concierge"`
 			PostalCode                 string `json:"postal_code_concierge"`
@@ -142,7 +140,6 @@ func CreateCondominium(c *gin.Context) {
 	// Insert Address
 	address := models.Address{
 		Street:     requestData.Address.Street,
-		Number:     requestData.Address.Number,
 		Complement: requestData.Address.AddressComplement,
 		City:       requestData.Address.City,
 		PostalCode: requestData.Address.PostalCode,
@@ -154,7 +151,6 @@ func CreateCondominium(c *gin.Context) {
 	}
 	address_concierge := models.Address{
 		Street:     requestData.Concierge.Street,
-		Number:     requestData.Concierge.Number,
 		Complement: requestData.Concierge.AddressComplementConcierge,
 		City:       requestData.Concierge.City,
 		PostalCode: requestData.Concierge.PostalCode,

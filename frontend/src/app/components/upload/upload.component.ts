@@ -1,4 +1,4 @@
-import { Component, Input, signal, computed, inject } from '@angular/core';
+import { Component, Input, signal, computed, inject, Output, EventEmitter } from '@angular/core';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { UploadService } from '../../services/upload.service';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -24,6 +24,7 @@ import { ToastModule } from 'primeng/toast';
 })
 export class FileUploadComponent {
   @Input() fileType: string = ''; // Input pour spécifier le type de fichier (ex: 'cadastre', 'facture')
+  @Output() fileUploaded = new EventEmitter<any>(); // Événement pour transmettre la réponse après l'upload
   reponse = "";
   files = signal<File[]>([]);
   totalSize = computed(() => this.files().reduce((sum, file) => sum + file.size, 0));
@@ -55,6 +56,7 @@ export class FileUploadComponent {
           next: (response) => {
             console.log(response)
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+            this.fileUploaded.emit(response);
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });

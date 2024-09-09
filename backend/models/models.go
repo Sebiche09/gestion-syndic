@@ -41,7 +41,6 @@ type Civility struct {
 type Address struct {
 	gorm.Model
 	Street     string `json:"street" gorm:"not null"`
-	Number     string `json:"number" gorm:"not null"`
 	Complement string `json:"complement"`
 	City       string `json:"city" gorm:"not null"`
 	PostalCode string `json:"postal_code" gorm:"not null"`
@@ -79,10 +78,11 @@ type Property struct {
 	Condominium        Condominium      `gorm:"foreignKey:CondominiumID"`
 	AddressID          uint             `json:"address_id" gorm:"not null"`
 	Address            Address          `gorm:"foreignKey:AddressID"`
+	CadastralReference string           `json:"internal_reference" gorm:"not null"`
 	PropertyType       uint             `json:"property_type" gorm:"not null"`
 	PropertyTypes      PropertyType     `gorm:"foreignKey:PropertyType"`
 	Floor              uint             `json:"floor" gorm:"not null"`
-	Descrption         string           `json:"description"`
+	Description        string           `json:"description"`
 	Quota              float64          `json:"quota" gorm:"not null, default:0"`
 	ElectricGazMeterID uint             `json:"electric_gaz_meter_id" gorm:"not null"`
 	ElectricGazMeter   ElectricGazMeter `gorm:"foreignKey:ElectricGazMeterID"`

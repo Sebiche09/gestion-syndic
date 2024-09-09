@@ -1,1 +1,3 @@
-<app-upload [fileType]="'cadastre'"></app-upload>
+<p-card header="Cadastre">
+<app-upload (fileUploaded)="onFileUploaded($event)" [fileType]="'cadastre'"></app-upload>
+</p-card>

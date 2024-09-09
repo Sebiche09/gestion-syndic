@@ -3,13 +3,15 @@ import { FormGroup} from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
+import { FileUploadComponent } from '../upload/upload.component';
 @Component({
   selector: 'app-ftpblueprint',
   standalone: true,
   imports: [
     FloatLabelModule,
     InputTextModule,
-    CardModule],
+    CardModule,
+    FileUploadComponent],
   templateUrl: './ftpblueprint.component.html',
   styleUrl: './ftpblueprint.component.scss'
 })

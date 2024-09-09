@@ -1,5 +1,5 @@
 import { Component , Output, EventEmitter, signal, computed } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { AddressComponent } from '../address/address.component';
@@ -35,7 +35,8 @@ import { UniqueValidator } from '../../validators/unique-validator';
     ToastModule,
     DialogModule,
     ConfirmPopupModule,
-    CoproprietaireComponent
+    CoproprietaireComponent,
+    
 ],
   providers: [MessageService, ConfirmationService]
 })
@@ -61,7 +62,6 @@ export class CondominiumComponent {
 
       address: this.fb.group({
         street: ['', Validators.required],
-        number: ['', Validators.required],
         address_complement: [''],
         city: ['', Validators.required],
         postal_code: ['', Validators.required],
@@ -71,6 +71,8 @@ export class CondominiumComponent {
       ftpBlueprint: this.fb.group({
         blueprint: ['']
       }),
+
+      lots: this.fb.array([]),
 
       concierge: this.fb.group({
         isThereConcierge: [false],
@@ -86,7 +88,6 @@ export class CondominiumComponent {
         reminder_delay: [40],
         reminder_receiving_method: [''],
         street_concierge: [''],
-        number_concierge: [''],
         address_complement_concierge: [''],
         city_concierge: [''],
         postal_code_concierge: [''],
@@ -107,6 +108,10 @@ export class CondominiumComponent {
   get ftpBlueprintForm(): FormGroup {
     return this.createCondominiumForm.get('ftpBlueprint') as FormGroup;
   }
+  // Getter pour le formGroup 'lot'
+  get lots(): FormArray {
+    return this.createCondominiumForm.get('lots') as FormArray;
+  }
   // Getter pour le formGroup 'concierge'
   get conciergeForm(): FormGroup {
     return this.createCondominiumForm.get('concierge') as FormGroup;
@@ -117,9 +122,9 @@ export class CondominiumComponent {
     if (this.activeIndex() === 0) {
       const informationsForm = this.createCondominiumForm.get('informations');
       return informationsForm?.valid ?? false;
-    } else if (this.activeIndex() === 1) {
-      const cadastreForm = this.createCondominiumForm.get('cadastre');
-      return cadastreForm?.valid ?? false;
+    } else if (this.activeIndex() === 2) {
+      const addressForm = this.createCondominiumForm.get('address');
+      return addressForm?.valid ?? false;
     }
     return true;
   }
@@ -203,6 +208,22 @@ export class CondominiumComponent {
         this.getErrorSubmit(error);
       }
     });
+  }
+
+  onAddressExtracted(address: any) {
+    if (address) {
+      // Met à jour le formulaire d'adresse avec les valeurs récupérées
+      this.addressForm.patchValue({
+        street: address.street,
+        postal_code: address.postal_code,
+        city: address.city,
+        country: address.country
+      });
+    }
+  }
+  onLotExtracted(lot: any) {
+    if (lot) {
+    }
   }
 
   getErrorSubmit(error: HttpErrorResponse) {

@@ -45,30 +45,48 @@ export class AddressComponent {
   ngOnInit(): void{
     this.loadCountries();
   }
-  //Get countries from DB
-  loadCountries(): void {
-    this.countryService.getCountries().subscribe({
-      next: (data) => {
-        console.log('Countries:', data);
-        // Assurez-vous que `data` est un tableau
-        if (Array.isArray(data)) {
-          this.countries = data.map((country: any) => ({
-            name: country.name.common, 
-            code: country.cca2
-          }));
-          if (this.countries.length > 0) {
-            this.selectedCountry = this.countries[0];
-            this.loadCities();
-          }
+ // Get countries from DB
+loadCountries(): void {
+  this.countryService.getCountries().subscribe({
+    next: (data) => {
+      console.log('Countries:', data);
+
+      // Vérifiez que `data` est bien un tableau et contient des pays valides
+      if (Array.isArray(data) && data.length > 0) {
+        // Mappez les pays pour récupérer uniquement les informations pertinentes
+        this.countries = data.map((country: any) => ({
+          name: country.name.common,  // Assurez-vous que `name.common` est correct
+          code: country.cca2          // Utilisez `cca2` pour les codes ISO 3166-1 alpha-2
+        }));
+
+        // Si vous souhaitez définir un pays par défaut basé sur une logique spécifique
+        const defaultCountryCode = 'BE';  // Exemple : 'FR' pour la France
+        const defaultCountry = this.countries.find(
+          (country) => country.code === defaultCountryCode
+        );
+
+        // Si un pays par défaut est trouvé, le sélectionner, sinon ne rien sélectionner
+        if (defaultCountry) {
+          this.selectedCountry = defaultCountry;
+          console.log(`Default country selected: ${this.selectedCountry.name}`);
         } else {
-          console.error('Data format is incorrect', data);
+          console.warn('No default country found, please select manually.');
         }
-      },
-      error: (error) => {
-        console.error('Failed to load countries', error);
+
+        // Vous pouvez également charger les villes pour ce pays par défaut, si nécessaire
+        if (this.selectedCountry) {
+          this.loadCities();  // Charge les villes du pays par défaut
+        }
+      } else {
+        console.error('Data format is incorrect or empty:', data);
       }
-    });
-  }
+    },
+    error: (error) => {
+      console.error('Failed to load countries:', error);
+    }
+  });
+}
+
   //Get cities from DB
   loadCities(): void {
     if (this.selectedCountry) {
