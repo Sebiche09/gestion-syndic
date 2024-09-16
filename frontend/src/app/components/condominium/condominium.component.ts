@@ -209,49 +209,74 @@ export class CondominiumComponent {
       }
     });
   }
-  onAddressExtracted(address: any) {
-    if (address) {
-      // Met à jour le formulaire d'adresse avec les valeurs récupérées
+  onTextExtracted(text: any) {
+    if (text) {
+      console.log(text);
+      
+      // Met à jour le formulaire d'adresse avec les valeurs récupérées (adresse principale du bâtiment)
       this.addressForm.patchValue({
-        street: address.street,
-        postal_code: address.postal_code,
-        city: address.city,
-        country: address.country
+        street: text.address.street,
+        postal_code: text.address.postal_code,
+        city: text.address.city,
+        country: text.address.country
       });
-    }
-  }
-  onUnitExtracted(unit: any) {
-    // Vider les unités existantes avant d'ajouter de nouvelles données
-    this.units.clear();  
-    if (unit && typeof unit === 'object') {
-      // Parcourir les clés de l'objet 'unit'
-      Object.keys(unit).forEach((unitKey: string) => {
-        const unitDataArray = unit[unitKey];
-    
-        // Vérifier si la valeur associée à la clé est un tableau (et non 'null')
-        if (Array.isArray(unitDataArray) && unitDataArray.length > 0) {
-          unitDataArray.forEach((unitData: any) => {
-            console.log(unitData.title)
-            // Créer un nouveau FormGroup pour chaque unité
+      
+      // Vider les unités existantes
+      this.units.clear();
+      
+      // Parcourir les unités (lots) dans 'unit'
+      const unitData = text.unit; // Récupère les unités depuis le JSON
+      if (unitData && typeof unitData === 'object') {
+        Object.keys(unitData).forEach((unitKey: string) => {
+          const unitInfo = unitData[unitKey];
+  
+          // Récupère le complément d'adresse
+          const complement = unitInfo?.complement || '';
+  
+          // Si 'unitInfo.owners' existe et est un tableau (donc non 'null')
+          if (Array.isArray(unitInfo.owners) && unitInfo.owners.length > 0) {
+            // Crée un formulaire pour chaque unité
             const newUnit = this.fb.group({
               cadastralReference: [unitKey || '', Validators.required],
-              unitType: [unitData.title || '', Validators.required],
               unitAddress: this.fb.group({
-                street: [unitData.address?.street || '', Validators.required],
-                postal_code: [unitData.address?.postal_code || '', Validators.required],
-                city: [unitData.address?.city || '', Validators.required],
-                country: [unitData.address?.country || '', Validators.required],
+                // Combiner l'adresse principale avec le complément d'adresse
+                street: [`${text.address.street} ${complement}`.trim(), Validators.required],
+                postal_code: [text.address.postal_code || '', Validators.required],
+                city: [text.address.city || '', Validators.required],
+                country: [text.address.country || '', Validators.required],
               }),
+              // Crée un FormArray pour les propriétaires
+              owners: this.fb.array([])  // Initialisation vide, on le remplira après
             });
-    
-            // Ajouter le nouveau lot au FormArray
+  
+            // Ajoute les propriétaires au FormArray
+            const ownersArray = newUnit.get('owners') as FormArray;
+            unitInfo.owners.forEach((owner: any) => {
+              const ownerGroup = this.fb.group({
+                lastName: [owner.last_name || '', Validators.required],
+                firstName: [owner.first_name || '', Validators.required],
+                title: [owner.title || '', Validators.required],
+                address: this.fb.group({
+                  street: [owner.address?.street || '', Validators.required],
+                  postal_code: [owner.address?.postal_code || '', Validators.required],
+                  city: [owner.address?.city || '', Validators.required],
+                  country: [owner.address?.country || '', Validators.required],
+                }),
+              });
+  
+              // Ajoute chaque propriétaire au FormArray
+              ownersArray.push(ownerGroup);
+            });
+  
+            // Ajouter le nouveau lot avec les propriétaires au FormArray des unités
             this.units.push(newUnit);
-          });
-        }
-      });
+          }
+        });
+      }
     }
-    
   }
+  
+  
   
   getErrorSubmit(error: HttpErrorResponse) {
     // Gestion des erreurs

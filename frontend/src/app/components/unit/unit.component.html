@@ -2,18 +2,15 @@
     <p-table [value]="unitControls" [tableStyle]="{'min-width': '60rem'}">
       <ng-template pTemplate="header">
         <tr>
-          <th>Nom du lot</th>
           <th>Référence cadastrale</th>
           <th>Adresse</th>
-          <th>Type de lot</th>
-          <th>Quota</th>
+          <th>Status</th>
           <th></th> <!-- Pour les actions comme supprimer -->
         </tr>
       </ng-template>
   
       <ng-template pTemplate="body" let-unit let-rowIndex="rowIndex">
         <tr>
-          <td>{{ unit.get('unitName')?.value }}</td>
           <td>{{ unit.get('cadastralReference')?.value }}</td>
           <td>
             {{ unit.get('unitAddress')?.get('street')?.value }}, 
@@ -21,13 +18,44 @@
             {{ unit.get('unitAddress')?.get('postal_code')?.value }}, 
             {{ unit.get('unitAddress')?.get('country')?.value }}
           </td>
-          <td>{{ unit.get('unitType')?.value }}</td>
-          <td>{{ unit.get('quota')?.value }}</td>
           <td>
-            <button (click)="removeUnit(rowIndex)" type="button" class="btn btn-danger">Supprimer</button>
+            <p-tag icon="pi pi-exclamation-triangle" severity="warning" value="A confirmer" />
+        </td>
+          <td>
+            <button (click)="viewDetails(rowIndex)" type="button" class="btn btn-primary">
+              <i class="pi pi-search"></i> <!-- Icône loupe -->
+            </button>
           </td>
         </tr>
       </ng-template>
     </p-table>
+
+    <p-dialog header="Détails du lot" [(visible)]="displayDetailsDialog" [modal]="true" [closable]="false" [autoZIndex]=true>
+      @if (selectedUnit) {
+      <div>
+        <h4>Référence cadastrale: {{ selectedUnit.get('cadastralReference')?.value }}</h4>
+        <h5>Adresse:</h5>
+        <p>{{ selectedUnit.get('unitAddress')?.get('street')?.value }}, 
+          {{ selectedUnit.get('unitAddress')?.get('city')?.value }},
+          {{ selectedUnit.get('unitAddress')?.get('postal_code')?.value }},
+          {{ selectedUnit.get('unitAddress')?.get('country')?.value }}
+        </p>
+  
+        <h5>Propriétaires:</h5>
+        @if (getOwners(selectedUnit)?.controls) {
+        <ul>
+          @for (owner of getOwners(selectedUnit)?.controls; track $index) {
+          <li>
+            {{ owner.get('firstName')?.value }} {{ owner.get('lastName')?.value }} - {{ owner.get('title')?.value }}
+          </li>
+        }
+        </ul>
+      }
+  
+        <button (click)="confirmDetails()" class="btn btn-success">Confirmer</button>
+        <button (click)="closeDetailsDialog()" class="btn btn-secondary">Annuler</button>
+      </div>
+    }
+    </p-dialog>
   </div>
   

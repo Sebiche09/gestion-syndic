@@ -14,7 +14,6 @@ export class UploadService {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('type', fileType);
-    console.log(formData);
     return this.http.post(this.uploadUrl, formData).pipe(
       catchError(this.handleError)
     );

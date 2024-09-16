@@ -9,10 +9,7 @@
         <app-information [informationForm]="informationsForm"></app-information>
     }
     @if (activeIndex() === 1) {
-        <app-cadastre 
-            (cadastreExtracted)="onAddressExtracted($event)"
-            (unitExtracted)="onUnitExtracted($event)">
-        </app-cadastre>
+        <app-cadastre (textExtracted)="onTextExtracted($event)"></app-cadastre>
     }@if (activeIndex() === 2) {
         <app-address [addressForm]="addressForm"></app-address>
     }@if (activeIndex() === 3) {

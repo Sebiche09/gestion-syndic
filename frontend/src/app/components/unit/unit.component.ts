@@ -1,47 +1,53 @@
 import { Component, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray , Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-unit',
   standalone: true,
-  imports: [TableModule],
+  imports: [TableModule, TagModule, DialogModule],
   templateUrl: './unit.component.html',
-  styleUrl: './unit.component.scss'
+  styleUrls: ['./unit.component.scss']
 })
 export class UnitComponent {
   @Input() units!: FormArray;
 
+  displayDetailsDialog = false;  // Gère l'état de la boîte de dialogue des détails
+  selectedUnit: FormGroup | null = null;  // Référence à l'unité sélectionnée
+
   constructor(private fb: FormBuilder) {}
-  
-  // Méthode pour créer un lot (utilisée pour ajouter un nouveau lot au FormArray)
-  createUnit(): FormGroup {
-    return this.fb.group({
-      unitName: [''],
-      cadastralReference: [''],
-      unitAddress: this.fb.group({
-        street: ['', Validators.required],
-        address_complement: [''],
-        city: ['', Validators.required],
-        postal_code: ['', Validators.required],
-        country: ['', Validators.required]
-      }),
-      unitType: ['', Validators.required],
-      foor : ['', Validators.required],
-      description : ['', Validators.required],
-      quota : ['', Validators.required],
-      occupants: this.fb.array([]),
-    });
-  }
-  
 
-  // Ajoute un nouveau lot dans le FormArray
-  addUnit(): void {
-    this.units.push(this.createUnit());
-    console.log(this.units)
+  // Afficher les détails du lot
+  viewDetails(index: number): void {
+    this.selectedUnit = this.units.at(index) as FormGroup;
+    this.displayDetailsDialog = true;  // Ouvrir uniquement la boîte de dialogue des détails
   }
 
-  // Supprime un lot du FormArray
+  // Fermer uniquement la boîte de dialogue des détails sans confirmation
+  closeDetailsDialog(): void {
+    this.displayDetailsDialog = false;  // Ferme seulement le dialogue de détails
+    this.selectedUnit = null;  // Réinitialiser l'unité sélectionnée
+  }
+
+  // Confirmer les informations et mettre à jour le statut
+  confirmDetails(): void {
+    if (this.selectedUnit) {
+      this.selectedUnit.patchValue({
+        status: 'validé'  // Met à jour le statut de l'unité
+      });
+    }
+    this.displayDetailsDialog = false;  // Fermer le dialogue de détails
+    this.selectedUnit = null;
+  }
+
+  // Retourner la liste des propriétaires pour un lot
+  getOwners(unit: FormGroup): FormArray | null {
+    return unit.get('owners') as FormArray || null;
+  }
+
+  // Supprimer un lot du FormArray
   removeUnit(index: number): void {
     this.units.removeAt(index);
   }

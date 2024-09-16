@@ -1,6 +1,7 @@
 package upload
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -61,7 +62,7 @@ func extractCadastralData(ocrText string) map[string]interface{} {
 	matches := natureDetailRegex.FindAllStringSubmatch(normalizedText, -1)
 
 	// Map pour stocker les informations des parcelles et propriétaires.
-	unit := make(map[string][]OwnerInfo)
+	unit := make(map[string]interface{})
 
 	// Boucle sur chaque correspondance pour extraire les informations.
 	for _, match := range matches {
@@ -72,14 +73,23 @@ func extractCadastralData(ocrText string) map[string]interface{} {
 			if len(lines) > 0 {
 				identifier := strings.ReplaceAll(strings.TrimSpace(lines[0]), " ", "")
 
+				var complement string
 				if strings.HasPrefix(identifier, "Cave") {
 					caveKey := strings.TrimSpace(lines[1])
 					fullKey := "Cave " + caveKey
+					complement = generateAddressComplement(fullKey)
 					owners := extractOwners(fullDetail)
-					unit[fullKey] = owners
+					unit[fullKey] = map[string]interface{}{
+						"complement": complement,
+						"owners":     owners,
+					}
 				} else {
+					complement = generateAddressComplement(identifier)
 					owners := extractOwners(fullDetail)
-					unit[identifier] = owners
+					unit[identifier] = map[string]interface{}{
+						"complement": complement,
+						"owners":     owners,
+					}
 				}
 			}
 		}
@@ -140,6 +150,37 @@ func extractOwners(fullDetail string) []OwnerInfo {
 
 	// Retourne la liste des propriétaires.
 	return owners
+}
+
+// generateAddressComplement génère un complément d'adresse basé sur la référence cadastrale.
+func generateAddressComplement(reference string) string {
+	var complement string
+
+	// On découpe la référence pour en extraire des détails comme l'étage, la position, etc.
+	// Exemple: A5/G/C5.3 => Appartement au 5e étage, centre gauche, etc.
+	parts := strings.Split(reference, "/")
+
+	if len(parts) >= 3 {
+		floor := parts[0][1:] // Numéro de l'étage (A5 => 5)
+		position := parts[1]  // Position G ou D (gauche ou droite)
+		section := parts[2]   // Section C5.3
+
+		complement = fmt.Sprintf("appartement, %sième étage, %s, section %s", floor, describePosition(position), section)
+	}
+
+	return complement
+}
+
+// describePosition retourne une description textuelle pour G/D (gauche/droite).
+func describePosition(position string) string {
+	switch position {
+	case "G":
+		return "centre gauche"
+	case "D":
+		return "centre droite"
+	default:
+		return position
+	}
 }
 
 // parseAddress analyse une adresse complète et en extrait les différentes parties (rue, code postal, ville).
