@@ -1,66 +1,88 @@
 <div class="card">
-    <p-table [value]="unitControls" [tableStyle]="{'min-width': '60rem'}">
+  <p-table 
+      [value]="unitControls"
+      [scrollable]="true" 
+      scrollHeight="500px" 
+      rowGroupMode="subheader" 
+      groupRowsBy="unitAddress.street" 
+      [tableStyle]="{'min-width': '60rem'}">
+      
       <ng-template pTemplate="header">
-        <tr>
-          <th>Référence cadastrale</th>
-          <th>Adresse</th>
-          <th>Status</th>
-          <th></th> <!-- Pour les actions comme supprimer -->
-        </tr>
+          <tr>
+              <th>Adresse</th>
+              <th>Référence cadastrale</th>
+              <th>Status</th>
+              <th></th>
+          </tr>
       </ng-template>
-  
-      <ng-template pTemplate="body" let-unit let-rowIndex="rowIndex">
-        <tr>
-          <td>{{ unit.get('cadastralReference')?.value }}</td>
-          <td>
-            {{ unit.get('unitAddress')?.get('street')?.value }}, 
-            {{ unit.get('unitAddress')?.get('city')?.value }}, 
-            {{ unit.get('unitAddress')?.get('postal_code')?.value }}, 
-            {{ unit.get('unitAddress')?.get('country')?.value }}
-          </td>
-          <td>
-            <p-tag [icon]="unit.get('status')?.value === 'brouillon' ? 'pi pi-exclamation-triangle' : 'pi pi-check' " 
-            [severity]="unit.get('status')?.value === 'brouillon' ? 'warning' : 'success'"
-            [value]="unit.get('status')?.value" />
-        </td>
-          <td>  
-            <p-button (click)="viewDetails(rowIndex)" type="button" class="btn btn-primary">
-              <i class="pi pi-search"></i>
-            </p-button>
-          </td>
-        </tr>
+      
+      <ng-template pTemplate="groupheader" let-unit let-expanded="expanded">
+          <tr pRowGroupHeader>
+              <td>
+                  <button 
+                      type="button" 
+                      pButton 
+                      [pRowToggler]="unit" 
+                      class="p-button-text p-button-rounded p-button-plain mr-2" 
+                      [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                  </button>
+                  {{ unit.get('unitAddress')?.get('street')?.value }},
+                  {{ unit.get('unitAddress')?.get('city')?.value }},
+                  {{ unit.get('unitAddress')?.get('postal_code')?.value }},
+                  {{ unit.get('unitAddress')?.get('country')?.value }}
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+          </tr>
       </ng-template>
-    </p-table>
+      
+      <ng-template pTemplate="rowexpansion" let-unit let-rowIndex="rowIndex">
+          <tr>
+              <td>{{ unit.get('unitAddress')?.get('complement')?.value || 'N/A' }}</td>
+              <td>{{ unit.get('cadastralReference')?.value }}</td>
+              <td>
+                  <p-tag 
+                      [icon]="unit.get('status')?.value === 'brouillon' ? 'pi pi-exclamation-triangle' : 'pi pi-check'" 
+                      [severity]="unit.get('status')?.value === 'brouillon' ? 'warning' : 'success'"
+                      [value]="unit.get('status')?.value">
+                  </p-tag>
+              </td>
+              <td>
+                  <p-button (click)="viewDetails(rowIndex)" type="button" class="btn btn-primary">
+                      <i class="pi pi-search"></i>
+                  </p-button>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
 
-    <p-dialog header="Détails du lot" [(visible)]="displayDetailsDialog"
+  <p-dialog header="Détails du lot" [visible]="displayDetailsDialog()"
     [modal]="true" [closable]="true"
     appendTo="body" 
     [autoZIndex]="true">
-      @if (selectedUnit) {
+    @if (selectedUnit()) {
       <div>
-        <h4>Référence cadastrale: {{ selectedUnit.get('cadastralReference')?.value }}</h4>
+        <h4>Référence cadastrale: {{ selectedUnit()?.get('cadastralReference')?.value }}</h4>
         <h5>Adresse:</h5>
-        <p>{{ selectedUnit.get('unitAddress')?.get('street')?.value }}, 
-          {{ selectedUnit.get('unitAddress')?.get('city')?.value }},
-          {{ selectedUnit.get('unitAddress')?.get('postal_code')?.value }},
-          {{ selectedUnit.get('unitAddress')?.get('country')?.value }}
+        <p>{{ selectedUnit()?.get('unitAddress')?.get('street')?.value }}, 
+          {{ selectedUnit()?.get('unitAddress')?.get('city')?.value }},
+          {{ selectedUnit()?.get('unitAddress')?.get('postal_code')?.value }},
+          {{ selectedUnit()?.get('unitAddress')?.get('country')?.value }}
         </p>
-  
+
         <h5>Propriétaires:</h5>
-        @if (getOwners(selectedUnit)?.controls) {
-        <ul>
-          @for (owner of getOwners(selectedUnit)?.controls; track $index) {
-          <li>
-            {{ owner.get('firstName')?.value }} {{ owner.get('lastName')?.value }} - {{ owner.get('title')?.value }}
-          </li>
+        @if (getOwners(selectedUnit()!)?.controls) {
+          <ul>
+            @for (owner of getOwners(selectedUnit()!)?.controls; track $index) {
+              <li>{{ owner.get('firstName')?.value }} {{ owner.get('lastName')?.value }} - {{ owner.get('title')?.value }}</li>
+            }
+          </ul>
         }
-        </ul>
-      }
-  
+
         <p-button (click)="confirmDetails()" class="btn btn-success">Confirmer</p-button>
         <p-button (click)="closeDetailsDialog()" class="btn btn-secondary">Annuler</p-button>
       </div>
     }
-    </p-dialog>
-  </div>
-  
+  </p-dialog>
+</div>

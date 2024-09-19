@@ -241,7 +241,8 @@ export class CondominiumComponent {
               status: ['brouillon'],
               unitAddress: this.fb.group({
                 // Combiner l'adresse principale avec le complément d'adresse
-                street: [`${text.address.street} ${complement}`.trim(), Validators.required],
+                street: [text.address.street || '', Validators.required],
+                complement: [complement],
                 postal_code: [text.address.postal_code || '', Validators.required],
                 city: [text.address.city || '', Validators.required],
                 country: [text.address.country || '', Validators.required],
