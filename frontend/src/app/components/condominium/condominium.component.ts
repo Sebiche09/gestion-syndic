@@ -238,6 +238,7 @@ export class CondominiumComponent {
             // Crée un formulaire pour chaque unité
             const newUnit = this.fb.group({
               cadastralReference: [unitKey || '', Validators.required],
+              status: ['brouillon'],
               unitAddress: this.fb.group({
                 // Combiner l'adresse principale avec le complément d'adresse
                 street: [`${text.address.street} ${complement}`.trim(), Validators.required],
