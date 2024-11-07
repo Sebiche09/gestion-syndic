@@ -1,0 +1,7 @@
+{
+  "name": "gestion-syndic",
+  "image":"mcr.microsoft.com/devcontainers/go",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  }
+}
