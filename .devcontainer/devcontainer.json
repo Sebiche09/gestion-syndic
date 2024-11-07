@@ -4,5 +4,5 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "postCreateCommand": "sudo apt-get update && apt-get install -y nodejs npm && npm install -g @angular/cli"
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y nodejs npm && sudo npm install -g @angular/cli"
 }
