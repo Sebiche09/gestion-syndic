@@ -34,7 +34,9 @@ Dans un premier temps, il faudra utiliser un serveur chez Hostinger
 - crée le workspace en donnant un nom à l'espace de travail
 exemple :
 ![image](https://github.com/user-attachments/assets/d76bbb6e-cf35-4b67-830e-fb7176af89b1)
-- 
+- une fois vscode de lancer, si une erreur apparait, simplement faire more actions... fermer vscode et le relancer.
+- une fois dans le terminal , tapper la commande docker-compose up
+Le projet est pret
 ## Code d'erreur : 
 
 Le code d'erreur est divisé en 3 parties
