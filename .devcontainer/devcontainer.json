@@ -4,5 +4,6 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "postCreateCommand": "apk add --no-cache nodejs npm && npm install -g @angular/cli"
+  "postCreateCommand": "apt-get update && apt-get install -y nodejs npm && npm install -g @angular/cli"
+}
 }
