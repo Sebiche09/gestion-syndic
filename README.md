@@ -29,11 +29,12 @@ Dans un premier temps, il faudra utiliser un serveur chez Hostinger
 - Serveur isolé pour backups
 
 ## Lancement du programme : 
-Dans le dossier principale gestion-syndic, faire la commande : 
-- docker-compose up -d
-- docker exec -it ollama ollama run llama3
-- /exit
-
+- Installer devpod sur la machine : https://devpod.sh/
+- cliquer sur le lien : [![Ouvrir dans devPod!](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#https://github.com/Sebiche09/gestion-syndic)
+- crée le workspace en donnant un nom à l'espace de travail
+exemple :
+![image](https://github.com/user-attachments/assets/d76bbb6e-cf35-4b67-830e-fb7176af89b1)
+- 
 ## Code d'erreur : 
 
 Le code d'erreur est divisé en 3 parties
@@ -46,5 +47,3 @@ Le deuxième chiffre désigne la nature de l'erreur :
 | 2           | donnée deja existante|
 | 3           | Problème d'accès à la db|
 |4            | Problème avec une fonction de golang|
-
-[![Open in DevPod!](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#https://github.com/Sebiche09/gestion-syndic)
