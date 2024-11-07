@@ -47,4 +47,4 @@ Le deuxième chiffre désigne la nature de l'erreur :
 | 3           | Problème d'accès à la db|
 |4            | Problème avec une fonction de golang|
 
-devpod up https://github.com/Sebiche09/gestion-syndic
+[![Open in DevPod!](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#https://github.com/Sebiche09/gestion-syndic)
