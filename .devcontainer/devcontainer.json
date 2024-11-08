@@ -7,5 +7,23 @@
       "version": "18"
     }
   },
-  "postCreateCommand": "cd frontend && npm install"
+  "postCreateCommand": "cd frontend && npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",                   // GitHub Copilot
+        "ms-kubernetes-tools.vscode-kubernetes-tools", // Kubernetes
+        "eamodio.gitlens",                  // GitLens
+        "GitHub.vscode-pull-request-github", // GitHub Pull Requests
+        "firefox-devtools.vscode-firefox-debug", // Debugger for Firefox
+        "DavidAnson.vscode-markdownlint",   // Markdownlint
+        "Angular.ng-template",              // Angular Language Service
+        "johnpapa.Angular2",                // Angular Snippets (version 18)
+        "ms-ossdata.vscode-postgresql",     // PostgreSQL
+        "esbenp.prettier-vscode",           // Prettier
+        "WallabyJs.console-ninja",          // Console Ninja
+        "wix.vscode-import-cost"            // Import Cost
+      ]
+    }
+  }
 }

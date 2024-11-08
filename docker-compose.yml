@@ -28,7 +28,7 @@ services:
 
   go_api:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile-go
     container_name: go_api
     ports:
@@ -56,12 +56,12 @@ services:
       - ./backend:/app 
     command: air
     security_opt:
-    - seccomp:unconfined 
+      - seccomp:unconfined 
     privileged: true
 
   frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile-angular 
     container_name: angular
     ports:
@@ -94,7 +94,7 @@ services:
 
   ocr:
     build:
-      context: .
+      context: ./ocr
       dockerfile: Dockerfile-ocr
     container_name: ocr
     volumes:

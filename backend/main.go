@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/Sebiche09/gestion-syndic/config"
-	"github.com/Sebiche09/gestion-syndic/routes"
+	"github.com/Sebiche09/gestion-syndic/src/config"
+	"github.com/Sebiche09/gestion-syndic/src/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
