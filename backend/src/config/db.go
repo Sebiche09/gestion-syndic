@@ -12,10 +12,8 @@ import (
 var DB *gorm.DB
 
 func SeedDatabase() {
-	// Vérifier si les données de base existent déjà pour éviter les duplications
 	var count int64
 
-	// Insert default civility types
 	if err := DB.Model(&models.Civility{}).Count(&count).Error; err != nil {
 		log.Fatal("Failed to count civility entries: ", err)
 	}

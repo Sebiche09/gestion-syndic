@@ -1,111 +1,58 @@
-<h2>
-    Liste des co-propriétés
-</h2>
-<p-table
-    #dt1
-    [value]="customers"
-    dataKey="id"
-    [rows]="6"
-    [rowsPerPageOptions]="[6, 20, 30, 50]"
-    [loading]="loading"
-    [paginator]="true"
-    [globalFilterFields]="['name', 'city']"
->
-    <ng-template pTemplate="caption">
-        <div class="flex">
-            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" />
-            
-            <span class="p-input-icon-left ml-auto">
-                <p-button label="Ajouter une co-propriété" icon="pi pi-plus" (onClick)="openDialog()"/>
-            </span>
-        </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-        <tr>
-            <th style="min-width:15rem">
-                <div class="flex align-items-center">
-                    Nom
-                    <!--<p-columnFilter type="text" field="name" display="menu" />-->
-                </div>
-            </th>
-            <th style="min-width:15rem">
-                <div class="flex align-items-center">
-                    Préfixe
-                    <!--<p-columnFilter type="text" field="country.name" display="menu" />-->
-                </div>
-            </th>
-            <th style="min-width:15rem">
-                <div class="flex align-items-center">
-                    Ville
-                    <p-columnFilter field="representative" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                        <ng-template pTemplate="header">
-                            <div class="px-3 pt-3 pb-0">
-                                <span class="font-bold">recherche</span>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                            <p-multiSelect [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
-                                <ng-template let-option pTemplate="item">
-                                    <div class="inline-block vertical-align-middle">
-                                        <span class="ml-1 mt-1">{{ option.name }}</span>
-                                    </div>
-                                </ng-template>
-                            </p-multiSelect>
-                        </ng-template>
-                    </p-columnFilter>
-                </div>
-            </th>
-            <th style="min-width:10rem">
-                <div class="flex align-items-center">
-                    Date de fin d'exercice
-                    <!--<p-columnFilter type="date" field="date" display="menu" />-->
-                </div>
-            </th>
-            <th style="width: 3rem">
-                <div class="flex align-items-center">
-                    Détails
-                </div>
-            </th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-customer>
-        <tr>
-            <td>
-                {{ customer.name }}
-            </td>
-            <td>
-                <span class="ml-1 vertical-align-middle">{{ customer.country.name }}</span>
-            </td>
-            <td>
-                <span class="ml-1 vertical-align-middle">{{ customer.representative.name }}</span>
-            </td>
-            <td>
-                {{ customer.date | date: 'MM/dd/yyyy' }}
-            </td>
-            <td>
-                <p-button icon="pi pi-search" />
-            </td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-        <tr>
-            <td colspan="7">No customers found.</td>
-        </tr>
-    </ng-template>
+<h2>Liste des co-propriétés</h2>
+<p-table #dt1 dataKey="id" [rows]="6" [paginator]="true">
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <span class="p-input-icon-left ml-auto">
+        <p-button
+          label="Ajouter une co-propriété"
+          icon="pi pi-plus"
+          (onClick)="openDialog()"
+        />
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">Nom</div>
+      </th>
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">Préfixe</div>
+      </th>
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">Ville</div>
+      </th>
+      <th style="min-width: 10rem">
+        <div class="flex align-items-center">Date de fin d'exercice</div>
+      </th>
+      <th style="width: 3rem">
+        <div class="flex align-items-center">Détails</div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-customer>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7">Aucune copropriété trouvée.</td>
+    </tr>
+  </ng-template>
 </p-table>
 
-<!-- Sidebar contenant le formulaire pour ajouter une co-propriété -->
-<p-dialog header="Ajouter une nouvelle co-propriété" [(visible)]="displayDialog"
-    [modal]="false" [style]="{width: '65vw', height: '90vh'}"
-    [contentStyle]="{display: 'flex', 'flex-direction': 'column'}"
-    (onHide)="handleDialogHide()" [autoZIndex]="true">
-    <app-condominium #condo (closeDialog)="closeDialog()"></app-condominium>
+<p-dialog
+  header="Ajouter une nouvelle co-propriété"
+  [(visible)]="displayDialog"
+  [modal]="false"
+  [style]="{ width: '65vw', height: '90vh' }"
+  [contentStyle]="{ display: 'flex', 'flex-direction': 'column' }"
+  [autoZIndex]="true"
+>
+  <app-condominium #condo (closeDialog)="closeDialog()"></app-condominium>
 </p-dialog>
-<!--
-
-    - nom
-    - prefix
-    - ville
-    - date de fin d'exercice
-
--->

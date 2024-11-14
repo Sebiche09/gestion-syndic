@@ -1,38 +1,49 @@
 <div class="card">
-    <p-toast></p-toast>
-    <p-steps [model]="items" [readonly]="false" [activeIndex]="activeIndex()" (activeIndexChange)="onActiveIndexChange($event)">
-    </p-steps>
+  <p-steps
+    [model]="items"
+    [readonly]="true"
+    [activeIndex]="activeIndex()"
+  >
+  </p-steps>
 </div>
 
 <form [formGroup]="createCondominiumForm" (ngSubmit)="onSubmit()">
-    @if (activeIndex() === 0) {
-        <app-information [informationForm]="informationsForm"></app-information>
+  @if (activeIndex() === 0) {
+  <app-information [informationForm]="informationsForm"></app-information>
+  } @if (activeIndex() === 1) {
+  <app-cadastre (textExtracted)="onTextExtracted($event)"></app-cadastre>
+  }@if (activeIndex() === 2) {
+  <app-address [addressForm]="addressForm"></app-address>
+  }@if (activeIndex() === 3) {
+  <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm"></app-ftpblueprint>
+  }@if (activeIndex() === 4) {
+  <app-unit [units]="units"></app-unit>
+  }
+  <div class="button-group">
+    @if (activeIndex() > 0) {
+    <p-button label="Précédent" (click)="previousStep()"></p-button>
     }
-    @if (activeIndex() === 1) {
-        <app-cadastre (textExtracted)="onTextExtracted($event)"></app-cadastre>
-    }@if (activeIndex() === 2) {
-        <app-address [addressForm]="addressForm"></app-address>
-    }@if (activeIndex() === 3) {
-        <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm"></app-ftpblueprint>
-    }@if (activeIndex() === 4) {
-        <app-unit [units]="units"></app-unit>
-    }
-    <!-- Ajoutez les autres composants conditionnellement ici -->
+    
+    <div class="right-buttons">
+      @if (activeIndex() < items.length - 1) {
+      <p-button
+        label="Suivant"
+        [disabled]="!isStepValid()"
+        (click)="nextStep()"
+      ></p-button>
+      }
 
-    <div class="button-group">
-        @if (activeIndex() > 0) {
-            <p-button label="Précédent" (click)="previousStep()"></p-button>
-        }
-
-        <div class="right-buttons">
-            <!-- Bouton suivant toujours visible, mais désactivé si le formulaire n'est pas valide -->
-            <p-button label="Suivant" [disabled]="!isStepValid()" (click)="nextStep()"></p-button>
-
-            <p-confirmPopup></p-confirmPopup>
-            @if (activeIndex() === items.length - 1) {
-                <p-button type="button" label="Submit" icon="pi pi-check" iconPos="right" [disabled]="!createCondominiumForm.valid" (click)="confirmation($event)"></p-button>
-            }
-        </div>
+      <p-confirmPopup></p-confirmPopup>
+      @if (activeIndex() === items.length - 1) {
+      <p-button
+        type="button"
+        label="Submit"
+        icon="pi pi-check"
+        iconPos="right"
+        [disabled]="!createCondominiumForm.valid"
+        (click)="confirmation($event)"
+      ></p-button>
+      }
     </div>
+  </div>
 </form>
-

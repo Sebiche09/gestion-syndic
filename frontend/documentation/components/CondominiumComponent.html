@@ -1,0 +1,1693 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">frontend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  CondominiumComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/condominium/condominium.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">providers</td>
+                <td class="col-md-9">
+                            <code>MessageService</code>
+                            <code>ConfirmationService</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-condominium</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>ReactiveFormsModule</code>
+                            <code>ButtonModule</code>
+                                <code><a href="../components/AddressComponent.html" target="_self" >AddressComponent</a></code>
+                                <code><a href="../components/InformationComponent.html" target="_self" >InformationComponent</a></code>
+                                <code><a href="../components/FtpblueprintComponent.html" target="_self" >FtpblueprintComponent</a></code>
+                                <code><a href="../components/ConciergeComponent.html" target="_self" >ConciergeComponent</a></code>
+                                <code><a href="../components/CadastreComponent.html" target="_self" >CadastreComponent</a></code>
+                                <code><a href="../components/UnitComponent.html" target="_self" >UnitComponent</a></code>
+                            <code>StepsModule</code>
+                            <code>ToastModule</code>
+                            <code>DialogModule</code>
+                            <code>ConfirmPopupModule</code>
+                                <code><a href="../components/CoproprietaireComponent.html" target="_self" >CoproprietaireComponent</a></code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./condominium.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./condominium.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#activeIndex" >activeIndex</a>
+                            </li>
+                            <li>
+                                <a href="#createCondominiumForm" >createCondominiumForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#fromUrlCreateCondominium" >fromUrlCreateCondominium</a>
+                            </li>
+                            <li>
+                                <a href="#items" >items</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#messageService" >messageService</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#confirmation" >confirmation</a>
+                            </li>
+                            <li>
+                                <a href="#getErrorSubmit" >getErrorSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#isStepValid" >isStepValid</a>
+                            </li>
+                            <li>
+                                <a href="#nextStep" >nextStep</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onActiveIndexChange" >onActiveIndexChange</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit" >onSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#onTextExtracted" >onTextExtracted</a>
+                            </li>
+                            <li>
+                                <a href="#previousStep" >previousStep</a>
+                            </li>
+                            <li>
+                                <a href="#resetStep" >resetStep</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Outputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#closeDialog" >closeDialog</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#informationsForm" >informationsForm</a>
+                                </li>
+                                <li>
+                                    <a href="#addressForm" >addressForm</a>
+                                </li>
+                                <li>
+                                    <a href="#ftpBlueprintForm" >ftpBlueprintForm</a>
+                                </li>
+                                <li>
+                                    <a href="#units" >units</a>
+                                </li>
+                                <li>
+                                    <a href="#conciergeForm" >conciergeForm</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: HttpClient, fb: FormBuilder, messageService: MessageService, confirmationService: ConfirmationService, uniqueCheckService: <a href="../injectables/UniqueCheckService.html" target="_self">UniqueCheckService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/components/condominium/condominium.component.ts:49</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>fb</td>
+                                                  
+                                                        <td>
+                                                                    <code>FormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>messageService</td>
+                                                  
+                                                        <td>
+                                                                    <code>MessageService</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>confirmationService</td>
+                                                  
+                                                        <td>
+                                                                    <code>ConfirmationService</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>uniqueCheckService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UniqueCheckService.html" target="_self" >UniqueCheckService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+    <section data-compodoc="block-outputs">
+    <h3 id="outputs">Outputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="closeDialog"></a>
+                        <b>closeDialog</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>EventEmitter</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/components/condominium/condominium.component.ts:44</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="confirmation"></a>
+                    <span class="name">
+                        <span ><b>confirmation</b></span>
+                        <a href="#confirmation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>confirmation(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="145"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:145</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getErrorSubmit"></a>
+                    <span class="name">
+                        <span ><b>getErrorSubmit</b></span>
+                        <a href="#getErrorSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getErrorSubmit(error: HttpErrorResponse)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="283"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:283</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>error</td>
+                                            <td>
+                                                        <code>HttpErrorResponse</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isStepValid"></a>
+                    <span class="name">
+                        <span ><b>isStepValid</b></span>
+                        <a href="#isStepValid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isStepValid()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="120"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:120</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nextStep"></a>
+                    <span class="name">
+                        <span ><b>nextStep</b></span>
+                        <a href="#nextStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>nextStep()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="138"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:138</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="160"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:160</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onActiveIndexChange"></a>
+                    <span class="name">
+                        <span ><b>onActiveIndexChange</b></span>
+                        <a href="#onActiveIndexChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onActiveIndexChange(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="132"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:132</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>index</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <span ><b>onSubmit</b></span>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="192"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:192</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onTextExtracted"></a>
+                    <span class="name">
+                        <span ><b>onTextExtracted</b></span>
+                        <a href="#onTextExtracted"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onTextExtracted(text: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="212"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:212</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>text</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="previousStep"></a>
+                    <span class="name">
+                        <span ><b>previousStep</b></span>
+                        <a href="#previousStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>previousStep()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="142"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:142</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetStep"></a>
+                    <span class="name">
+                        <span ><b>resetStep</b></span>
+                        <a href="#resetStep"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resetStep()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="135"
+                                    class="link-to-prism">src/app/components/condominium/condominium.component.ts:135</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="activeIndex"></a>
+                    <span class="name">
+                        <span ><b>activeIndex</b></span>
+                        <a href="#activeIndex"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>signal(0)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/components/condominium/condominium.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createCondominiumForm"></a>
+                    <span class="name">
+                        <span ><b>createCondominiumForm</b></span>
+                        <a href="#createCondominiumForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/components/condominium/condominium.component.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fromUrlCreateCondominium"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>fromUrlCreateCondominium</b></span>
+                        <a href="#fromUrlCreateCondominium"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>environment.apiUrls.condominiumApi</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/components/condominium/condominium.component.ts:49</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="items"></a>
+                    <span class="name">
+                        <span ><b>items</b></span>
+                        <a href="#items"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>MenuItem[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/components/condominium/condominium.component.ts:45</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="messageService"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>messageService</b></span>
+                        <a href="#messageService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>MessageService</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/components/condominium/condominium.component.ts:53</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="informationsForm"></a>
+                        <span class="name"><b>informationsForm</b><a href="#informationsForm"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>informationsForm()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="100" class="link-to-prism">src/app/components/condominium/condominium.component.ts:100</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="addressForm"></a>
+                        <span class="name"><b>addressForm</b><a href="#addressForm"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>addressForm()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="104" class="link-to-prism">src/app/components/condominium/condominium.component.ts:104</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ftpBlueprintForm"></a>
+                        <span class="name"><b>ftpBlueprintForm</b><a href="#ftpBlueprintForm"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>ftpBlueprintForm()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="108" class="link-to-prism">src/app/components/condominium/condominium.component.ts:108</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="units"></a>
+                        <span class="name"><b>units</b><a href="#units"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>units()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="112" class="link-to-prism">src/app/components/condominium/condominium.component.ts:112</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="conciergeForm"></a>
+                        <span class="name"><b>conciergeForm</b><a href="#conciergeForm"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>conciergeForm()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="116" class="link-to-prism">src/app/components/condominium/condominium.component.ts:116</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component , Output, EventEmitter, signal, computed } from &#x27;@angular/core&#x27;;
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from &#x27;@angular/forms&#x27;;
+import { HttpClient, HttpErrorResponse } from &#x27;@angular/common/http&#x27;;
+import { environment } from &#x27;../../../environments/environment&#x27;;
+import { AddressComponent } from &#x27;../address/address.component&#x27;;
+import { FtpblueprintComponent } from &#x27;../ftpblueprint/ftpblueprint.component&#x27;;
+import { ConciergeComponent } from &#x27;../concierge/concierge.component&#x27;;
+import { InformationComponent } from &#x27;../information/information.component&#x27;;
+import { CadastreComponent } from &#x27;../cadastre/cadastre.component&#x27;;
+import { UnitComponent } from &#x27;../unit/unit.component&#x27;;
+import { ButtonModule } from &#x27;primeng/button&#x27;;
+import { StepsModule } from &#x27;primeng/steps&#x27;;
+import { ConfirmationService, MenuItem, MessageService } from &#x27;primeng/api&#x27;;
+import { ToastModule } from &#x27;primeng/toast&#x27;;
+import { DialogModule } from &#x27;primeng/dialog&#x27;;
+import { ConfirmPopupModule } from &#x27;primeng/confirmpopup&#x27;;
+import { CoproprietaireComponent } from &quot;../coproprietaire/coproprietaire.component&quot;;
+import { UniqueCheckService } from &#x27;../../services/unique-check.service&#x27;;
+import { UniqueValidator } from &#x27;../../validators/unique-validator&#x27;;
+@Component({
+  selector: &#x27;app-condominium&#x27;,
+  templateUrl: &#x27;./condominium.component.html&#x27;,
+  styleUrls: [&#x27;./condominium.component.scss&#x27;],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    ButtonModule,
+    AddressComponent,
+    InformationComponent,
+    FtpblueprintComponent,
+    ConciergeComponent,
+    CadastreComponent,
+    UnitComponent,
+    StepsModule,
+    ToastModule,
+    DialogModule,
+    ConfirmPopupModule,
+    CoproprietaireComponent,
+    
+],
+  providers: [MessageService, ConfirmationService]
+})
+export class CondominiumComponent {
+  @Output() closeDialog &#x3D; new EventEmitter&lt;void&gt;();
+  items: MenuItem[] &#x3D; [];
+  activeIndex &#x3D; signal(0);
+  createCondominiumForm: FormGroup;
+
+  private fromUrlCreateCondominium &#x3D; environment.apiUrls.condominiumApi;
+
+  constructor(private http: HttpClient,
+     private fb: FormBuilder,
+     public messageService: MessageService,
+     private confirmationService: ConfirmationService,
+    private uniqueCheckService: UniqueCheckService) {
+    this.createCondominiumForm &#x3D; this.fb.group({
+      informations: this.fb.group({
+        name: [&#x27;&#x27;, [Validators.required, Validators.minLength(3)],[UniqueValidator.checkNameUniqueness(this.uniqueCheckService)]],
+        prefix: [&#x27;&#x27;, [Validators.required], [UniqueValidator.checkPrefixUniqueness(this.uniqueCheckService)]],
+        description: [&#x27;&#x27;, [Validators.maxLength(500)]]
+      }),
+
+      address: this.fb.group({
+        street: [&#x27;&#x27;, Validators.required],
+        address_complement: [&#x27;&#x27;],
+        city: [&#x27;&#x27;, Validators.required],
+        postal_code: [&#x27;&#x27;, Validators.required],
+        country: [&#x27;&#x27;, Validators.required]
+      }),
+
+      ftpBlueprint: this.fb.group({
+        blueprint: [&#x27;&#x27;]
+      }),
+
+      units: this.fb.array([]),
+
+      concierge: this.fb.group({
+        isThereConcierge: [false],
+        name: [&#x27;&#x27;],
+        surname: [&#x27;&#x27;],
+        email: [&#x27;&#x27;],
+        corporation: [false],
+        phone: [&#x27;&#x27;],
+        iban: [&#x27;&#x27;],
+        birthdate: [&#x27;&#x27;],
+        civility: [&#x27;&#x27;],
+        document_receiving_method: [&#x27;&#x27;],
+        reminder_delay: [40],
+        reminder_receiving_method: [&#x27;&#x27;],
+        street_concierge: [&#x27;&#x27;],
+        address_complement_concierge: [&#x27;&#x27;],
+        city_concierge: [&#x27;&#x27;],
+        postal_code_concierge: [&#x27;&#x27;],
+        country_concierge: [&#x27;&#x27;]
+      })
+    });
+  }
+
+  // Getter pour le formGroup &#x27;informations&#x27;
+  get informationsForm(): FormGroup {
+    return this.createCondominiumForm.get(&#x27;informations&#x27;) as FormGroup;
+  }
+  // Getter pour le formGroup &#x27;address&#x27;
+  get addressForm(): FormGroup {
+    return this.createCondominiumForm.get(&#x27;address&#x27;) as FormGroup;
+  }
+  // Getter pour le formGroup &#x27;ftpBlueprint&#x27;
+  get ftpBlueprintForm(): FormGroup {
+    return this.createCondominiumForm.get(&#x27;ftpBlueprint&#x27;) as FormGroup;
+  }
+  // Getter pour le formGroup &#x27;lot&#x27;
+  get units(): FormArray {
+    return this.createCondominiumForm.get(&#x27;units&#x27;) as FormArray;
+  }
+  // Getter pour le formGroup &#x27;concierge&#x27;
+  get conciergeForm(): FormGroup {
+    return this.createCondominiumForm.get(&#x27;concierge&#x27;) as FormGroup;
+  }
+  
+  isStepValid(): boolean {
+    // Vérifiez les validations pour chaque étape en fonction de l&#x27;index actif
+    if (this.activeIndex() &#x3D;&#x3D;&#x3D; 0) {
+      const informationsForm &#x3D; this.createCondominiumForm.get(&#x27;informations&#x27;);
+      return informationsForm?.valid ?? false;
+    } else if (this.activeIndex() &#x3D;&#x3D;&#x3D; 2) {
+      const addressForm &#x3D; this.createCondominiumForm.get(&#x27;address&#x27;);
+      return addressForm?.valid ?? false;
+    }
+    return true;
+  }
+
+  onActiveIndexChange(index: number) {
+    this.activeIndex.set(index);
+  }
+  resetStep(){
+    this.activeIndex.set(0);
+  }
+  nextStep() {
+    this.activeIndex.update(i &#x3D;&gt; i + 1);
+  }
+
+  previousStep() {
+    this.activeIndex.update(i &#x3D;&gt; i - 1);
+  }
+  confirmation(event: Event) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: &quot;Etes-vous sur de confirmer l&#x27;envoi du formulaire?&quot;,
+        icon: &#x27;pi pi-exclamation-triangle&#x27;,
+        accept: () &#x3D;&gt; {
+            this.messageService.add({ severity: &#x27;info&#x27;, summary: &#x27;Confirmed&#x27;, detail: &#x27;Formulaire confirmé&#x27;, life: 3000 });
+            this.onSubmit();
+        },
+        reject: () &#x3D;&gt; {
+            this.messageService.add({ severity: &#x27;error&#x27;, summary: &#x27;Rejected&#x27;, detail: &#x27;Formulaire rejeté&#x27;, life: 3000 });
+        }
+    });
+}
+
+  ngOnInit() {
+    this.items &#x3D; [
+        {
+            label: &#x27;Informations&#x27;,
+            command: (event: any) &#x3D;&gt; this.messageService.add({severity:&#x27;info&#x27;, summary:&#x27;Information Step&#x27;, detail: event.item.label})
+        },
+        {
+          label: &#x27;Cadastre&#x27;,
+          command: (event: any) &#x3D;&gt; this.messageService.add({severity:&#x27;info&#x27;, summary:&#x27;Cadastre Step&#x27;, detail: event.item.label})
+        },
+        {
+            label: &#x27;Adresse&#x27;,
+            command: (event: any) &#x3D;&gt; this.messageService.add({severity:&#x27;info&#x27;, summary:&#x27;Address Step&#x27;, detail: event.item.label})
+        },
+        {
+            label: &#x27;Plans&#x27;,
+            command: (event: any) &#x3D;&gt; this.messageService.add({severity:&#x27;info&#x27;, summary:&#x27;FTP Blueprint Step&#x27;, detail: event.item.label})
+        },
+        {
+          label: &#x27;Lots&#x27;,
+          command: (event: any) &#x3D;&gt; this.messageService.add({severity:&#x27;info&#x27;, summary:&#x27;Lot Step&#x27;, detail: event.item.label})
+        },
+        {
+          label: &#x27;Co-propriétaires&#x27;,
+          command: (event: any) &#x3D;&gt; this.messageService.add({severity:&#x27;info&#x27;, summary:&#x27;Co-propriétaire Step&#x27;, detail: event.item.label})
+        },
+        {
+            label: &#x27;Concierge&#x27;,
+            command: (event: any) &#x3D;&gt; this.messageService.add({severity:&#x27;info&#x27;, summary:&#x27;Concierge Step&#x27;, detail: event.item.label})
+        }
+    ];
+  }
+  onSubmit(): void {
+    this.closeDialog.emit();
+    console.log(&#x27;Formulaire soumis:&#x27;, this.createCondominiumForm.value);
+    let formData &#x3D; this.createCondominiumForm.value;
+
+    if (formData.concierge) {
+      formData.concierge.corporation &#x3D; !!formData.concierge.corporation;
+    }
+
+    this.http.post(this.fromUrlCreateCondominium, formData).subscribe({
+      next: (response) &#x3D;&gt; {
+        console.log(&#x27;Réponse de l\&#x27;API:&#x27;, response);
+        this.createCondominiumForm.reset();
+      },
+      error: (error: HttpErrorResponse) &#x3D;&gt; {
+        console.error(&#x27;Erreur lors de l\&#x27;envoi:&#x27;, error);
+        this.getErrorSubmit(error);
+      }
+    });
+  }
+  onTextExtracted(text: any) {
+    if (text) {
+      console.log(text);
+      
+      // Met à jour le formulaire d&#x27;adresse avec les valeurs récupérées (adresse principale du bâtiment)
+      this.addressForm.patchValue({
+        street: text.address.street,
+        postal_code: text.address.postal_code,
+        city: text.address.city,
+        country: text.address.country
+      });
+      
+      // Vider les unités existantes
+      this.units.clear();
+      
+      // Parcourir les unités (lots) dans &#x27;unit&#x27;
+      const unitData &#x3D; text.unit; // Récupère les unités depuis le JSON
+      if (unitData &amp;&amp; typeof unitData &#x3D;&#x3D;&#x3D; &#x27;object&#x27;) {
+        Object.keys(unitData).forEach((unitKey: string) &#x3D;&gt; {
+          const unitInfo &#x3D; unitData[unitKey];
+  
+          // Récupère le complément d&#x27;adresse
+          const complement &#x3D; unitInfo?.complement || &#x27;&#x27;;
+  
+          // Si &#x27;unitInfo.owners&#x27; existe et est un tableau (donc non &#x27;null&#x27;)
+          if (Array.isArray(unitInfo.owners) &amp;&amp; unitInfo.owners.length &gt; 0) {
+            // Crée un formulaire pour chaque unité
+            const newUnit &#x3D; this.fb.group({
+              cadastralReference: [unitKey || &#x27;&#x27;, Validators.required],
+              status: [&#x27;brouillon&#x27;],
+              unitAddress: this.fb.group({
+                // Combiner l&#x27;adresse principale avec le complément d&#x27;adresse
+                street: [text.address.street || &#x27;&#x27;, Validators.required],
+                complement: [complement],
+                postal_code: [text.address.postal_code || &#x27;&#x27;, Validators.required],
+                city: [text.address.city || &#x27;&#x27;, Validators.required],
+                country: [text.address.country || &#x27;&#x27;, Validators.required],
+              }),
+              // Crée un FormArray pour les propriétaires
+              owners: this.fb.array([])  // Initialisation vide, on le remplira après
+            });
+  
+            // Ajoute les propriétaires au FormArray
+            const ownersArray &#x3D; newUnit.get(&#x27;owners&#x27;) as FormArray;
+            unitInfo.owners.forEach((owner: any) &#x3D;&gt; {
+              const ownerGroup &#x3D; this.fb.group({
+                lastName: [owner.last_name || &#x27;&#x27;, Validators.required],
+                firstName: [owner.first_name || &#x27;&#x27;, Validators.required],
+                title: [owner.title || &#x27;&#x27;, Validators.required],
+                address: this.fb.group({
+                  street: [owner.address?.street || &#x27;&#x27;, Validators.required],
+                  postal_code: [owner.address?.postal_code || &#x27;&#x27;, Validators.required],
+                  city: [owner.address?.city || &#x27;&#x27;, Validators.required],
+                  country: [owner.address?.country || &#x27;&#x27;, Validators.required],
+                }),
+              });
+  
+              // Ajoute chaque propriétaire au FormArray
+              ownersArray.push(ownerGroup);
+            });
+  
+            // Ajouter le nouveau lot avec les propriétaires au FormArray des unités
+            this.units.push(newUnit);
+          }
+        });
+      }
+    }
+  }
+  
+  
+  
+  getErrorSubmit(error: HttpErrorResponse) {
+    // Gestion des erreurs
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;card&quot;&gt;
+    &lt;p-toast&gt;&lt;/p-toast&gt;
+    &lt;p-steps [model]&#x3D;&quot;items&quot; [readonly]&#x3D;&quot;false&quot; [activeIndex]&#x3D;&quot;activeIndex()&quot; (activeIndexChange)&#x3D;&quot;onActiveIndexChange($event)&quot;&gt;
+    &lt;/p-steps&gt;
+&lt;/div&gt;
+
+&lt;form [formGroup]&#x3D;&quot;createCondominiumForm&quot; (ngSubmit)&#x3D;&quot;onSubmit()&quot;&gt;
+    @if (activeIndex() &#x3D;&#x3D;&#x3D; 0) {
+        &lt;app-information [informationForm]&#x3D;&quot;informationsForm&quot;&gt;&lt;/app-information&gt;
+    }
+    @if (activeIndex() &#x3D;&#x3D;&#x3D; 1) {
+        &lt;app-cadastre (textExtracted)&#x3D;&quot;onTextExtracted($event)&quot;&gt;&lt;/app-cadastre&gt;
+    }@if (activeIndex() &#x3D;&#x3D;&#x3D; 2) {
+        &lt;app-address [addressForm]&#x3D;&quot;addressForm&quot;&gt;&lt;/app-address&gt;
+    }@if (activeIndex() &#x3D;&#x3D;&#x3D; 3) {
+        &lt;app-ftpblueprint [ftpBlueprintForm]&#x3D;&quot;ftpBlueprintForm&quot;&gt;&lt;/app-ftpblueprint&gt;
+    }@if (activeIndex() &#x3D;&#x3D;&#x3D; 4) {
+        &lt;app-unit [units]&#x3D;&quot;units&quot;&gt;&lt;/app-unit&gt;
+    }
+    &lt;!-- Ajoutez les autres composants conditionnellement ici --&gt;
+
+    &lt;div class&#x3D;&quot;button-group&quot;&gt;
+        @if (activeIndex() &gt; 0) {
+            &lt;p-button label&#x3D;&quot;Précédent&quot; (click)&#x3D;&quot;previousStep()&quot;&gt;&lt;/p-button&gt;
+        }
+
+        &lt;div class&#x3D;&quot;right-buttons&quot;&gt;
+            &lt;!-- Bouton suivant toujours visible, mais désactivé si le formulaire n&#x27;est pas valide --&gt;
+            &lt;p-button label&#x3D;&quot;Suivant&quot; [disabled]&#x3D;&quot;!isStepValid()&quot; (click)&#x3D;&quot;nextStep()&quot;&gt;&lt;/p-button&gt;
+
+            &lt;p-confirmPopup&gt;&lt;/p-confirmPopup&gt;
+            @if (activeIndex() &#x3D;&#x3D;&#x3D; items.length - 1) {
+                &lt;p-button type&#x3D;&quot;button&quot; label&#x3D;&quot;Submit&quot; icon&#x3D;&quot;pi pi-check&quot; iconPos&#x3D;&quot;right&quot; [disabled]&#x3D;&quot;!createCondominiumForm.valid&quot; (click)&#x3D;&quot;confirmation($event)&quot;&gt;&lt;/p-button&gt;
+            }
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./condominium.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.card {
+    width: 100%;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+
+.button-group {
+    
+    position: absolute;
+    bottom: 30px;
+    right: 4%;
+    width: 92%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.right-buttons {
+    left:50px;
+    display: flex;
+    gap: 10px;
+    margin-left: auto; 
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="card">    <p-toast></p-toast>    <p-steps [model]="items" [readonly]="false" [activeIndex]="activeIndex()" (activeIndexChange)="onActiveIndexChange($event)">    </p-steps></div><form [formGroup]="createCondominiumForm" (ngSubmit)="onSubmit()">    @if (activeIndex() === 0) {        <app-information [informationForm]="informationsForm"></app-information>    }    @if (activeIndex() === 1) {        <app-cadastre (textExtracted)="onTextExtracted($event)"></app-cadastre>    }@if (activeIndex() === 2) {        <app-address [addressForm]="addressForm"></app-address>    }@if (activeIndex() === 3) {        <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm"></app-ftpblueprint>    }@if (activeIndex() === 4) {        <app-unit [units]="units"></app-unit>    }    <!-- Ajoutez les autres composants conditionnellement ici -->    <div class="button-group">        @if (activeIndex() > 0) {            <p-button label="Précédent" (click)="previousStep()"></p-button>        }        <div class="right-buttons">            <!-- Bouton suivant toujours visible, mais désactivé si le formulaire n\'est pas valide -->            <p-button label="Suivant" [disabled]="!isStepValid()" (click)="nextStep()"></p-button>            <p-confirmPopup></p-confirmPopup>            @if (activeIndex() === items.length - 1) {                <p-button type="button" label="Submit" icon="pi pi-check" iconPos="right" [disabled]="!createCondominiumForm.valid" (click)="confirmation($event)"></p-button>            }        </div>    </div></form></div>'
+    var COMPONENTS = [{'name': 'AddressComponent', 'selector': 'app-address'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CadastreComponent', 'selector': 'app-cadastre'},{'name': 'ConciergeComponent', 'selector': 'app-concierge'},{'name': 'CondominiumComponent', 'selector': 'app-condominium'},{'name': 'CoproprietaireComponent', 'selector': 'app-coproprietaire'},{'name': 'DisplayCondominiumComponent', 'selector': 'displayCondominium'},{'name': 'FileUploadComponent', 'selector': 'app-upload'},{'name': 'FtpblueprintComponent', 'selector': 'app-ftpblueprint'},{'name': 'InformationComponent', 'selector': 'app-information'},{'name': 'UnitComponent', 'selector': 'app-unit'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'CondominiumComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'CondominiumComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

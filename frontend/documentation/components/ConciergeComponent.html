@@ -1,0 +1,1088 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">frontend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  ConciergeComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/concierge/concierge.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-concierge</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>ReactiveFormsModule</code>
+                            <code>FormsModule</code>
+                            <code>FloatLabelModule</code>
+                            <code>InputTextModule</code>
+                            <code>InputMaskModule</code>
+                            <code>InputSwitchModule</code>
+                            <code>CalendarModule</code>
+                            <code>DropdownModule</code>
+                            <code>KeyFilterModule</code>
+                            <code>CardModule</code>
+                            <code>BlockUIModule</code>
+                            <code>TooltipModule</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./concierge.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./concierge.component.scss</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#civilityTypes" >civilityTypes</a>
+                            </li>
+                            <li>
+                                <a href="#ConciergeMessage" >ConciergeMessage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#documentReceivingMethods" >documentReceivingMethods</a>
+                            </li>
+                            <li>
+                                <a href="#isThereConcierge" >isThereConcierge</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#reminderReceivingMethods" >reminderReceivingMethods</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#conciergeSwitch" >conciergeSwitch</a>
+                            </li>
+                            <li>
+                                <a href="#getLabel" >getLabel</a>
+                            </li>
+                            <li>
+                                <a href="#loadOptions" >loadOptions</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#conciergeForm" >conciergeForm</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(condominiumService: <a href="../injectables/CondominiumService.html" target="_self">CondominiumService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/components/concierge/concierge.component.ts:54</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>condominiumService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CondominiumService.html" target="_self" >CondominiumService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="conciergeForm"></a>
+                        <b>conciergeForm</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/components/concierge/concierge.component.ts:40</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="conciergeSwitch"></a>
+                    <span class="name">
+                        <span ><b>conciergeSwitch</b></span>
+                        <a href="#conciergeSwitch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>conciergeSwitch(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="46"
+                                    class="link-to-prism">src/app/components/concierge/concierge.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLabel"></a>
+                    <span class="name">
+                        <span ><b>getLabel</b></span>
+                        <a href="#getLabel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLabel(field: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="96"
+                                    class="link-to-prism">src/app/components/concierge/concierge.component.ts:96</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>field</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadOptions"></a>
+                    <span class="name">
+                        <span ><b>loadOptions</b></span>
+                        <a href="#loadOptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadOptions()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="66"
+                                    class="link-to-prism">src/app/components/concierge/concierge.component.ts:66</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="61"
+                                    class="link-to-prism">src/app/components/concierge/concierge.component.ts:61</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="civilityTypes"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>civilityTypes</b></span>
+                        <a href="#civilityTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>any[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/components/concierge/concierge.component.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ConciergeMessage"></a>
+                    <span class="name">
+                        <span ><b>ConciergeMessage</b></span>
+                        <a href="#ConciergeMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;Il n&#x27;y a pas de concierge dans cette copropriété&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/components/concierge/concierge.component.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="documentReceivingMethods"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>documentReceivingMethods</b></span>
+                        <a href="#documentReceivingMethods"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>any[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/components/concierge/concierge.component.ts:59</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isThereConcierge"></a>
+                    <span class="name">
+                        <span ><b>isThereConcierge</b></span>
+                        <a href="#isThereConcierge"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/components/concierge/concierge.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reminderReceivingMethods"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>reminderReceivingMethods</b></span>
+                        <a href="#reminderReceivingMethods"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>any[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/components/concierge/concierge.component.ts:58</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit , Input } from &#x27;@angular/core&#x27;;
+import { FormGroup , ReactiveFormsModule, FormsModule} from &#x27;@angular/forms&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FloatLabelModule } from &#x27;primeng/floatlabel&#x27;;
+import { InputTextModule } from &#x27;primeng/inputtext&#x27;;
+import { InputMaskModule } from &#x27;primeng/inputmask&#x27;;
+import { InputSwitchModule } from &#x27;primeng/inputswitch&#x27;;
+import { CalendarModule } from &#x27;primeng/calendar&#x27;;
+import { DropdownModule } from &#x27;primeng/dropdown&#x27;;
+import { KeyFilterModule } from &#x27;primeng/keyfilter&#x27;;
+import { BlockUIModule } from &#x27;primeng/blockui&#x27;;
+import { PanelModule } from &#x27;primeng/panel&#x27;;
+import { CardModule } from &#x27;primeng/card&#x27;;
+import { TooltipModule } from &#x27;primeng/tooltip&#x27;;
+
+
+import { CondominiumService } from &#x27;../../services/condominium.service&#x27;;
+
+@Component({
+  selector: &#x27;app-concierge&#x27;,
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    FloatLabelModule, 
+    InputTextModule, 
+    InputMaskModule, 
+    InputSwitchModule, 
+    CalendarModule, 
+    DropdownModule, 
+    KeyFilterModule,
+    CardModule,
+    BlockUIModule,
+    TooltipModule],
+  templateUrl: &#x27;./concierge.component.html&#x27;,
+  styleUrl: &#x27;./concierge.component.scss&#x27;
+})
+export class ConciergeComponent implements OnInit{
+  @Input() conciergeForm!: FormGroup;
+  isThereConcierge &#x3D; false ;
+  ConciergeMessage &#x3D; &quot;Il n&#x27;y a pas de concierge dans cette copropriété&quot;;
+
+
+  // Function to switch the concierge form
+  conciergeSwitch(event: any) {
+    this.isThereConcierge! &#x3D; event.checked;
+    if (event.checked &#x3D;&#x3D; true){
+      this.ConciergeMessage &#x3D; &quot;Il y a un concierge dans cette copropriété&quot;;
+    }else {
+      this.ConciergeMessage &#x3D; &quot;Il n&#x27;y a pas de concierge dans cette copropriété&quot;;
+    }
+    
+  }
+
+  constructor(private condominiumService: CondominiumService) {}
+  public civilityTypes: any[] &#x3D; [];
+  public reminderReceivingMethods: any[] &#x3D; [];
+  public documentReceivingMethods: any[] &#x3D; [];
+
+  ngOnInit(): void{
+    this.loadOptions();
+  }
+
+  //Get civilities types and receiving methods from DB
+  loadOptions(): void {
+    this.condominiumService.getCivilityOptions().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.civilityTypes &#x3D; data;
+        console.log(&#x27;Civility options loaded&#x27;, data);
+      },
+      error: (error) &#x3D;&gt; {
+        console.error(&#x27;Failed to load civility options&#x27;, error);
+      }
+    });
+
+    this.condominiumService.getReminderReceivingMethodOptions().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.reminderReceivingMethods &#x3D; data;
+      },
+      error: (error) &#x3D;&gt; {
+        console.error(&#x27;Failed to load reminder receiving method options&#x27;, error);
+      }
+    });
+
+    this.condominiumService.getDocumentReceivingMethodOptions().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.documentReceivingMethods &#x3D; data;
+      },
+      error: (error) &#x3D;&gt; {
+        console.error(&#x27;Failed to load receiving method options&#x27;, error);
+      }
+    });
+  }
+
+  getLabel(field: string): string {
+    const labels: Record&lt;string, string&gt; &#x3D; {
+      name: &#x27;Prénom&#x27;,
+      surname: &#x27;Nom&#x27;,
+      email: &#x27;Adresse mail&#x27;,
+      corporation: &#x27;Entreprise&#x27;,
+      phone: &#x27;Téléphone&#x27;,
+      iban: &#x27;Iban&#x27;,
+      birthdate: &#x27;Date de naissance&#x27;,
+      civility: &#x27;Civilité&#x27;,
+      document_receiving_method: &#x27;Méthode d\&#x27;envoi des documents&#x27;,
+      reminder_delay: &#x27;Délai rappels&#x27;,
+      reminder_receiving_method: &#x27;Méthode d\&#x27;envoi rappels&#x27;
+    };
+    return labels[field] || field;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;p-card header&#x3D;&quot;Concierge&quot;&gt;
+  &lt;div class&#x3D;&quot;card flex flex-wrap &quot;&gt;
+    &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+      &lt;p-inputSwitch 
+        [ngModel]&#x3D;&quot;conciergeForm.get(&#x27;isThereConcierge&#x27;)?.value&quot; 
+        (onChange)&#x3D;&quot;conciergeSwitch($event)&quot; /&gt;
+      &lt;label for&#x3D;&quot;conciergeSwitch&quot; style&#x3D;&quot;padding: 10px;&quot;&gt;{{ ConciergeMessage }}&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/p-card&gt;
+
+  &lt;p-blockUI [target]&#x3D;&quot;blocked&quot; [blocked]&#x3D;&quot;!isThereConcierge&quot;&gt;
+    &lt;i class&#x3D;&quot;pi pi-lock&quot; style&#x3D;&quot;font-size: 3rem&quot;&gt;&lt;/i&gt;
+  &lt;/p-blockUI&gt;
+
+&lt;p-card #blocked&gt;
+  &lt;div class&#x3D;&quot;card flex flex-wrap gap-4 mb-4&quot;   [formGroup]&#x3D;&quot;conciergeForm&quot;  &gt;
+
+      &lt;div class&#x3D;&quot;flex-wrap&quot; #test&gt;
+        &lt;p-floatLabel &gt;
+          &lt;input type&#x3D;&quot;text&quot; pInputText formControlName&#x3D;&quot;name&quot; pTooltip&#x3D;&quot;Entrer votre prénom&quot; tooltipPosition&#x3D;&quot;top&quot;  /&gt;
+          &lt;label for&#x3D;&quot;name&quot;&gt;{{ getLabel(&#x27;name&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;
+  
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;input type&#x3D;&quot;text&quot; pInputText formControlName&#x3D;&quot;surname&quot; pTooltip&#x3D;&quot;Entrer votre nom&quot; tooltipPosition&#x3D;&quot;top&quot; /&gt;
+          &lt;label for&#x3D;&quot;surname&quot;&gt;{{ getLabel(&#x27;surname&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;
+  
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;input type&#x3D;&quot;email&quot; pInputText formControlName&#x3D;&quot;email&quot; pTooltip&#x3D;&quot;Entrer votre email&quot; tooltipPosition&#x3D;&quot;top&quot;  /&gt;
+          &lt;label for&#x3D;&quot;email&quot;&gt;{{ getLabel(&#x27;email&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;
+  
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-inputSwitch formControlName&#x3D;&quot;corporation&quot; /&gt;
+        &lt;label for&#x3D;&quot;corporation&quot;&gt;{{ getLabel(&#x27;corporation&#x27;) }}&lt;/label&gt;
+      &lt;/div&gt;
+  
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;p-inputMask 
+            mask&#x3D;&quot;(+99) 999-99-99-99&quot; 
+            formControlName&#x3D;&quot;phone&quot;
+            placeholder&#x3D;&quot;(99) 999-99-99-99&quot; /&gt;
+          &lt;label for&#x3D;&quot;phone&quot;&gt;{{ getLabel(&#x27;phone&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;  
+  
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;p-inputMask 
+            mask&#x3D;&quot;(a*)99-9999-9999-9999&quot; 
+            formControlName&#x3D;&quot;iban&quot;
+            placeholder&#x3D;&quot;(BE)XX-XXXX-XXXX-XXXX&quot; /&gt;
+          &lt;label for&#x3D;&quot;iban&quot;&gt;{{ getLabel(&#x27;iban&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;  
+  
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;p-calendar
+            formControlName&#x3D;&quot;birthdate&quot;
+            dateFormat&#x3D;&quot;dd.mm.yy&quot;/&gt;
+          &lt;label for&#x3D;&quot;birthdate&quot;&gt;{{ getLabel(&#x27;birthdate&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;  
+      
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;p-dropdown
+            formControlName&#x3D;&quot;civility&quot;
+            [options]&#x3D;&quot;civilityTypes&quot;
+            optionLabel&#x3D;&quot;type&quot;
+            placeholder&#x3D;&quot;Selectionner une civilité&quot;
+            class&#x3D;&quot;fixed-width-dropdown&quot;  /&gt;
+          &lt;label for&#x3D;&quot;civility&quot;&gt;{{ getLabel(&#x27;civility&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;  
+  
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;p-dropdown
+            formControlName&#x3D;&quot;document_receiving_method&quot;
+            [options]&#x3D;&quot;documentReceivingMethods&quot;
+            optionLabel&#x3D;&quot;type&quot;
+            placeholder&#x3D;&quot;Selectionner une méthode d&#x27;envoi des documents&quot;
+            class&#x3D;&quot;fixed-width-dropdown&quot; /&gt;
+          &lt;label for&#x3D;&quot;document_receiving_method&quot;&gt;{{ getLabel(&#x27;document_receiving_method&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;  
+      
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;input type&#x3D;&quot;text&quot; pInputText formControlName&#x3D;&quot;reminder_delay&quot; pKeyFilter&#x3D;&quot;int&quot; /&gt;
+          &lt;label for&#x3D;&quot;reminder_delay&quot;&gt;{{ getLabel(&#x27;reminder_delay&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;
+  
+      &lt;div class&#x3D;&quot;flex-wrap&quot;&gt;
+        &lt;p-floatLabel&gt;
+          &lt;p-dropdown
+            formControlName&#x3D;&quot;reminder_receiving_method&quot;
+            [options]&#x3D;&quot;reminderReceivingMethods&quot;
+            optionLabel&#x3D;&quot;type&quot;
+            placeholder&#x3D;&quot;Selectionner une méthode d&#x27;envoi des rappels&quot;
+            class&#x3D;&quot;fixed-width-dropdown&quot;  /&gt;
+          &lt;label for&#x3D;&quot;reminder_receiving_method&quot;&gt;{{ getLabel(&#x27;reminder_receiving_method&#x27;) }}&lt;/label&gt;
+        &lt;/p-floatLabel&gt;
+      &lt;/div&gt;  
+  &lt;/div&gt;
+&lt;/p-card&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><p-card header="Concierge">  <div class="card flex flex-wrap ">    <div class="flex-wrap">      <p-inputSwitch         [ngModel]="conciergeForm.get(\'isThereConcierge\')?.value"         (onChange)="conciergeSwitch($event)" />      <label for="conciergeSwitch" style="padding: 10px;">{{ ConciergeMessage }}</label>    </div>  </div></p-card>  <p-blockUI [target]="blocked" [blocked]="!isThereConcierge">    <i class="pi pi-lock" style="font-size: 3rem"></i>  </p-blockUI><p-card #blocked>  <div class="card flex flex-wrap gap-4 mb-4"   [formGroup]="conciergeForm"  >      <div class="flex-wrap" #test>        <p-floatLabel >          <input type="text" pInputText formControlName="name" pTooltip="Entrer votre prénom" tooltipPosition="top"  />          <label for="name">{{ getLabel(\'name\') }}</label>        </p-floatLabel>      </div>        <div class="flex-wrap">        <p-floatLabel>          <input type="text" pInputText formControlName="surname" pTooltip="Entrer votre nom" tooltipPosition="top" />          <label for="surname">{{ getLabel(\'surname\') }}</label>        </p-floatLabel>      </div>        <div class="flex-wrap">        <p-floatLabel>          <input type="email" pInputText formControlName="email" pTooltip="Entrer votre email" tooltipPosition="top"  />          <label for="email">{{ getLabel(\'email\') }}</label>        </p-floatLabel>      </div>        <div class="flex-wrap">        <p-inputSwitch formControlName="corporation" />        <label for="corporation">{{ getLabel(\'corporation\') }}</label>      </div>        <div class="flex-wrap">        <p-floatLabel>          <p-inputMask             mask="(+99) 999-99-99-99"             formControlName="phone"            placeholder="(99) 999-99-99-99" />          <label for="phone">{{ getLabel(\'phone\') }}</label>        </p-floatLabel>      </div>          <div class="flex-wrap">        <p-floatLabel>          <p-inputMask             mask="(a*)99-9999-9999-9999"             formControlName="iban"            placeholder="(BE)XX-XXXX-XXXX-XXXX" />          <label for="iban">{{ getLabel(\'iban\') }}</label>        </p-floatLabel>      </div>          <div class="flex-wrap">        <p-floatLabel>          <p-calendar            formControlName="birthdate"            dateFormat="dd.mm.yy"/>          <label for="birthdate">{{ getLabel(\'birthdate\') }}</label>        </p-floatLabel>      </div>              <div class="flex-wrap">        <p-floatLabel>          <p-dropdown            formControlName="civility"            [options]="civilityTypes"            optionLabel="type"            placeholder="Selectionner une civilité"            class="fixed-width-dropdown"  />          <label for="civility">{{ getLabel(\'civility\') }}</label>        </p-floatLabel>      </div>          <div class="flex-wrap">        <p-floatLabel>          <p-dropdown            formControlName="document_receiving_method"            [options]="documentReceivingMethods"            optionLabel="type"            placeholder="Selectionner une méthode d\'envoi des documents"            class="fixed-width-dropdown" />          <label for="document_receiving_method">{{ getLabel(\'document_receiving_method\') }}</label>        </p-floatLabel>      </div>              <div class="flex-wrap">        <p-floatLabel>          <input type="text" pInputText formControlName="reminder_delay" pKeyFilter="int" />          <label for="reminder_delay">{{ getLabel(\'reminder_delay\') }}</label>        </p-floatLabel>      </div>        <div class="flex-wrap">        <p-floatLabel>          <p-dropdown            formControlName="reminder_receiving_method"            [options]="reminderReceivingMethods"            optionLabel="type"            placeholder="Selectionner une méthode d\'envoi des rappels"            class="fixed-width-dropdown"  />          <label for="reminder_receiving_method">{{ getLabel(\'reminder_receiving_method\') }}</label>        </p-floatLabel>      </div>    </div></p-card></div>'
+    var COMPONENTS = [{'name': 'AddressComponent', 'selector': 'app-address'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CadastreComponent', 'selector': 'app-cadastre'},{'name': 'ConciergeComponent', 'selector': 'app-concierge'},{'name': 'CondominiumComponent', 'selector': 'app-condominium'},{'name': 'CoproprietaireComponent', 'selector': 'app-coproprietaire'},{'name': 'DisplayCondominiumComponent', 'selector': 'displayCondominium'},{'name': 'FileUploadComponent', 'selector': 'app-upload'},{'name': 'FtpblueprintComponent', 'selector': 'app-ftpblueprint'},{'name': 'InformationComponent', 'selector': 'app-information'},{'name': 'UnitComponent', 'selector': 'app-unit'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ConciergeComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ConciergeComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
