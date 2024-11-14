@@ -49,10 +49,15 @@
 <p-dialog
   header="Ajouter une nouvelle co-propriété"
   [(visible)]="displayDialog"
-  [modal]="false"
-  [style]="{ width: '65vw', height: '90vh' }"
-  [contentStyle]="{ display: 'flex', 'flex-direction': 'column' }"
+  [modal]="true"
+  (onHide)="onDialogHide()"
+  [style]="{ width: '70vw', height: '90vh' }"
+  [contentStyle]="{ display: 'flex', 'flex-direction': 'column', 'justify-content': 'flex-start' }"
+  [closable]="true"
+  [dismissableMask]="false"
   [autoZIndex]="true"
 >
-  <app-condominium #condo (closeDialog)="closeDialog()"></app-condominium>
+  <app-condominium></app-condominium>
 </p-dialog>
+
+<p-confirmDialog></p-confirmDialog>

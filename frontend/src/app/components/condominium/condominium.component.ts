@@ -38,7 +38,7 @@ import { UniqueValidator } from '../../validators/unique-validator';
   providers: [MessageService, ConfirmationService],
 })
 export class CondominiumComponent {
-  @Output() closeDialog = new EventEmitter<void>(); // Événement pour fermer le dialog parent (app.component.html)
+  @Output() closeRequest = new EventEmitter<void>(); // Événement pour fermer le dialog parent (app.component.html)
 
   // Injection de dépendances via `inject` pour plus de clarté
   private fb = inject(FormBuilder);
@@ -81,7 +81,6 @@ export class CondominiumComponent {
           [Validators.required],
           [UniqueValidator.checkPrefixUniqueness(this.uniqueCheckService)],
         ],
-        exercice: ['', [Validators.required]],  
         description: ['', [Validators.maxLength(500)]],
       }),
       address: this.fb.group({
@@ -145,6 +144,12 @@ export class CondominiumComponent {
   previousStep() {
     this.activeIndex.update((i) => i - 1);
   }
+  clearFormAndIndex() {
+    this.createCondominiumForm.reset();
+    this.activeIndex.set(0);
+  }
+
+
 
   confirmation(event: Event) {
     this.confirmationService.confirm({
@@ -172,7 +177,7 @@ export class CondominiumComponent {
   }
 
   onSubmit(): void {
-    this.closeDialog.emit();
+    this.closeRequest.emit();
     console.log('Formulaire soumis:', this.createCondominiumForm.value);
     let formData = this.createCondominiumForm.value;
 

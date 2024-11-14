@@ -1,4 +1,4 @@
-import { Component, Input , OnInit} from '@angular/core';
+import { Component, Input , Output, EventEmitter} from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -24,18 +24,24 @@ import { PanelModule } from 'primeng/panel';
     MessageModule,
     ButtonModule,
     DividerModule,
-    PanelModule
+    PanelModule,
   ],
   templateUrl: './information.component.html',
   styleUrls: ['./information.component.scss']
 })
 export class InformationComponent {
   @Input() informationForm!: FormGroup;
+  @Output() next = new EventEmitter<void>();
 
   // Vérifie si le champ est invalide et a été touché
   isFieldInvalid(field: string): boolean {
     const control = this.informationForm.get(field);
     return !!(control && control.invalid && control.touched);
+  }
+  nextStep() {
+    if (this.informationForm.valid) {
+      this.next.emit();
+    }
   }
 
   // Récupère les messages d'erreur appropriés pour un champ donné
@@ -47,6 +53,6 @@ export class InformationComponent {
       if (control.errors['maxlength']) return `Maximum ${control.errors['maxlength'].requiredLength} caractères autorisés.`;
       if (control.errors['nameTaken']) return 'Ce nom est déjà pris.';
     }
-    return null;
+    return '';
   }
 }

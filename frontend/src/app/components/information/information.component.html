@@ -1,40 +1,57 @@
 <p-card header="Informations">
-  <div class="card p-fluid" [formGroup]="informationForm" >
+  <form [formGroup]="informationForm" class="p-fluid card-form">
+    <!-- Row for Name and Prefix Fields -->
+    <div class="p-field p-grid">
+      <!-- Name Field (50%) -->
+      <div class="p-col-6">
+        <p-floatLabel>
+          <input 
+            type="text" 
+            pInputText 
+            formControlName="name" 
+            [ngClass]="{'error-input': isFieldInvalid('name')}" 
+            id="name"
+          />
+          <label for="name">Nom de la copropriété</label>
+        </p-floatLabel>
+        <small class="error-message">{{ getErrorMessage('name') }}</small>
+      </div>
 
-    <!-- Name Field -->
-    <div class="p-col-custom-12">
-      <p-floatLabel>
-        <input type="text" pInputText formControlName="name" [ngClass]="{'error-input': isFieldInvalid('name')}" />
-        <label for="name">Name</label>
-      </p-floatLabel>
-      <small *ngIf="getErrorMessage('name')" class="error-message">{{ getErrorMessage('name') }}</small>
-    </div>
-
-    <!-- Prefix Field -->
-    <div class="p-col-custom-12">
-      <p-floatLabel>
-        <input type="text" pInputText formControlName="prefix" [ngClass]="{'error-input': isFieldInvalid('prefix')}" />
-        <label for="prefix">Prefix</label>
-      </p-floatLabel>
-      <small *ngIf="getErrorMessage('prefix')" class="error-message">{{ getErrorMessage('prefix') }}</small>
-    </div>
-
-    <!-- Exercice Field -->
-    <div class="p-col-custom-12">
-      <p-floatLabel>
-        <input type="text" pInputText formControlName="exercice" [ngClass]="{'error-input': isFieldInvalid('exercice')}" />
-        <label for="exercice">Exercice comptable</label>
-      </p-floatLabel>
-      <small *ngIf="getErrorMessage('exercice')" class="error-message">{{ getErrorMessage('exercice') }}</small>
+      <!-- Prefix Field (50%) -->
+      <div class="p-col-6">
+        <p-floatLabel>
+          <input 
+            type="text" 
+            pInputText 
+            formControlName="prefix" 
+            [ngClass]="{'error-input': isFieldInvalid('prefix')}" 
+            id="prefix"
+          />
+          <label for="prefix">Prefixe de la copropriété</label>
+        </p-floatLabel>
+        <small class="error-message">{{ getErrorMessage('prefix') }}</small>
+      </div>
     </div>
 
     <!-- Description Field -->
-    <div class="p-grid p-mb-3 p-col-12">
+    <div class="p-field">
       <p-floatLabel>
-        <textarea pInputTextarea rows="5" cols="30" formControlName="description" [ngClass]="{'error-input': isFieldInvalid('description')}"></textarea>
+        <textarea 
+          pInputTextarea 
+          rows="3" 
+          cols="30" 
+          formControlName="description" 
+          [ngClass]="{'error-input': isFieldInvalid('description')}" 
+          id="description"
+        ></textarea>
         <label for="description">Description</label>
       </p-floatLabel>
-      <small *ngIf="getErrorMessage('description')" class="error-message">{{ getErrorMessage('description') }}</small>
+      <small class="error-message">{{ getErrorMessage('description') }}</small>
     </div>
-  </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="grid grid-nogutter justify-content-end">
+        <p-button label="Suivant" (onClick)="nextStep()" icon="pi pi-angle-right" iconPos="right"></p-button>
+    </div>
+</ng-template>
 </p-card>

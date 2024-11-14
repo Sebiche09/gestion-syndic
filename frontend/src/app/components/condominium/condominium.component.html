@@ -9,41 +9,14 @@
 
 <form [formGroup]="createCondominiumForm" (ngSubmit)="onSubmit()">
   @if (activeIndex() === 0) {
-  <app-information [informationForm]="informationsForm"></app-information>
+  <app-information [informationForm]="informationsForm" (next)="nextStep()"></app-information>
   } @if (activeIndex() === 1) {
-  <app-cadastre (textExtracted)="onTextExtracted($event)"></app-cadastre>
+  <app-cadastre (textExtracted)="onTextExtracted($event)" (next)="nextStep()"></app-cadastre>
   }@if (activeIndex() === 2) {
-  <app-address [addressForm]="addressForm"></app-address>
+  <app-address [addressForm]="addressForm" (next)="nextStep()"></app-address>
   }@if (activeIndex() === 3) {
-  <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm"></app-ftpblueprint>
+  <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm" (next)="nextStep()"></app-ftpblueprint>
   }@if (activeIndex() === 4) {
-  <app-unit [units]="units"></app-unit>
+  <app-unit [units]="units" (next)="nextStep()"></app-unit>
   }
-  <div class="button-group">
-    @if (activeIndex() > 0) {
-    <p-button label="Précédent" (click)="previousStep()"></p-button>
-    }
-    
-    <div class="right-buttons">
-      @if (activeIndex() < items.length - 1) {
-      <p-button
-        label="Suivant"
-        [disabled]="!isStepValid()"
-        (click)="nextStep()"
-      ></p-button>
-      }
-
-      <p-confirmPopup></p-confirmPopup>
-      @if (activeIndex() === items.length - 1) {
-      <p-button
-        type="button"
-        label="Submit"
-        icon="pi pi-check"
-        iconPos="right"
-        [disabled]="!createCondominiumForm.valid"
-        (click)="confirmation($event)"
-      ></p-button>
-      }
-    </div>
-  </div>
 </form>
