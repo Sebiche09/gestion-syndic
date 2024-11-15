@@ -1,3 +1,10 @@
 <p-card header="Cadastre">
 <app-upload (fileUploaded)="onFileUploaded($event)" [fileType]="'cadastre'"></app-upload>
+<ng-template pTemplate="footer">
+    
+    <div class="grid grid-nogutter justify-content-between">
+        <p-button label="Précédent" (onClick)="previousStep()" icon="pi pi-angle-left"></p-button>
+        <p-button label="Suivant"   (onClick)="nextStep()" icon="pi pi-angle-right" iconPos="right"></p-button>
+    </div>
+</ng-template>
 </p-card>

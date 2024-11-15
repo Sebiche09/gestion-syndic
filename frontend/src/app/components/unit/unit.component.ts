@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, signal, Output,EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -14,6 +14,8 @@ import { ButtonModule } from 'primeng/button';
 })
 export class UnitComponent {
   @Input() units!: FormArray;
+  @Output() next = new EventEmitter<void>();
+  @Output() previous = new EventEmitter<void>();
 
   displayDetailsDialog = signal(false);  
   selectedUnit = signal<FormGroup | null>(null);  
@@ -43,5 +45,14 @@ export class UnitComponent {
   
   get unitControls() {
     return this.units.controls;
+  }
+  allUnitsValidated(): boolean {
+    return this.units.controls.every((unit) => (unit as FormGroup).get('status')?.value === 'Validé');
+  }
+  previousStep() {
+    this.previous.emit();
+  }
+  nextStep() {
+      this.next.emit();
   }
 }

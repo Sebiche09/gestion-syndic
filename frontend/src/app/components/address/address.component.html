@@ -8,6 +8,7 @@
           <input id="street" pInputText formControlName="street" />
           <label for="street">Street</label>
         </p-floatLabel>
+        <small class="error-message">{{ getErrorMessage('street') }}</small>
       </div>
     </div> 
 
@@ -26,72 +27,36 @@
           <input id="postal_code" pInputText formControlName="postal_code" />
           <label for="postal_code">Postal Code</label>
         </p-floatLabel>
+        <small class="error-message">{{ getErrorMessage('postal_code') }}</small>
       </div>
     </div>
 
     <div class="p-grid p-mb-3">
-      <!-- Country Dropdown -->
+      <!-- Ville -->
       <div class="p-field p-col-custom-6">
-        <p-dropdown 
-          [options]="countries" 
-          formControlName="country" 
-          optionLabel="name" 
-          optionValue="code" 
-          [filter]="true" 
-          filterBy="name" 
-          [showClear]="true"
-          placeholder="Select a Country">
-          <ng-template pTemplate="selectedItem" let-selectedOption>
-            <div class="flex align-items-center gap-2">
-              <img 
-                src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                [class]="'flag flag-' + (selectedCountry?.code?.toLowerCase() || '')"
-                style="width: 18px" />
-              <div>{{ selectedOption.name }}</div>
-            </div>
-          </ng-template>
-          <ng-template let-country pTemplate="item">
-            <div class="flex align-items-center gap-2">
-              <img 
-                src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                [class]="'flag flag-' + country.code.toLowerCase()"
-                style="width: 18px" />
-              <div>{{ country.name }}</div>
-            </div>
-          </ng-template>
-        </p-dropdown>
+        <p-floatLabel>
+          <input id="city" pInputText formControlName="city" />
+          <label for="city">Ville</label>
+        </p-floatLabel>
+        <small class="error-message">{{ getErrorMessage('city') }}</small>
       </div>
 
-      <!-- City Dropdown -->
-      <div class="p-col-custom-6"> <!-- 1/2 de la largeur -->
-        <p-dropdown 
-          [options]="cities" 
-          formControlName="city" 
-          optionLabel="name" 
-          [filter]="true" 
-          filterBy="name" 
-          [showClear]="true"
-          placeholder="Select a City">
-          <ng-template pTemplate="selectedItem" let-selectedOption>
-            <div class="flex align-items-center gap-2">
-              <img 
-                src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                [class]="'flag flag-' + (selectedCity?.name?.toLowerCase() || '')"
-                style="width: 18px" />
-              <div>{{ selectedOption.name }}</div>
-            </div>
-          </ng-template>
-          <ng-template let-city pTemplate="item">
-            <div class="flex align-items-center gap-2">
-              <img 
-                src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                [class]="'flag flag-' + city.name.toLowerCase()"
-                style="width: 18px" />
-              <div>{{ city.name }}</div>
-            </div>
-          </ng-template>
-        </p-dropdown>
+      <!-- Pays -->
+      <div class="p-col-custom-6">
+        <p-floatLabel>
+          <input id="country" pInputText formControlName="country" />
+          <label for="country">Pays</label>
+        </p-floatLabel>
+        <small class="error-message">{{ getErrorMessage('country') }}</small>
       </div>
-    </div> <!-- Fin de la troisième ligne -->
+    </div>
   </div>
+  <ng-template pTemplate="footer">
+    
+    <div class="grid grid-nogutter justify-content-between">
+        <p-button label="Précédent" (onClick)="previousStep()" icon="pi pi-angle-left"></p-button>
+        <p-button label="Suivant"   (onClick)="nextStep()" icon="pi pi-angle-right" iconPos="right"
+        [disabled]="!addressForm.valid"></p-button>
+    </div>
+</ng-template>
 </p-card>

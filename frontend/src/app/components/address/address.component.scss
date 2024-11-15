@@ -29,4 +29,15 @@
 .p-field .p-dropdown {
     width: 100%;
 }
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.1rem; 
+    display: block;
+    min-height: 1em;
+  }
+  
+  .error-message:not(:empty) {
+    visibility: visible;
+  }
   

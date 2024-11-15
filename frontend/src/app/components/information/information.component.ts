@@ -32,19 +32,18 @@ import { PanelModule } from 'primeng/panel';
 export class InformationComponent {
   @Input() informationForm!: FormGroup;
   @Output() next = new EventEmitter<void>();
-
-  // Vérifie si le champ est invalide et a été touché
-  isFieldInvalid(field: string): boolean {
-    const control = this.informationForm.get(field);
-    return !!(control && control.invalid && control.touched);
-  }
+  
   nextStep() {
     if (this.informationForm.valid) {
       this.next.emit();
     }
   }
 
-  // Récupère les messages d'erreur appropriés pour un champ donné
+  isFieldInvalid(field: string): boolean {
+    const control = this.informationForm.get(field);
+    return !!(control && control.invalid && control.touched);
+  }
+
   getErrorMessage(field: string): string | null {
     const control = this.informationForm.get(field);
     if (control?.errors) {

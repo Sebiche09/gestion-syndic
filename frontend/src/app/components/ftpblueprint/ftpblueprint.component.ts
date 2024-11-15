@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input,Output, EventEmitter } from '@angular/core';
 import { FormGroup} from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { FileUploadComponent } from '../upload/upload.component';
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-ftpblueprint',
   standalone: true,
@@ -11,11 +12,20 @@ import { FileUploadComponent } from '../upload/upload.component';
     FloatLabelModule,
     InputTextModule,
     CardModule,
-    FileUploadComponent],
+    FileUploadComponent,
+    ButtonModule],
   templateUrl: './ftpblueprint.component.html',
   styleUrl: './ftpblueprint.component.scss'
 })
 export class FtpblueprintComponent {
   @Input() ftpBlueprintForm!: FormGroup;
+  @Output() next = new EventEmitter<void>();
+  @Output() previous = new EventEmitter<void>();
   
+  previousStep() {
+    this.previous.emit();
+  }
+  nextStep() {
+      this.next.emit();
+  }
 } 

@@ -11,12 +11,12 @@
   @if (activeIndex() === 0) {
   <app-information [informationForm]="informationsForm" (next)="nextStep()"></app-information>
   } @if (activeIndex() === 1) {
-  <app-cadastre (textExtracted)="onTextExtracted($event)" (next)="nextStep()"></app-cadastre>
+  <app-cadastre (textExtracted)="onTextExtracted($event)" (next)="nextStep()" (previous)="previousStep()"></app-cadastre>
   }@if (activeIndex() === 2) {
-  <app-address [addressForm]="addressForm" (next)="nextStep()"></app-address>
+  <app-address [addressForm]="addressForm" (next)="nextStep()" (previous)="previousStep()"></app-address>
   }@if (activeIndex() === 3) {
-  <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm" (next)="nextStep()"></app-ftpblueprint>
+  <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm" (next)="nextStep()" (previous)="previousStep()"></app-ftpblueprint>
   }@if (activeIndex() === 4) {
-  <app-unit [units]="units" (next)="nextStep()"></app-unit>
+  <app-unit [units]="units" (next)="nextStep()" (previous)="previousStep()"></app-unit>
   }
 </form>

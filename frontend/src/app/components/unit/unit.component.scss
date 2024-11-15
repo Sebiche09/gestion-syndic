@@ -1,0 +1,21 @@
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+  }
+  
+  .table-container {
+    flex: 1;
+    overflow-y: auto; /* Permet le défilement du tableau uniquement */
+  }
+  
+  .table-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: white;
+    border-top: 1px solid #ccc;
+    position: sticky;
+    bottom: 0;
+  }
+  
