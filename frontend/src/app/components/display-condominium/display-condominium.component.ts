@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { DisplayCondominiumService } from '../../services/display-condominium.service';
 import { Router } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
@@ -12,7 +11,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     templateUrl: 'display-condominium.component.html',
     standalone: true,
     imports: [TableModule, ButtonModule, DialogModule, CondominiumComponent, ConfirmDialogModule],
-    providers: [DisplayCondominiumService, ConfirmationService]
+    providers: [ConfirmationService]
 })
 export class DisplayCondominiumComponent {
     displayDialog: boolean = false;
@@ -20,7 +19,6 @@ export class DisplayCondominiumComponent {
     @ViewChild(CondominiumComponent) dialogForm!: CondominiumComponent; 
 
     constructor(
-        private displayCondominiumService: DisplayCondominiumService, 
         private router: Router,
         private confirmationService: ConfirmationService
     ) {}

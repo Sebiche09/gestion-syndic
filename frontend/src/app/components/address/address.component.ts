@@ -24,6 +24,7 @@ import { ButtonModule } from 'primeng/button';
 })
 export class AddressComponent {
   @Input() addressForm!: FormGroup;
+  
   @Output() next = new EventEmitter<void>();
   @Output() previous = new EventEmitter<void>();
 

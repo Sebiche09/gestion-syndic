@@ -12,6 +12,8 @@ import { InformationComponent } from '../information/information.component';
 import { CadastreComponent } from '../cadastre/cadastre.component';
 import { UnitComponent } from '../unit/unit.component';
 import { CondominiumService } from '../../services/condominium.service';
+import { CoproprietaireComponent } from '../coproprietaire/coproprietaire.component';
+import { title } from 'node:process';
 @Component({
   selector: 'app-condominium',
   templateUrl: './condominium.component.html',
@@ -28,6 +30,7 @@ import { CondominiumService } from '../../services/condominium.service';
     StepsModule,
     DialogModule,
     ConfirmPopupModule,
+    CoproprietaireComponent
   ],
   providers: [MessageService, ConfirmationService],
 })
@@ -42,9 +45,8 @@ export class CondominiumComponent {
     'Cadastre',
     'Adresse',
     'Plans',
-    'Lots',
     'Co-propriétaires',
-    'Concierge',
+    'Lots',
   ].map((label) => ({ label })); // Création des titres des étapes
 
   activeIndex = signal(0); // Index de l'étape active
@@ -68,8 +70,8 @@ export class CondominiumComponent {
   get units(): FormArray {
     return this.createCondominiumForm.get('units') as FormArray;
   }
-  get conciergeForm(): FormGroup {
-    return this.createCondominiumForm.get('concierge') as FormGroup;
+  get occupants(): FormArray {
+    return this.createCondominiumForm.get('occupants') as FormArray;
   }
   //---------------------------------------------------------
   
@@ -114,9 +116,6 @@ export class CondominiumComponent {
 
   onSubmit(): void {
     this.closeRequest.emit();
-    console.log('Formulaire soumis:', this.createCondominiumForm.value);
-
-    // Envoi du formulaire via le service CondominiumService
     this.condominiumService.submitCondominium(this.createCondominiumForm.value)
       .subscribe({
         next: (response) => {
@@ -136,26 +135,63 @@ export class CondominiumComponent {
   
   onTextExtracted(text: any) {
     if (text) {
-      console.log(text);
-      
       this.addressForm.patchValue({
         street: text.address.street,
         postal_code: text.address.postal_code,
         city: text.address.city,
         country: text.address.country,
       });
-
-      this.units.clear();
-
+  
+      const occupantsArray = this.createCondominiumForm.get('occupants') as FormArray;
+  
       const unitData = text.unit;
       if (unitData && typeof unitData === 'object') {
         Object.keys(unitData).forEach((unitKey: string) => {
           const unitInfo = unitData[unitKey];
           if (Array.isArray(unitInfo.owners) && unitInfo.owners.length > 0) {
-            this.condominiumService.addUnit(this.units, { unitKey, ...unitInfo });
+            const transformedOwners = unitInfo.owners.map((owner: any) => {
+              let occupantIndex = occupantsArray.controls.findIndex((control) =>
+                control.get('name')?.value === owner.last_name &&
+                control.get('surname')?.value === owner.first_name &&
+                control.get('title')?.value === owner.title
+
+              );
+  
+              if (occupantIndex === -1) {
+                this.condominiumService.addOccupant(occupantsArray, {
+                  name: owner.last_name,
+                  surname: owner.first_name,
+                  title: owner.title,
+                });
+                occupantIndex = occupantsArray.length - 1;
+              }
+  
+              // Inclure nom et prénom directement
+              return {
+                name: owner.last_name,
+                surname: owner.first_name,
+                title: owner.title || '',
+                quota: owner.quota || 0,
+                administrator: owner.administrator || false,
+              };
+            });
+  
+            unitInfo.owners = transformedOwners;
+  
+            this.condominiumService.addUnit(this.units, {
+              unitKey,
+              ...unitInfo,
+            });
+          } else {
+            console.warn(`Unité ${unitKey} n'a pas de propriétaires définis.`);
           }
         });
       }
     }
   }
+  
+  
+  
+  
+    
 }

@@ -1,1 +1,179 @@
-<p>coproprietaire works!</p>
+<div class="modal-container">
+    <div class="table-container">
+      <p-toast></p-toast>
+      <p-table [value]="occupants.controls" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Statut</th>
+            <th style="width: 5rem">Actions</th>
+          </tr>
+        </ng-template>
+  
+        <ng-template pTemplate="body" let-occupant let-rowIndex="rowIndex">
+          <tr>
+            <td>{{ occupant.get('name')?.value }}</td>
+            <td>{{ occupant.get('surname')?.value }}</td>
+            <td>
+              <p-tag
+                [icon]="occupant.get('status')?.value === 'brouillon' ? 'pi pi-exclamation-triangle' : 'pi pi-check'"
+                [severity]="occupant.get('status')?.value === 'brouillon' ? 'warning' : 'success'"
+                [value]="occupant.get('status')?.value">
+              </p-tag>
+            </td>
+            <td>
+              <p-button (click)="viewDetails(rowIndex)" type="button" class="btn btn-primary">
+                <i class="pi pi-search"></i>
+              </p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div class="table-footer">
+        <p-button label="Précédent" (onClick)="previousStep()" icon="pi pi-angle-left"></p-button>
+        <p-button label="Suivant" (onClick)="nextStep()" [disabled]="!allOccupantsValidated()" icon="pi pi-angle-right" iconPos="right"></p-button>
+      </div>
+    </div>
+  
+    <p-dialog 
+        header="Modifier l'occupant" 
+        [(visible)]="detailsDialogVisible" 
+        [modal]="true" 
+        [closable]="true" 
+        appendTo="body" 
+        [autoZIndex]="true">
+        @if (selectedOccupantForm) {
+            <form [formGroup]="selectedOccupantForm">
+                
+                <div class="form-group">
+                <label for="name">Nom</label>
+                <input id="name" type="text" pInputText formControlName="name" />
+                </div>
+
+                <div class="form-group">
+                <label for="surname">Prénom</label>
+                <input id="surname" type="text" pInputText formControlName="surname" />
+                </div>
+
+                <div class="form-group">
+                <label for="birthDate">Date de naissance</label>
+                <p-calendar 
+                    pInputText formControlName="birthDate" 
+                    [showIcon]="true" 
+                    [showOnFocus]="false"
+                    inputId="buttondisplay"
+                    dateFormat="dd.mm.yy"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="civility">Civilité</label>
+                    <p-dropdown 
+                      id="civility" 
+                      formControlName="civility" 
+                      [options]="civility" 
+                      optionLabel="label" 
+                      optionValue="value"
+                      placeholder="Sélectionner une civilité">
+                    </p-dropdown>
+                  </div>
+                  
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                      id="email" 
+                      type="email" 
+                      pInputText 
+                      formControlName="email" 
+                      placeholder="exemple@domain.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <p-inputMask 
+                        id="phone" 
+                        mask="+999 99 99 99 99" 
+                        formControlName="phone" 
+                        [slotChar]="'_'"
+                        placeholder="+123 45 67 89 01">
+                    </p-inputMask>
+                </div>
+
+                <div class="form-group">
+                    <label for="iban">IBAN</label>
+                    <p-inputMask 
+                        id="iban" 
+                        mask="SS99 9999 9999 9999 999" 
+                        formControlName="iban" 
+                        [slotChar]="'_'"
+                        placeholder="FR 1234 5678 9012 3456 7890 123">
+                    </p-inputMask>
+                </div>
+
+                <div class="form-group">
+                    <label for="document_receiving_method">Méthode de réception de document</label>
+                    <p-dropdown 
+                      id="document_receiving_method" 
+                      formControlName="document_receiving_method" 
+                      [options]="documentReceivingMethods" 
+                      optionLabel="label" 
+                      optionValue="value"
+                      placeholder="Sélectionner une méthode">
+                    </p-dropdown>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="reminder_receiving_method">Méthode de réception de rappel</label>
+                    <p-dropdown 
+                      id="reminder_receiving_method" 
+                      formControlName="reminder_receiving_method" 
+                      [options]="reminderReceivingMethods" 
+                      optionLabel="label" 
+                      optionValue="value"
+                      placeholder="Sélectionner une méthode">
+                    </p-dropdown>
+                  </div>
+
+                <div class="form-group">
+                    <label for="reminder_delay">Délai rappel</label>
+                    <p-inputNumber 
+                        id="reminder_delay" 
+                        formControlName="reminder_delay" 
+                        [min]="0" 
+                        [max]="365" 
+                        [step]="1" 
+                        [showButtons]="true" 
+                        [style]="{ width: '10rem' }" 
+                        placeholder="Entrez le délai">
+                    </p-inputNumber>
+                </div>
+                
+                <div class="form-group">
+                    <p-checkbox 
+                        id="isConcierge" 
+                        binary="true" 
+                        formControlName="isConcierge" 
+                        label="Concierge" 
+                        [style]="{ marginRight: '1rem' }">
+                    </p-checkbox>
+                </div>
+
+                <div class="form-group">
+                    <p-checkbox 
+                        id="corporation" 
+                        binary="true" 
+                        formControlName="corporation" 
+                        label="Entreprise" 
+                        [style]="{ marginRight: '1rem' }">
+                    </p-checkbox>
+                </div>
+            </form>
+        }
+        <footer>
+            <p-button label="Confirmer" (onClick)="confirmDetails()" icon="pi pi-check"></p-button>
+            <p-button label="Annuler" (onClick)="closeDetailsDialog()" icon="pi pi-times"></p-button>
+        </footer>
+    </p-dialog>
+  </div>
+  

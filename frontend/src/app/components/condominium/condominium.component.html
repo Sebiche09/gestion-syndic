@@ -15,8 +15,10 @@
   }@if (activeIndex() === 2) {
   <app-address [addressForm]="addressForm" (next)="nextStep()" (previous)="previousStep()"></app-address>
   }@if (activeIndex() === 3) {
-  <app-ftpblueprint [ftpBlueprintForm]="ftpBlueprintForm" (next)="nextStep()" (previous)="previousStep()"></app-ftpblueprint>
+  <app-ftpblueprint (next)="nextStep()" (previous)="previousStep()"></app-ftpblueprint>
   }@if (activeIndex() === 4) {
-  <app-unit [units]="units" (next)="nextStep()" (previous)="previousStep()"></app-unit>
+    <app-coproprietaire [occupants]="occupants" (next)="nextStep()" (previous)="previousStep()"></app-coproprietaire>
+  }@if (activeIndex() === 5) {
+  <app-unit [units]="units" [addressForm]="addressForm" (submit)="onSubmit()" (previous)="previousStep()"></app-unit>
   }
 </form>

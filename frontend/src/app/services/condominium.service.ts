@@ -13,23 +13,7 @@ export class CondominiumService {
   private fb = inject(FormBuilder);
   private uniqueCheckService = inject(UniqueCheckService);
 
-  private getCivilities = environment.apiUrls.getCivilities;
-  private getDocumentRemindingMethod = environment.apiUrls.getDocumentRemindingMethod;
-  private getReminderRemindingMethod = environment.apiUrls.getReminderRemindingMethod;
-
   constructor(private http: HttpClient) {}
-
-  getCivilityOptions(): Observable<any[]> {
-    return this.http.get<any[]>(this.getCivilities);
-  }
-
-  getDocumentReceivingMethodOptions(): Observable<any[]> {
-    return this.http.get<any[]>(this.getDocumentRemindingMethod);
-  }
-
-  getReminderReceivingMethodOptions(): Observable<any[]> {
-    return this.http.get<any[]>(this.getReminderRemindingMethod);
-  }
 
   submitCondominium(formData: any): Observable<any> {
     const url = environment.apiUrls.condominiumApi;
@@ -40,16 +24,16 @@ export class CondominiumService {
     return this.fb.group({
       informations: this.fb.group({
         name: [
-          '', 
+          'test', 
           [Validators.required, Validators.minLength(3), Validators.maxLength(50)],
           [UniqueValidator.checkNameUniqueness(this.uniqueCheckService)],
         ],
         prefix: [
-          '',
+          'test',
           [Validators.required, Validators.maxLength(50)],
           [UniqueValidator.checkPrefixUniqueness(this.uniqueCheckService)],
         ],
-        description: ['', [Validators.maxLength(500)]],
+        description: ['test', [Validators.maxLength(500)]],
       }),
       address: this.fb.group({
         street: ['', Validators.required],
@@ -58,33 +42,44 @@ export class CondominiumService {
         postal_code: ['', Validators.required],
         country: ['Belgique', Validators.required],
       }),
-      ftpBlueprint: this.fb.group({ blueprint: [''] }),
       units: this.fb.array([]),
-      concierge: this.fb.group({
-        isThereConcierge: [false],
-        name: [''],
-        surname: [''],
-        email: [''],
-        corporation: [false],
-        phone: [''],
-        iban: [''],
-        birthdate: [''],
-        civility: [''],
-        document_receiving_method: [''],
-        reminder_delay: [40],
-        reminder_receiving_method: [''],
-        street_concierge: [''],
-        address_complement_concierge: [''],
-        city_concierge: [''],
-        postal_code_concierge: [''],
-        country_concierge: [''],
-      }),
+      occupants: this.fb.array([]),
     });
+  }
+
+  addOccupant(occupants: FormArray, occupantData: any): void {
+    const newOccupant = this.fb.group({
+      name: [occupantData.name || '', Validators.required],
+      surname: [occupantData.surname || '', Validators.required],
+      birthDate: [occupantData.birthDate || '01.01.2024', Validators.required],
+      email: [occupantData.email || 'test', [Validators.email]],
+      corporation: [occupantData.corporation || false],
+      phone: [occupantData.phone || '32470542056'],
+      iban: [occupantData.iban || 'BE68539007547034'],
+      civility: [occupantData.civility || 'Monsieur', Validators.required],
+      address: this.fb.group({
+        street: [occupantData.address?.street || '', Validators.required],
+        postal_code: [occupantData.address?.postal_code || '', Validators.required],
+        city: [occupantData.address?.city || '', Validators.required],
+        country: [occupantData.address?.country || '', Validators.required],
+      }),
+      document_receiving_method: ['fax'],
+      reminder_delay: [0],
+      reminder_receiving_method: ['fax'],
+      isConcierge: [occupantData.concierge || false],
+      status: ['brouillon'],
+    });
+    
+    occupants.push(newOccupant);
   }
 
   addUnit(units: FormArray, unitData: any): void {
     const newUnit = this.fb.group({
       cadastralReference: [unitData.unitKey || '', Validators.required],
+      unitType: [unitData.unitType || '', Validators.required],
+      floor: [unitData.floor || 0, Validators.required],
+      description: [unitData.description || ''],
+      quota: [unitData.quota || 0],
       status: ['brouillon'],
       unitAddress: this.fb.group({
         street: [unitData.street || '', Validators.required],
@@ -93,25 +88,22 @@ export class CondominiumService {
         city: [unitData.city || '', Validators.required],
         country: [unitData.country || '', Validators.required],
       }),
-      owners: this.fb.array([]),
+      owners: this.fb.array([]), 
     });
-
     const ownersArray = newUnit.get('owners') as FormArray;
     unitData.owners.forEach((owner: any) => {
+      console.log('Adding owner:', owner.name, owner.surname);
       const ownerGroup = this.fb.group({
-        lastName: [owner.last_name || '', Validators.required],
-        firstName: [owner.first_name || '', Validators.required],
-        title: [owner.title || '', Validators.required],
-        address: this.fb.group({
-          street: [owner.address?.street || '', Validators.required],
-          postal_code: [owner.address?.postal_code || '', Validators.required],
-          city: [owner.address?.city || '', Validators.required],
-          country: [owner.address?.country || '', Validators.required],
-        }),
+        name: [owner.name || '', Validators.required],
+        surname: [owner.surname || '', Validators.required],
+        title: [owner.title || '', Validators.required], 
+        quota: [owner.quota || 0], 
+        administrator: [owner.administrator || false],
       });
       ownersArray.push(ownerGroup);
     });
-
+  
     units.push(newUnit);
   }
+  
 }

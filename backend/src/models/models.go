@@ -81,10 +81,10 @@ type Unit struct {
 	CadastralReference string           `json:"internal_reference" gorm:"not null"`
 	UnitType           uint             `json:"unit_type" gorm:"not null"`
 	UnitTypes          UnitType         `gorm:"foreignKey:UnitType"`
-	Floor              uint             `json:"floor" gorm:"not null"`
+	Floor              uint8            `json:"floor" gorm:"not null"`
 	Description        string           `json:"description"`
 	Quota              float64          `json:"quota" gorm:"not null, default:0"`
-	ElectricGazMeterID uint             `json:"electric_gaz_meter_id" gorm:"not null"`
+	ElectricGazMeterID *uint            `json:"electric_gaz_meter_id"`
 	ElectricGazMeter   ElectricGazMeter `gorm:"foreignKey:ElectricGazMeterID"`
 }
 
@@ -101,15 +101,15 @@ type UnitType struct {
 
 type Condominium struct {
 	gorm.Model
-	Name               string   `json:"name" gorm:"not null"`
-	AddressID          uint     `json:"address_id" gorm:"not null"`
-	Address            Address  `gorm:"foreignKey:AddressID"`
-	Description        string   `json:"description"`
-	FtpBlueprintPath   string   `json:"ftp_blueprint_path" gorm:"not null"`
-	LandRegistryNumber string   `json:"land_registry_number" gorm:"not null"`
-	Prefix             string   `json:"prefix" gorm:"not null"`
-	ConciergeID        uint     `json:"concierge_id" gorm:"not null"`
-	Concierge          Occupant `gorm:"foreignKey:ConciergeID"`
+	Name               string    `json:"name" gorm:"not null"`
+	AddressID          uint      `json:"address_id" gorm:"not null"`
+	Address            Address   `gorm:"foreignKey:AddressID"`
+	Description        string    `json:"description"`
+	FtpBlueprintPath   string    `json:"ftp_blueprint_path"`
+	LandRegistryNumber string    `json:"land_registry_number"`
+	Prefix             string    `json:"prefix" gorm:"not null"`
+	ConciergeID        *uint     `json:"concierge_id"`
+	Concierge          *Occupant `gorm:"foreignKey:ConciergeID"`
 }
 
 type Exercice struct {

@@ -18,7 +18,6 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './ftpblueprint.component.scss'
 })
 export class FtpblueprintComponent {
-  @Input() ftpBlueprintForm!: FormGroup;
   @Output() next = new EventEmitter<void>();
   @Output() previous = new EventEmitter<void>();
   

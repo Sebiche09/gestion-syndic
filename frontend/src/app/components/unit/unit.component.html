@@ -27,10 +27,11 @@
                       class="p-button-text p-button-rounded p-button-plain mr-2" 
                       [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                   </button>
-                  {{ unit.get('unitAddress')?.get('street')?.value }},
-                  {{ unit.get('unitAddress')?.get('city')?.value }},
-                  {{ unit.get('unitAddress')?.get('postal_code')?.value }},
-                  {{ unit.get('unitAddress')?.get('country')?.value }}
+
+                  {{ addressForm.get('street')?.value }},
+                  {{ addressForm.get('city')?.value }},
+                  {{ addressForm.get('postal_code')?.value }},
+                  {{ addressForm.get('country')?.value }}
               </td>
               <td></td>
               <td></td>
@@ -59,7 +60,7 @@
   </p-table>
   <div class="table-footer">
     <p-button label="Précédent" (onClick)="previousStep()" icon="pi pi-angle-left"></p-button>
-    <p-button label="Suivant" (onClick)="nextStep()" [disabled]="!allUnitsValidated()" icon="pi pi-angle-right" iconPos="right"></p-button>
+    <p-button label="Valider" (onClick)="submitStep()" icon="pi pi-check"></p-button>
   </div>
   </div>
   <p-dialog header="Détails du lot" [visible]="displayDetailsDialog()"
@@ -69,18 +70,18 @@
     @if (selectedUnit()) {
       <div>
         <h4>Référence cadastrale: {{ selectedUnit()?.get('cadastralReference')?.value }}</h4>
-        <h5>Adresse:</h5>
-        <p>{{ selectedUnit()?.get('unitAddress')?.get('street')?.value }}, 
-          {{ selectedUnit()?.get('unitAddress')?.get('city')?.value }},
-          {{ selectedUnit()?.get('unitAddress')?.get('postal_code')?.value }},
-          {{ selectedUnit()?.get('unitAddress')?.get('country')?.value }}
-        </p>
+        <h5>Type:</h5>
+        <p>{{ selectedUnit()?.get('unitType')?.value }} </p>
+        <h5>Etage:</h5>
+        <p>{{ selectedUnit()?.get('floor')?.value }} </p>
+        <h5>Complement:</h5>
+        <p>{{ selectedUnit()?.get('unitAddress')?.get('complement')?.value }} </p>
 
         <h5>Propriétaires:</h5>
         @if (getOwners(selectedUnit()!)?.controls) {
           <ul>
             @for (owner of getOwners(selectedUnit()!)?.controls; track $index) {
-              <li>{{ owner.get('firstName')?.value }} {{ owner.get('lastName')?.value }} - {{ owner.get('title')?.value }}</li>
+              <li>{{ owner.get('surname')?.value }} {{ owner.get('name')?.value }} - {{ owner.get('title')?.value }}</li>
             }
           </ul>
         }

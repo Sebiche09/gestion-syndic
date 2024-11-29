@@ -1,29 +1,17 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
-	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Sebiche09/gestion-syndic/src/config"
-	"github.com/Sebiche09/gestion-syndic/src/controller/errors"
 	"github.com/Sebiche09/gestion-syndic/src/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-
-func getIdByType(db *gorm.DB, tableName, typeName string) (int, error) {
-	var result struct {
-		ID int
-	}
-
-	err := db.Table(tableName).Select("id").Where("type = ?", typeName).Scan(&result).Error
-	if err != nil {
-		return 0, err
-	}
-	return result.ID, nil
-}
 
 // CheckIfExists vérifie si une valeur existe déjà dans une table donnée.
 // tableName : Nom de la table
@@ -36,6 +24,28 @@ func CheckIfExists(db *gorm.DB, tableName string, conditions map[string]interfac
 		return false, query.Error
 	}
 	return count > 0, nil
+}
+
+func getOccupantTypeLabel(title string) (string, error) {
+	// Mapping des abréviations aux labels
+	abbreviationToLabel := map[string]string{
+		"PP":      "pleine propriete",
+		"NP":      "nue propriete",
+		"US":      "usufruit",
+		"SUPERF":  "superficiaire",
+		"USA/HAB": "usage/habitation",
+		"emph":    "emphyteote",
+	}
+
+	// Vérification si le titre contient une des abréviations
+	for abbreviation, label := range abbreviationToLabel {
+		if strings.Contains(strings.ToUpper(title), abbreviation) {
+			return label, nil
+		}
+	}
+
+	// Retourner une erreur si aucune correspondance n'est trouvée
+	return "", fmt.Errorf("no matching occupant type for title: %s", title)
 }
 
 func CreateCondominium(c *gin.Context) {
@@ -52,92 +62,67 @@ func CreateCondominium(c *gin.Context) {
 			PostalCode        string `json:"postal_code"`
 			Country           string `json:"country"`
 		} `json:"address"`
-		FtpBlueprint struct {
-			Blueprint string `json:"blueprint"`
-		} `json:"ftpBlueprint"`
-		Concierge struct {
-			Name                       string `json:"name"`
-			Surname                    string `json:"surname"`
-			Email                      string `json:"email"`
-			Corporation                bool   `json:"corporation"`
-			Phone                      string `json:"phone"`
-			Iban                       string `json:"iban"`
-			BirthDate                  string `json:"birthdate"` // Consider using time.Time and parsing it
-			Civility                   string `json:"civility"`
-			DocumentReceivingMethod    string `json:"document_receiving_method"`
-			ReminderDelay              string `json:"reminder_delay"`
-			ReminderReceivingMethod    string `json:"reminder_receiving_method"`
-			Street                     string `json:"street_concierge"`
-			AddressComplementConcierge string `json:"address_complement_concierge"`
-			City                       string `json:"city_concierge"`
-			PostalCode                 string `json:"postal_code_concierge"`
-			Country                    string `json:"country_concierge"`
-		} `json:"concierge"`
+		Occupants []struct {
+			Name                    string `json:"name"`
+			Surname                 string `json:"surname"`
+			Email                   string `json:"email"`
+			Corporation             bool   `json:"corporation"`
+			IsConcierge             bool   `json:"isConcierge"`
+			Phone                   string `json:"phone"`
+			Iban                    string `json:"iban"`
+			BirthDate               string `json:"birthdate"`
+			Civility                string `json:"civility"`
+			DocumentReceivingMethod string `json:"document_receiving_method"`
+			ReminderDelay           int    `json:"reminder_delay"`
+			ReminderReceivingMethod string `json:"reminder_receiving_method"`
+			Address                 struct {
+				Street            string `json:"street"`
+				AddressComplement string `json:"address_complement"`
+				City              string `json:"city"`
+				PostalCode        string `json:"postal_code"`
+				Country           string `json:"country"`
+			} `json:"address"`
+		} `json:"occupants"`
+		Units []struct {
+			CadastralReference string `json:"cadastralReference"`
+			Status             string `json:"status"`
+			UnitType           string `json:"unitType"`
+			Floor              uint8  `json:"floor"`
+			Description        string `json:"description"`
+			UnitAddress        struct {
+				Street     string `json:"street"`
+				Complement string `json:"complement"`
+				City       string `json:"city"`
+				PostalCode string `json:"postal_code"`
+				Country    string `json:"country"`
+			} `json:"unitAddress"`
+			Owners []struct {
+				Name          string `json:"name"`
+				Surname       string `json:"surname"`
+				Title         string `json:"title"`
+				Quota         int    `json:"quota"`
+				Administrator bool   `json:"administrator"`
+			} `json:"owners"`
+		} `json:"units"`
+	}
+
+	// Validation des données reçues
+	if err := c.ShouldBindJSON(&requestData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data" + err.Error()})
+		return
 	}
 
 	db := config.DB
 
-	if err := c.BindJSON(&requestData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// Transaction pour garantir la cohérence des données
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
 
-	reminderDelay, err := strconv.Atoi(requestData.Concierge.ReminderDelay)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid reminder_delay format"})
-		return
-	}
-	birthDate, err := time.Parse("2006-01-02", requestData.Concierge.BirthDate)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid birthdate format"})
-		return
-	}
-
-	// Vérifier si un condominium existe déjà avec le même nom
-	conditionsCondominiumName := map[string]interface{}{
-		"name": requestData.Informations.Name,
-	}
-	existsNameCondominium, err := CheckIfExists(db, "condominia", conditionsCondominiumName)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking condominium name existence"})
-		return
-	}
-	if existsNameCondominium {
-		c.JSON(http.StatusConflict, gin.H{"error": "Condominium with this name already exists"})
-		return
-	}
-
-	// Vérifier si un condominium existe déjà avec le même préfixe
-	conditionsCondominiumPrefix := map[string]interface{}{
-		"prefix": requestData.Informations.Prefix,
-	}
-	existsPrefixCondominium, err := CheckIfExists(db, "condominia", conditionsCondominiumPrefix)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking condominium prefix existence"})
-		return
-	}
-	if existsPrefixCondominium {
-		c.JSON(http.StatusConflict, gin.H{"error": "Condominium with this prefix already exists"})
-		return
-	}
-
-	// Vérifier si un occupant existe deja avec le même nom et prénom et date de naissance
-	conditionsOccupant := map[string]interface{}{
-		"name":       requestData.Concierge.Name,
-		"surname":    requestData.Concierge.Surname,
-		"birth_date": birthDate,
-	}
-	existsOccupant, err := CheckIfExists(db, "occupants", conditionsOccupant)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": "Error checking occupant existence"})
-		return
-	}
-	if existsOccupant {
-		c.JSON(http.StatusConflict, gin.H{"Error": "this occupant already exists"})
-		return
-	}
-
-	// Insert Address
+	// Ajouter l'adresse principale
 	address := models.Address{
 		Street:     requestData.Address.Street,
 		Complement: requestData.Address.AddressComplement,
@@ -145,104 +130,158 @@ func CreateCondominium(c *gin.Context) {
 		PostalCode: requestData.Address.PostalCode,
 		Country:    requestData.Address.Country,
 	}
-	if err := db.Create(&address).Error; err != nil {
+
+	if err := tx.Create(&address).Error; err != nil {
+		tx.Rollback()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create address"})
 		return
 	}
-	address_concierge := models.Address{
-		Street:     requestData.Concierge.Street,
-		Complement: requestData.Concierge.AddressComplementConcierge,
-		City:       requestData.Concierge.City,
-		PostalCode: requestData.Concierge.PostalCode,
-		Country:    requestData.Concierge.Country,
-	}
-	if err := db.Create(&address_concierge).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create concierge address"})
-		return
+	var conciergeID *uint
+
+	// Ajouter les occupants
+	for _, occupantData := range requestData.Occupants {
+		// Ajouter l'adresse du domicile de l'occupant
+		domicileAddress := models.Address{
+			Street:     occupantData.Address.Street,
+			Complement: occupantData.Address.AddressComplement,
+			City:       occupantData.Address.City,
+			PostalCode: occupantData.Address.PostalCode,
+			Country:    occupantData.Address.Country,
+		}
+
+		if err := tx.Create(&domicileAddress).Error; err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create occupant address" + err.Error()})
+			return
+		}
+
+		// Ajouter l'occupant
+		occupant := models.Occupant{
+			Name:                      occupantData.Name,
+			Surname:                   occupantData.Surname,
+			Email:                     occupantData.Email,
+			Corporation:               occupantData.Corporation,
+			Phone:                     occupantData.Phone,
+			Iban:                      occupantData.Iban,
+			BirthDate:                 time.Now(),
+			CivilityID:                1,
+			DomicileAddressID:         domicileAddress.ID,
+			DocumentReceivingMethodID: 1,
+			ReminderDelay:             occupantData.ReminderDelay,
+			ReminderReceivingMethodID: 1,
+		}
+
+		if err := tx.Create(&occupant).Error; err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create occupant" + err.Error()})
+			return
+		}
+		if occupantData.IsConcierge {
+			conciergeID = &occupant.ID
+		}
 	}
 
-	civilityID, err := getIdByType(db, "civilities", requestData.Concierge.Civility)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find civility"})
-		return
-	}
-	documentReceivingMethodID, err := getIdByType(db, "document_receiving_methods", requestData.Concierge.DocumentReceivingMethod)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find document receiving method"})
-		return
-	}
-	reminderReceivingMethodID, err := getIdByType(db, "reminder_receiving_methods", requestData.Concierge.ReminderReceivingMethod)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find reminder receiving method"})
-		return
-	}
-
-	occupant := models.Occupant{
-		Name:                      requestData.Concierge.Name,
-		Surname:                   requestData.Concierge.Surname,
-		Email:                     requestData.Concierge.Email,
-		Corporation:               requestData.Concierge.Corporation,
-		Phone:                     requestData.Concierge.Phone,
-		Iban:                      requestData.Concierge.Iban,
-		BirthDate:                 birthDate,
-		CivilityID:                civilityID,
-		DomicileAddressID:         address_concierge.ID,
-		DocumentReceivingMethodID: documentReceivingMethodID,
-		ReminderDelay:             reminderDelay,
-		ReminderReceivingMethodID: reminderReceivingMethodID,
-	}
-
-	if err := db.Create(&occupant).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create occupant"})
-		return
-	}
-
-	// Insert Condominium
+	// Ajouter le condominium
 	condominium := models.Condominium{
-		Name:               requestData.Informations.Name,
-		AddressID:          address.ID,
-		Description:        requestData.Informations.Description,
-		FtpBlueprintPath:   requestData.FtpBlueprint.Blueprint,
-		LandRegistryNumber: requestData.Informations.Prefix,
-		Prefix:             requestData.Informations.Prefix,
-		ConciergeID:        occupant.ID,
+		Name:        requestData.Informations.Name,
+		Prefix:      requestData.Informations.Prefix,
+		Description: requestData.Informations.Description,
+		AddressID:   address.ID,
+		ConciergeID: conciergeID,
 	}
 
-	if err := db.Create(&condominium).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create condominium"})
+	if err := tx.Create(&condominium).Error; err != nil {
+		tx.Rollback()
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create condominium: " + err.Error() + " Address ID: " + fmt.Sprint(address.ID)})
+		return
+	}
+
+	// Ajouter les unités
+	for _, unitData := range requestData.Units {
+		// Ajouter l'adresse de l'unité
+		unitAddress := models.Address{
+			Street:     unitData.UnitAddress.Street,
+			Complement: unitData.UnitAddress.Complement,
+			City:       unitData.UnitAddress.City,
+			PostalCode: unitData.UnitAddress.PostalCode,
+			Country:    unitData.UnitAddress.Country,
+		}
+
+		if err := tx.Create(&unitAddress).Error; err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create unit address"})
+			return
+		}
+
+		var unitType models.UnitType
+		if err := tx.Where("label = ?", unitData.UnitType).First(&unitType).Error; err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find unit type: " + err.Error()})
+			return
+		}
+
+		// Ajouter l'unité
+		unit := models.Unit{
+			CondominiumID:      condominium.ID,
+			AddressID:          unitAddress.ID,
+			CadastralReference: unitData.CadastralReference,
+			UnitType:           unitType.ID,
+			Floor:              unitData.Floor,
+		}
+
+		if err := tx.Create(&unit).Error; err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create unit" + err.Error()})
+			return
+		}
+
+		// Ajouter les propriétaires de l'unité
+		for _, ownerData := range unitData.Owners {
+			label, err := getOccupantTypeLabel(ownerData.Title)
+			if err != nil {
+				tx.Rollback()
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid occupant type: " + err.Error()})
+				return
+			}
+
+			var occupantType models.OccupantType
+			if err := tx.Where("label = ?", label).First(&occupantType).Error; err != nil {
+				tx.Rollback()
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find unit type: " + err.Error()})
+				return
+			}
+			var occupant models.Occupant
+			if err := tx.Where("name = ? AND surname = ?", ownerData.Name, ownerData.Surname).First(&occupant).Error; err != nil {
+				tx.Rollback()
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find occupant: " + err.Error()})
+				return
+			}
+
+			owner := models.OccupantPossessionOnUnit{
+				OccupantID:    occupant.ID,
+				UnitID:        unit.ID,
+				Quota:         float64(ownerData.Quota),
+				Administrator: ownerData.Administrator,
+				OccupantType:  occupantType.ID,
+			}
+
+			if err := tx.Create(&owner).Error; err != nil {
+				tx.Rollback()
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create unit owner" + err.Error()})
+				return
+			}
+		}
+	}
+
+	// Commit de la transaction
+	if err := tx.Commit().Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to commit transaction" + err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Condominium created successfully"})
 }
 
-func GetCivilities(c *gin.Context) {
-	var civilities []models.Civility
-	if err := config.DB.Find(&civilities).Error; err != nil {
-		errors.HandleError(c, err, "Error fetching civilities", http.StatusInternalServerError)
-		return
-	}
-
-	c.JSON(http.StatusOK, civilities)
-}
-func GetDocumentReceivingMethods(c *gin.Context) {
-	var documentReceivingMethods []models.DocumentReceivingMethod
-	if err := config.DB.Find(&documentReceivingMethods).Error; err != nil {
-		errors.HandleError(c, err, "Error fetching document receiving methods", http.StatusInternalServerError)
-		return
-	}
-
-	c.JSON(http.StatusOK, documentReceivingMethods)
-}
-func GetReminderReceivingMethods(c *gin.Context) {
-	var reminderReceivingMethods []models.ReminderReceivingMethod
-	if err := config.DB.Find(&reminderReceivingMethods).Error; err != nil {
-		errors.HandleError(c, err, "Error fetching reminder receiving methods", http.StatusInternalServerError)
-		return
-	}
-
-	c.JSON(http.StatusOK, reminderReceivingMethods)
-}
 func CheckUniqueness(c *gin.Context) {
 	db := config.DB
 

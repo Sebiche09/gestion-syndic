@@ -1,0 +1,102 @@
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.table-container {
+  flex: 1;
+  overflow-y: auto; /* Permet le défilement du tableau uniquement */
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: white;
+  border-top: 1px solid #ccc;
+  position: sticky;
+  bottom: 0;
+}
+
+p-dialog .p-dialog-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-group input,
+.form-group p-calendar,
+.form-group p-dropdown,
+.form-group p-inputMask,
+.form-group p-inputNumber {
+  width: 100%;
+  border-radius: 5px;
+}
+
+p-inputMask, p-inputNumber {
+  width: 100%;
+}
+
+.form-group p-checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.p-checkbox label {
+  margin-left: 5px;
+  font-weight: normal;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+p-button {
+  font-size: 1rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.p-dialog-content {
+  max-width: 500px;
+  padding: 20px;
+}
+
+.p-dialog-content .form-group {
+  margin-bottom: 10px;
+}
+
+.p-dialog-content .p-inputtext,
+.p-dialog-content .p-dropdown,
+.p-dialog-content .p-inputnumber,
+.p-dialog-content .p-calendar {
+  font-size: 0.9rem;
+}
+
+.p-dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+

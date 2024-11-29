@@ -3,6 +3,7 @@ package upload
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -72,22 +73,26 @@ func extractCadastralData(ocrText string) map[string]interface{} {
 
 			if len(lines) > 0 {
 				identifier := strings.ReplaceAll(strings.TrimSpace(lines[0]), " ", "")
-
 				var complement string
+				var floor int
 				if strings.HasPrefix(identifier, "Cave") {
-					caveKey := strings.TrimSpace(lines[1])
-					fullKey := "Cave " + caveKey
-					complement = generateAddressComplement(fullKey)
+					complement = generateAddressComplement(identifier)
+					floor = generateFloor(identifier)
 					owners := extractOwners(fullDetail)
-					unit[fullKey] = map[string]interface{}{
+					unit[identifier] = map[string]interface{}{
 						"complement": complement,
+						"unitType":   "Cave",
+						"floor":      floor,
 						"owners":     owners,
 					}
 				} else {
 					complement = generateAddressComplement(identifier)
+					floor = generateFloor(identifier)
 					owners := extractOwners(fullDetail)
 					unit[identifier] = map[string]interface{}{
 						"complement": complement,
+						"floor":      floor,
+						"unitType":   "Appartement",
 						"owners":     owners,
 					}
 				}
@@ -100,6 +105,19 @@ func extractCadastralData(ocrText string) map[string]interface{} {
 
 	// Retourne le résultat final avec l'adresse principale et les informations cadastrales.
 	return extractedData
+}
+
+func generateFloor(reference string) int {
+	var floor int
+	parts := strings.Split(reference, "/")
+	if len(parts) >= 3 {
+		floorStr := parts[0][1:]
+		parsedFloor, err := strconv.Atoi(floorStr)
+		if err == nil {
+			floor = parsedFloor
+		}
+	}
+	return floor
 }
 
 // extractOwners extrait et renvoie les informations des propriétaires à partir des détails complets capturés.
@@ -161,11 +179,10 @@ func generateAddressComplement(reference string) string {
 	parts := strings.Split(reference, "/")
 
 	if len(parts) >= 3 {
-		floor := parts[0][1:] // Numéro de l'étage (A5 => 5)
-		position := parts[1]  // Position G ou D (gauche ou droite)
-		section := parts[2]   // Section C5.3
+		position := parts[1] // Position G ou D (gauche ou droite)
+		section := parts[2]  // Section C5.3
 
-		complement = fmt.Sprintf("appartement, %sième étage, %s, section %s", floor, describePosition(position), section)
+		complement = fmt.Sprintf("%s, section %s", describePosition(position), section)
 	}
 
 	return complement

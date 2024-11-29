@@ -14,6 +14,7 @@ var DB *gorm.DB
 func SeedDatabase() {
 	var count int64
 
+	// Insert default civilities
 	if err := DB.Model(&models.Civility{}).Count(&count).Error; err != nil {
 		log.Fatal("Failed to count civility entries: ", err)
 	}
@@ -44,6 +45,7 @@ func SeedDatabase() {
 		}
 		log.Println("Document receiving method data seeded successfully")
 	}
+
 	// Insert default reminder receiving methods
 	if err := DB.Model(&models.ReminderReceivingMethod{}).Count(&count).Error; err != nil {
 		log.Fatal("Failed to count reminder receiving method entries: ", err)
@@ -57,9 +59,44 @@ func SeedDatabase() {
 			{Type: "Recommandé"},
 		}
 		if err := DB.Create(&reminderReceivingMethods).Error; err != nil {
-			log.Fatal("Failed to seed receiving method data: ", err)
+			log.Fatal("Failed to seed reminder receiving method data: ", err)
 		}
 		log.Println("Reminder receiving method data seeded successfully")
+	}
+
+	// Insert default unit types
+	if err := DB.Model(&models.UnitType{}).Count(&count).Error; err != nil {
+		log.Fatal("Failed to count unit type entries: ", err)
+	}
+	if count == 0 {
+		unitTypes := []models.UnitType{
+			{Label: "Appartement"},
+			{Label: "Cave"},
+			{Label: "Garage"},
+			{Label: "Local Commercial"},
+			{Label: "Autre"},
+		}
+		if err := DB.Create(&unitTypes).Error; err != nil {
+			log.Fatal("Failed to seed unit type data: ", err)
+		}
+		log.Println("Unit type data seeded successfully")
+	}
+	if err := DB.Model(&models.OccupantType{}).Count(&count).Error; err != nil {
+		log.Fatal("Failed to count occupant type entries: ", err)
+	}
+	if count == 0 {
+		occupantTypes := []models.OccupantType{
+			{Label: "pleine propriete"},
+			{Label: "nue propriete"},
+			{Label: "usufruit"},
+			{Label: "superficiaire"},
+			{Label: "emphyteote"},
+			{Label: "usage/habitation"},
+		}
+		if err := DB.Create(&occupantTypes).Error; err != nil {
+			log.Fatal("Failed to seed occupant type data: ", err)
+		}
+		log.Println("Occupant type data seeded successfully")
 	}
 }
 

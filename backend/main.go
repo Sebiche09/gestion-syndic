@@ -27,8 +27,6 @@ func main() {
 	routes.OccupantRoute(router)
 	routes.InvoiceRoute(router)
 	routes.CondominiumRoute(router)
-	routes.CivilityRoute(router)
-	routes.ReceivingMethodRoute(router)
 	router.Run(":8080")
 }
 

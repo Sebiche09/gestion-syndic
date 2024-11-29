@@ -1,4 +1,4 @@
-import { Component, Input, signal, Output,EventEmitter } from '@angular/core';
+import { Component, Input, signal, Output,EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -12,16 +12,19 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './unit.component.html',
   styleUrls: ['./unit.component.scss']
 })
-export class UnitComponent {
+export class UnitComponent implements OnInit{
   @Input() units!: FormArray;
-  @Output() next = new EventEmitter<void>();
+  @Input() addressForm!: FormGroup;
+  
   @Output() previous = new EventEmitter<void>();
+  @Output() submit = new EventEmitter<void>();
 
   displayDetailsDialog = signal(false);  
   selectedUnit = signal<FormGroup | null>(null);  
 
   constructor(private fb: FormBuilder) {}
-
+  ngOnInit(){
+  }
   viewDetails(index: number): void {
     this.selectedUnit.set(this.units.at(index) as FormGroup);
     this.displayDetailsDialog.set(true);
@@ -40,7 +43,9 @@ export class UnitComponent {
   }
 
   getOwners(unit: FormGroup): FormArray | null {
+    console.log(unit.get('owners'));
     return unit.get('owners') as FormArray || null;
+    
   }
   
   get unitControls() {
@@ -52,7 +57,7 @@ export class UnitComponent {
   previousStep() {
     this.previous.emit();
   }
-  nextStep() {
-      this.next.emit();
+  submitStep() {
+    this.submit.emit();
   }
 }
