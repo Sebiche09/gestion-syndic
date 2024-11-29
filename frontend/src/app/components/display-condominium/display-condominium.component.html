@@ -1,5 +1,5 @@
 <h2>Liste des co-propriétés</h2>
-<p-table #dt1 dataKey="id" [rows]="6" [paginator]="true">
+<p-table #dt1 dataKey="id" [rows]="6" [value]="condominiums" [paginator]="true">
   <ng-template pTemplate="caption">
     <div class="flex">
       <span class="p-input-icon-left ml-auto">
@@ -30,14 +30,18 @@
       </th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-customer>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+  <ng-template pTemplate="body" let-condominium>
+      <tr>
+        <td>{{ condominium.name }}</td>
+        <td>{{ condominium.prefix }}</td>
+        <td>{{ condominium.city }}</td>
+        <td></td>
+        <td>
+          <p-button
+            icon="pi pi-eye"
+          />
+        </td>
+      </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>

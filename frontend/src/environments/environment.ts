@@ -3,6 +3,7 @@ export const environment = {
     apiUrls: {
       uploadApi: 'http://localhost:8080/upload',
       condominiumApi: 'http://localhost:8080/condominium',
+      getAllCondominiums: 'http://localhost:8080/all-condominiums',
       getCivilities: 'http://localhost:8080/getcivilities',
       getReminderRemindingMethod : 'http://localhost:8080/getreminderreceivingmethods',
       getDocumentRemindingMethod : 'http://localhost:8080/getdocumentreceivingmethods',

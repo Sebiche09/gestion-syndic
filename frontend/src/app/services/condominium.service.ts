@@ -19,6 +19,10 @@ export class CondominiumService {
     const url = environment.apiUrls.condominiumApi;
     return this.http.post(url, formData);
   }
+  getAllCondominiums(): Observable<any> {
+    const url = environment.apiUrls.getAllCondominiums;
+    return this.http.get(url);
+  }
 
   createCondominiumForm(): FormGroup {
     return this.fb.group({

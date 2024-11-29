@@ -48,6 +48,34 @@ func getOccupantTypeLabel(title string) (string, error) {
 	return "", fmt.Errorf("no matching occupant type for title: %s", title)
 }
 
+func GetAllCondominiums(c *gin.Context) {
+	db := config.DB
+
+	var condominiums []models.Condominium
+
+	// Chargement de tous les condominiums avec leurs adresses associées
+	if err := db.Preload("Address").Find(&condominiums).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch condominiums"})
+		return
+	}
+
+	// Construire la réponse avec les champs nécessaires
+	response := []gin.H{}
+	for _, condo := range condominiums {
+		response = append(response, gin.H{
+			"name":   condo.Name,
+			"prefix": condo.Prefix,
+			"city":   condo.Address.City, // Association Address chargée avec Preload
+		})
+	}
+	if len(condominiums) == 0 {
+		c.JSON(http.StatusOK, []gin.H{})
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
 func CreateCondominium(c *gin.Context) {
 	var requestData struct {
 		Informations struct {
