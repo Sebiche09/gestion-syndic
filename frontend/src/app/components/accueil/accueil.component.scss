@@ -1,0 +1,30 @@
+/* Conteneur principal */
+.layout-container {
+    display: flex;
+    height: 100vh; 
+    background-color: #f5f6fa; 
+  }
+  
+
+  
+  /* Contenu principal */
+  .main-content {
+    flex-grow: 1;
+    margin-left: 7rem; 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Navbar */
+  app-navbar {
+    position: sticky; /* Navbar fixe au haut de la page */
+    background-color: #f5f6fa;
+  }
+  
+  .content-area {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+
+  }
+  

@@ -7,11 +7,12 @@ import { CondominiumComponent } from '../condominium/condominium.component';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CondominiumService } from '../../services/condominium.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 @Component({
     selector: 'displayCondominium',
     templateUrl: 'display-condominium.component.html',
     standalone: true,
-    imports: [TableModule, ButtonModule, DialogModule, CondominiumComponent, ConfirmDialogModule],
+    imports: [TableModule, ButtonModule, DialogModule, CondominiumComponent, ConfirmDialogModule, SidebarComponent],
     providers: [ConfirmationService, CondominiumService]
 })
 export class DisplayCondominiumComponent implements OnInit {

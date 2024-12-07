@@ -1,67 +1,72 @@
-<h2>Liste des co-propriétés</h2>
-<p-table #dt1 dataKey="id" [rows]="6" [value]="condominiums" [paginator]="true">
-  <ng-template pTemplate="caption">
-    <div class="flex">
-      <span class="p-input-icon-left ml-auto">
-        <p-button
-          label="Ajouter une co-propriété"
-          icon="pi pi-plus"
-          (onClick)="openDialog()"
-        />
-      </span>
-    </div>
-  </ng-template>
-  <ng-template pTemplate="header">
-    <tr>
-      <th style="min-width: 15rem">
-        <div class="flex align-items-center">Nom</div>
-      </th>
-      <th style="min-width: 15rem">
-        <div class="flex align-items-center">Préfixe</div>
-      </th>
-      <th style="min-width: 15rem">
-        <div class="flex align-items-center">Ville</div>
-      </th>
-      <th style="min-width: 10rem">
-        <div class="flex align-items-center">Date de fin d'exercice</div>
-      </th>
-      <th style="width: 3rem">
-        <div class="flex align-items-center">Détails</div>
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-condominium>
-      <tr>
-        <td>{{ condominium.name }}</td>
-        <td>{{ condominium.prefix }}</td>
-        <td>{{ condominium.city }}</td>
-        <td></td>
-        <td>
-          <p-button
-            icon="pi pi-eye"
-          />
-        </td>
-      </tr>
-  </ng-template>
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="7">Aucune copropriété trouvée.</td>
-    </tr>
-  </ng-template>
-</p-table>
+<div class="layout-container">
+  <app-sidebar></app-sidebar>
+    <div class="content-container">
+      <h2>Liste des co-propriétés</h2>
+      <p-table #dt1 dataKey="id" [rows]="6" [value]="condominiums" [paginator]="true">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+              <p-button
+                label="Ajouter une co-propriété"
+                icon="pi pi-plus"
+                (onClick)="openDialog()"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Nom</div>
+            </th>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Préfixe</div>
+            </th>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Ville</div>
+            </th>
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">Date de fin d'exercice</div>
+            </th>
+            <th style="width: 3rem">
+              <div class="flex align-items-center">Détails</div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-condominium>
+            <tr>
+              <td>{{ condominium.name }}</td>
+              <td>{{ condominium.prefix }}</td>
+              <td>{{ condominium.city }}</td>
+              <td></td>
+              <td>
+                <p-button
+                  icon="pi pi-eye"
+                />
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">Aucune copropriété trouvée.</td>
+          </tr>
+        </ng-template>
+      </p-table>
 
-<p-dialog
-  header="Ajouter une nouvelle co-propriété"
-  [(visible)]="displayDialog"
-  [modal]="true"
-  (onHide)="onDialogHide()"
-  [style]="{ width: '70vw', height: '90vh' }"
-  [contentStyle]="{ display: 'flex', 'flex-direction': 'column', 'justify-content': 'flex-start' }"
-  [closable]="true"
-  [dismissableMask]="false"
-  [autoZIndex]="true"
->
-  <app-condominium></app-condominium>
-</p-dialog>
+      <p-dialog
+        header="Ajouter une nouvelle co-propriété"
+        [(visible)]="displayDialog"
+        [modal]="true"
+        (onHide)="onDialogHide()"
+        [style]="{ width: '70vw', height: '90vh' }"
+        [contentStyle]="{ display: 'flex', 'flex-direction': 'column', 'justify-content': 'flex-start' }"
+        [closable]="true"
+        [dismissableMask]="false"
+        [autoZIndex]="true"
+      >
+        <app-condominium></app-condominium>
+      </p-dialog>
 
-<p-confirmDialog></p-confirmDialog>
+      <p-confirmDialog></p-confirmDialog>
+  </div>
+</div>

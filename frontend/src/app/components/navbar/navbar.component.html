@@ -1,0 +1,42 @@
+<p-toolbar class="navbar"
+    styleClass="bg-gray-100">
+    
+    <div class="p-toolbar-group-left">
+      <!-- Groupe gauche vide ou autre contenu -->
+    </div>
+  
+    <div class="p-toolbar-group-right">
+      <p-dropdown
+        [options]="properties"
+        [(ngModel)]="selectedProperty"
+        optionLabel="name"
+        placeholder="Sélectionner une copropriété"
+        styleClass="w-18rem h-2rem border-round-2xl bg-gray-300"
+        [style]="{'display': 'flex', 'align-items': 'center'}"
+      ></p-dropdown>
+      <button
+        pButton
+        type="button"
+        [rounded]="true" 
+        [text]="true" 
+        severity="contrast"
+        icon="pi pi-palette"
+        class="w-3rem h-3rem p-3"
+        (click)="onThemeChange()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        [rounded]="true" 
+        [text]="true" 
+        severity="contrast"
+        icon="pi pi-chevron-left"
+        class="w-3rem h-3rem p-3"
+        (click)="toggleSidebar()"
+      ></button>
+    </div>
+  </p-toolbar>
+  
+  <p-sidebar [(visible)]="rightSidebarVisible" position="right" [baseZIndex]="10000">
+  </p-sidebar>
+  
