@@ -1,111 +1,100 @@
-    <!-- Sidebar Container -->
-    <div 
-        class="sidebar-container"
-        [class.sidebar-extended]="sidebarHovered"
-        (mouseenter)="sidebarHovered = true" 
-        (mouseleave)="sidebarHovered = false"
-        pStyleClass
-        enterActiveClass="slidein" 
-        leaveActiveClass="slideout"
-        transitionOptions="300ms ease"
-    >
-        <!-- Sidebar Content -->
-        <div class="sidebar-content">
-            <!-- Header -->
-            <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
-                <span class="inline-flex align-items-center gap-2">
-                    <a pRipple routerLink="/accueil" style="text-decoration: none;">
-                        <span class="font-semibold text-2xl text-primary">Sogim</span>
-                    </a>
-                </span>
-            </div>
-            
+<div 
+    class="sidebar-container overflow-hidden flex flex-column fixed top-0 left-0 h-full bg-white shadow-1 z-5"
+    [class.sidebar-extended]="sidebarHovered"
+    (mouseenter)="sidebarHovered = true" 
+    (mouseleave)="onMouseLeave()">
 
-            <!-- Menu Items -->
-            <div class="overflow-y-auto">
-                <ul class="list-none p-3 m-0">
-                    <li>
-                        <a
-                            pRipple
-                            routerLink="/displaycondominium"
-                            class="sidebar-item"
-                        >
-                            <i class="pi pi-building"></i>
-                            @if (sidebarHovered) {<span class="font-medium">COPROPRIETE(S)</span>}
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-user"></i>
-                            @if (sidebarHovered) {<span class="font-medium">COPROPRIETAIRE(S)</span>}
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-user"></i>
-                            @if (sidebarHovered) {<span class="font-medium">OCCUPANT(S)</span>}
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-home"></i>
-                            @if (sidebarHovered) {<span class="font-medium">LOT(S)</span>}
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-truck"></i>
-                            @if (sidebarHovered) {<span class="font-medium">FOURNISSEUR(S)</span>}
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-chart-line"></i>
-                            @if (sidebarHovered) {<span class="font-medium">Reports</span>}
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-users"></i>
-                            @if (sidebarHovered) {<span class="font-medium">Team</span>}
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-comments"></i>
-                            @if (sidebarHovered) {<span class="font-medium">Messages</span>}
-                            <span 
-                                class="inline-flex align-items-center justify-content-center ml-auto bg-primary border-circle" 
-                                style="min-width: 1.5rem; height: 1.5rem">
-                                3
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-calendar"></i>
-                            @if (sidebarHovered) {<span class="font-medium">Calendar</span>}
-                        </a>
-                    </li>
-                    <li>
-                        <a pRipple class="sidebar-item">
-                            <i class="pi pi-cog"></i>
-                            @if (sidebarHovered) {<span class="font-medium">Settings</span>}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Footer -->
-            <div class="mt-auto">
-                <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
-                <a pRipple class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                    <p-avatar
-                        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-                        shape="circle"
-                    ></p-avatar>
-                    @if (sidebarHovered) {<span class="font-bold">Amy Elsner</span>}
+    <div class="sidebar-content flex flex-column h-full">
+        <div class="flex align-items-center justify-content-between px-2 pt-3 flex-shrink-0">
+            <span class="inline-flex align-items-center gap-2">
+                <a pRipple routerLink="/accueil" style="text-decoration: none;">
+                  <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 200 200"
+                      width="50"
+                      height="50"
+                  >
+                    <!-- Bâtiments stylisés -->
+                    <rect x="50" y="70" width="30" height="80" fill="#4CAF50" rx="5" />
+                    <rect x="90" y="50" width="30" height="100" fill="#2196F3" rx="5" />
+                    <rect x="130" y="90" width="30" height="60" fill="#FFC107" rx="5" />
+                    
+                    <!-- Fenêtres -->
+                    <rect x="57" y="75" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="67" y="75" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="57" y="85" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="67" y="85" width="6" height="6" fill="#FFFFFF" />
+                  
+                    <rect x="97" y="55" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="107" y="55" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="97" y="65" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="107" y="65" width="6" height="6" fill="#FFFFFF" />
+                  
+                    <rect x="137" y="95" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="147" y="95" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="137" y="105" width="6" height="6" fill="#FFFFFF" />
+                    <rect x="147" y="105" width="6" height="6" fill="#FFFFFF" />
+                  
+                    <!-- Document financier stylisé -->
+                    <rect x="70" y="130" width="60" height="40" fill="#FFFFFF" rx="5" />
+                    <line x1="75" y1="140" x2="125" y2="140" stroke="#4CAF50" stroke-width="3" />
+                    <line x1="75" y1="150" x2="125" y2="150" stroke="#4CAF50" stroke-width="3" />
+                    <line x1="75" y1="160" x2="105" y2="160" stroke="#4CAF50" stroke-width="3" />
+                  
+                    <!-- Cercle décoratif pour modernité -->
+                    <circle cx="100" cy="40" r="25" fill="#2196F3" opacity="0.1" />
+                    <text x="100" y="45" text-anchor="middle" font-size="14" fill="#2196F3" font-family="Arial, sans-serif" font-weight="bold">SYNDIC</text>
+                  </svg>
                 </a>
-            </div>
+            </span>
+          </div>
+
+        <div class="overflow-y-auto flex-grow-1 overflow-hidden ">
+            <ul class="list-none p-3 m-0">
+              @for (item of menuItems; track $index) {
+                @if (item.title) {
+                <li class="mb-2">
+                  <div class="text-black px-1 py-2 gap-2 flex align-items-center">
+                    <span class="font-medium" 
+                    [ngClass]="{'fadein animation-duration-400': sidebarHovered}"
+                    [style.visibility]="sidebarHovered ? 'visible' : 'hidden'">
+                      {{ item.title }}
+                    </span>
+                  </div>
+                </li>}
+                <li class="mb-2">
+                    <a
+                        pRipple
+                        [routerLink]="item.link"
+                        class=" no-underline flex gap-2 px-2 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                    >
+                        <i [class]="item.icon" class="text-xl"></i>
+                        @if (sidebarHovered) {
+                          <span 
+                            class="font-medium"
+                            [ngClass]="{'fadein animation-duration-400': sidebarHovered}"
+                            >
+                              {{ item.label }}</span>}
+                        @if (item.badge && sidebarHovered) {
+                        <span class="ml-auto bg-primary text-white text-center border-circle flex  justify-content-center" style="width: 1.5rem; height: 1.5rem;">
+                          {{ item.badge }}
+                      </span>}
+                    </a>
+                </li>}
+            </ul>
+        </div>
+
+        <div class="mt-auto">
+            <hr class="mb-3 mx-3 border-1 surface-border" />
+            <a pRipple class="flex align-items-center cursor-pointer px-2 py-2 gap-2 border-round text-gray-700 hover:bg-gray-100 transition-all">
+                <p-avatar
+                    styleClass="mr-2"
+                    size="large"
+                    image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                    shape="circle"
+                ></p-avatar>
+                @if (sidebarHovered) {<span class="font-bold">Amy Elsner</span>}
+            </a>
         </div>
     </div>
+</div>

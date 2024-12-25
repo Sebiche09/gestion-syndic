@@ -1,64 +1,10 @@
-/* Sidebar réduite (par défaut) */
 .sidebar-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 7rem; /* Largeur réduite par défaut */
-    background-color: #ffffff;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    transition: width 0.3s ease-in-out; /* Transition de largeur */
+    width: 4.5rem;
+    transition: width 0.3s ease-in;
+}
+.sidebar-extended {
+    width: 15rem; 
+    
 }
 
-/* Sidebar étendue */
-.sidebar-container.sidebar-extended {
-    width: 18rem; /* Largeur étendue */
-}
 
-/* Animation via PrimeNG */
-.slidein {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.slideout {
-    transform: translateX(-100%);
-    opacity: 0;
-}
-
-/* Style des items */
-.sidebar-item {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    gap: 1rem;
-    color: #666666;
-    text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.sidebar-item:hover {
-    background-color: #f5f5f5;
-    color: #333333;
-}
-
-/* Icônes */
-.sidebar-item i {
-    font-size: 1.5rem;
-}
-
-.sidebar-item span {
-    display: none;
-}
-
-.sidebar-container.sidebar-extended .sidebar-item span {
-    display: inline; 
-}
-
-/* Avatar et footer */
-p-avatar {
-    width: 2rem;
-    height: 2rem;
-}
