@@ -69,14 +69,14 @@ func SeedDatabase() {
 		log.Fatal("Failed to count unit type entries: ", err)
 	}
 	if count == 0 {
-		unitTypes := []models.UnitType{
+		unitType := []models.UnitType{
 			{Label: "Appartement"},
 			{Label: "Cave"},
 			{Label: "Garage"},
 			{Label: "Local Commercial"},
 			{Label: "Autre"},
 		}
-		if err := DB.Create(&unitTypes).Error; err != nil {
+		if err := DB.Create(&unitType).Error; err != nil {
 			log.Fatal("Failed to seed unit type data: ", err)
 		}
 		log.Println("Unit type data seeded successfully")
@@ -85,7 +85,7 @@ func SeedDatabase() {
 		log.Fatal("Failed to count occupant type entries: ", err)
 	}
 	if count == 0 {
-		occupantTypes := []models.OccupantType{
+		occupantType := []models.OccupantType{
 			{Label: "pleine propriete"},
 			{Label: "nue propriete"},
 			{Label: "usufruit"},
@@ -93,7 +93,7 @@ func SeedDatabase() {
 			{Label: "emphyteote"},
 			{Label: "usage/habitation"},
 		}
-		if err := DB.Create(&occupantTypes).Error; err != nil {
+		if err := DB.Create(&occupantType).Error; err != nil {
 			log.Fatal("Failed to seed occupant type data: ", err)
 		}
 		log.Println("Occupant type data seeded successfully")

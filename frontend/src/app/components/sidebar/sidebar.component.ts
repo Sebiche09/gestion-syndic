@@ -22,16 +22,13 @@ export class SidebarComponent {
     this.sidebarHovered = false;
   }
   menuItems = [
-    { label: 'COPROPRIETE(S)', icon: 'pi pi-building', link: '/displaycondominium', title: 'DASHBOARDS' },
+    { label: 'COPROPRIETE(S)', icon: 'pi pi-building', link: '/displaycondominium', title: 'INFRASTRUCTURE' },
     { label: 'COPROPRIETAIRE(S)', icon: 'pi pi-user' },
     { label: 'OCCUPANT(S)', icon: 'pi pi-user' },
-    { label: 'LOT(S)', icon: 'pi pi-home' },
+    { label: 'LOT(S)', icon: 'pi pi-home', link: '/displayunit'},
     { label: 'FOURNISSEUR(S)', icon: 'pi pi-truck' },
-    { label: 'Reports', icon: 'pi pi-chart-line', title: 'REPORTS' },
-    { label: 'Team', icon: 'pi pi-users' },
-    { label: 'Messages', icon: 'pi pi-comments', badge: '3' },
-    { label: 'Calendar', icon: 'pi pi-calendar' },
-    { label: 'Settings', icon: 'pi pi-cog' },
+    { label: 'FACTURACTION', icon: 'pi pi-chart-line', title: 'COMPTABILITÉ' },
+    { label: 'FINANCIER', icon: 'pi pi-comments', badge: '3' },
   ];
   onMouseLeave() {
     if (this.mouseleaveTimeout) {
@@ -40,7 +37,7 @@ export class SidebarComponent {
   
     this.mouseleaveTimeout = setTimeout(() => {
       this.sidebarHovered = false;
-    }, 200);
+    }, 300);
   }
 
 }

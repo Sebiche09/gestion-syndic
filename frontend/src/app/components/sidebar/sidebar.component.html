@@ -1,10 +1,10 @@
 <div 
-    class="sidebar-container overflow-hidden flex flex-column fixed top-0 left-0 h-full bg-white shadow-1 z-5"
+class="sidebar-container fixed top-0 left-0 h-full w-64 bg-white shadow-1 z-5 overflow-hidden"
     [class.sidebar-extended]="sidebarHovered"
     (mouseenter)="sidebarHovered = true" 
     (mouseleave)="onMouseLeave()">
 
-    <div class="sidebar-content flex flex-column h-full">
+    <div class="flex flex-column h-full">
         <div class="flex align-items-center justify-content-between px-2 pt-3 flex-shrink-0">
             <span class="inline-flex align-items-center gap-2">
                 <a pRipple routerLink="/accueil" style="text-decoration: none;">

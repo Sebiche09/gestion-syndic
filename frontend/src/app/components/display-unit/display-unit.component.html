@@ -1,0 +1,50 @@
+<p-table [value]="units" sortField="condominium.name" sortMode="single" [scrollable]="true" scrollHeight="400px" rowGroupMode="subheader" groupRowsBy="condominium.name" [tableStyle]="{'min-width': '60rem'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Nom</th>
+            <th>Reference cadastrale</th>
+            <th>Nature</th>
+            <th>Quotités</th>
+            <th class="flex justify-content-end">Details</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="groupheader" let-unit>
+        <tr pRowGroupHeader>
+            <td colspan="5">
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-building" style="font-size: 1rem"></i>
+                    <span class="font-bold">{{unit.condominium.name}}</span>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="groupfooter" let-unit>
+        <tr>
+            <td colspan="5" class="text-left font-bold pr-12">Total Lots: {{ calculateUnitTotal() }}</td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowIndex="rowIndex" let-unit>
+        <tr>
+            <td>
+                {{ unit.id }}
+            </td>
+            <td>
+                {{ unit.cadastral_reference }}
+            </td>
+            <td>
+                {{ unit.unit_type.label }}
+            </td>
+            <td>
+                {{ unit.quota }}
+            </td>
+            <td class="flex justify-content-end">
+                <p-button
+                  icon="pi pi-eye"
+                />
+              </td>
+        </tr>
+    </ng-template>
+</p-table>

@@ -57,14 +57,14 @@ type ReminderReceivingMethod struct {
 }
 
 type OccupantPossessionOnUnit struct {
-	OccupantID    uint         `json:"occupant_id" gorm:"not null"`
-	Occupant      Occupant     `gorm:"foreignKey:OccupantID"`
-	UnitID        uint         `json:"unit_id" gorm:"not null"`
-	Unit          Unit         `gorm:"foreignKey:UnitID"`
-	Quota         float64      `json:"quota" gorm:"not null, default:0"`
-	Administrator bool         `json:"administrator" gorm:"default:false"`
-	OccupantType  uint         `json:"occupant_type" gorm:"not null"`
-	OccupantTypes OccupantType `gorm:"foreignKey:OccupantType"`
+	OccupantID     uint         `json:"occupant_id" gorm:"not null"`
+	Occupant       Occupant     `gorm:"foreignKey:OccupantID"`
+	UnitID         uint         `json:"unit_id" gorm:"not null"`
+	Unit           Unit         `gorm:"foreignKey:UnitID"`
+	Quota          float64      `json:"quota" gorm:"not null, default:0"`
+	Administrator  bool         `json:"administrator" gorm:"default:false"`
+	OccupantTypeID uint         `json:"occupant_type_id" gorm:"not null"`
+	OccupantType   OccupantType `gorm:"foreignKey:OccupantTypeID"`
 }
 
 type OccupantType struct {
@@ -79,8 +79,8 @@ type Unit struct {
 	AddressID          uint             `json:"address_id" gorm:"not null"`
 	Address            Address          `gorm:"foreignKey:AddressID"`
 	CadastralReference string           `json:"internal_reference" gorm:"not null"`
-	UnitType           uint             `json:"unit_type" gorm:"not null"`
-	UnitTypes          UnitType         `gorm:"foreignKey:UnitType"`
+	UnitTypeID         uint             `json:"unit_type_id" gorm:"not null"`
+	UnitType           UnitType         `gorm:"foreignKey:UnitTypeID"`
 	Floor              uint8            `json:"floor" gorm:"not null"`
 	Description        string           `json:"description"`
 	Quota              float64          `json:"quota" gorm:"not null, default:0"`

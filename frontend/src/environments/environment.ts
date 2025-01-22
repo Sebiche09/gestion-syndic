@@ -11,5 +11,6 @@ export const environment = {
       getCitiesBase: 'http://api.geonames.org/searchJSON',
       username: 'sebastien.vlmnckx',
       checkUniqueness: 'http://localhost:8080/check-uniqueness',
+      unit : 'http://localhost:8080/unit'
     }
   };  

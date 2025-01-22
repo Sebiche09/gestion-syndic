@@ -1,1 +1,11 @@
-<router-outlet></router-outlet>
+<app-sidebar></app-sidebar>
+<div class="flex-grow">
+  <div class="pl-7">
+    <app-navbar></app-navbar>
+  </div>  
+  <!-- Contenu dynamique -->
+  <div class="pl-8 pr-2">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+  

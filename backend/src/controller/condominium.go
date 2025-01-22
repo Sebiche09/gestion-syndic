@@ -253,7 +253,7 @@ func CreateCondominium(c *gin.Context) {
 			CondominiumID:      condominium.ID,
 			AddressID:          unitAddress.ID,
 			CadastralReference: unitData.CadastralReference,
-			UnitType:           unitType.ID,
+			UnitTypeID:         unitType.ID,
 			Floor:              unitData.Floor,
 		}
 
@@ -286,11 +286,11 @@ func CreateCondominium(c *gin.Context) {
 			}
 
 			owner := models.OccupantPossessionOnUnit{
-				OccupantID:    occupant.ID,
-				UnitID:        unit.ID,
-				Quota:         float64(ownerData.Quota),
-				Administrator: ownerData.Administrator,
-				OccupantType:  occupantType.ID,
+				OccupantID:     occupant.ID,
+				UnitID:         unit.ID,
+				Quota:          float64(ownerData.Quota),
+				Administrator:  ownerData.Administrator,
+				OccupantTypeID: occupantType.ID,
 			}
 
 			if err := tx.Create(&owner).Error; err != nil {
