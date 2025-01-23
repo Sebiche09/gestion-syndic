@@ -15,8 +15,10 @@ import (
 
 // CheckIfExists vérifie si une valeur existe déjà dans une table donnée.
 // tableName : Nom de la table
-// columnName : Nom de la colonne
-// value : Valeur à vérifier
+// conditions : Conditions pour la recherche (clé-valeur)
+// Retourne :
+// - bool : true si la valeur existe, false sinon
+// - error : une erreur si la requête échoue
 func CheckIfExists(db *gorm.DB, tableName string, conditions map[string]interface{}) (bool, error) {
 	var count int64
 	query := db.Table(tableName).Where(conditions).Count(&count)
@@ -26,6 +28,11 @@ func CheckIfExists(db *gorm.DB, tableName string, conditions map[string]interfac
 	return count > 0, nil
 }
 
+// getOccupantTypeLabel retourne le label correspondant à une abréviation trouvée dans un titre.
+// title : Titre contenant potentiellement une abréviation
+// Retourne :
+// - string : Le label correspondant à l'abréviation
+// - error : Une erreur si aucune abréviation valide n'est trouvée
 func getOccupantTypeLabel(title string) (string, error) {
 	// Mapping des abréviations aux labels
 	abbreviationToLabel := map[string]string{
@@ -48,6 +55,15 @@ func getOccupantTypeLabel(title string) (string, error) {
 	return "", fmt.Errorf("no matching occupant type for title: %s", title)
 }
 
+// GetAllCondominiums retourne la liste des condominiums enregistrés avec leurs adresses associées
+// @Summary Liste tous les condominiums
+// @Description Retourne la liste de tous les condominiums avec leurs adresses associées
+// @Tags Condominiums
+// @Accept json
+// @Produce json
+// @Success 200 {array} map[string]interface{} "Liste des condominiums"
+// @Failure 500 {object} map[string]string "Erreur serveur"
+// @Router /condominiums [get]
 func GetAllCondominiums(c *gin.Context) {
 	db := config.DB
 
@@ -76,6 +92,17 @@ func GetAllCondominiums(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// CreateCondominium crée un nouveau condominium avec ses adresses, occupants et unités associés
+// @Summary Crée un condominium
+// @Description Permet de créer un condominium avec ses informations, adresses, occupants et unités
+// @Tags Condominiums
+// @Accept json
+// @Produce json
+// @Param condominium body map[string]interface{} true "Structure de la requête pour créer un condominium"
+// @Success 200 {object} map[string]interface{} "Condominium créé avec succès"
+// @Failure 400 {object} map[string]string "Données invalides"
+// @Failure 500 {object} map[string]string "Erreur serveur"
+// @Router /condominiums [post]
 func CreateCondominium(c *gin.Context) {
 	var requestData struct {
 		Informations struct {
@@ -310,6 +337,18 @@ func CreateCondominium(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Condominium created successfully"})
 }
 
+// CheckUniqueness vérifie si un nom ou un préfixe est déjà utilisé pour un condominium
+// @Summary Vérifie l'unicité d'un nom ou préfixe
+// @Description Vérifie si un nom ou un préfixe existe déjà dans la base de données
+// @Tags Condominiums
+// @Accept json
+// @Produce json
+// @Param name query string false "Nom du condominium"
+// @Param prefix query string false "Préfixe du condominium"
+// @Success 200 {object} map[string]interface{} "Résultat de la vérification (true si pris, false sinon)"
+// @Failure 400 {object} map[string]string "Nom ou préfixe non fourni"
+// @Failure 500 {object} map[string]string "Erreur serveur"
+// @Router /condominiums/check-uniqueness [get]
 func CheckUniqueness(c *gin.Context) {
 	db := config.DB
 

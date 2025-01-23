@@ -1,0 +1,241 @@
+definitions:
+  models.Address:
+    description: Modèle représentant une adresse
+    properties:
+      city:
+        example: Paris
+        type: string
+      complement:
+        example: Appartement 4B
+        type: string
+      country:
+        example: France
+        type: string
+      postal_code:
+        example: "75001"
+        type: string
+      street:
+        example: 10 rue des Lilas
+        type: string
+    type: object
+  models.Civility:
+    description: Modèle représentant une civilité
+    properties:
+      id:
+        example: 1
+        type: integer
+      type:
+        example: Monsieur
+        type: string
+    type: object
+  models.DocumentReceivingMethod:
+    description: Modèle représentant une méthode de réception des documents
+    properties:
+      id:
+        example: 1
+        type: integer
+      type:
+        example: Email
+        type: string
+    type: object
+  models.Occupant:
+    description: Modèle représentant un occupant
+    properties:
+      birth_date:
+        example: "1990-01-01"
+        type: string
+      civility:
+        $ref: '#/definitions/models.Civility'
+      civility_id:
+        example: 1
+        type: integer
+      corporation:
+        example: false
+        type: boolean
+      document_receiving_method_id:
+        example: 0
+        type: integer
+      documentReceivingMethod:
+        $ref: '#/definitions/models.DocumentReceivingMethod'
+      domicile_address_id:
+        example: 10
+        type: integer
+      domicileAddress:
+        $ref: '#/definitions/models.Address'
+      email:
+        example: jean.dupont@example.com
+        type: string
+      iban:
+        example: FR7630006000011234567890189
+        type: string
+      name:
+        example: Jean
+        type: string
+      phone:
+        example: "+330123456789"
+        type: string
+      reminder_delay:
+        example: 10
+        type: integer
+      reminder_receiving_method_id:
+        example: 0
+        type: integer
+      reminderReceivingMethod:
+        $ref: '#/definitions/models.ReminderReceivingMethod'
+      surname:
+        example: Dupont
+        type: string
+    type: object
+  models.ReminderReceivingMethod:
+    description: Modèle représentant une méthode de réception des rappels
+    properties:
+      id:
+        example: 1
+        type: integer
+      type:
+        example: SMS
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/occupants:
+    get:
+      description: Retourne tous les occupants enregistrés
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Occupant'
+            type: array
+      summary: Récupère la liste des occupants
+      tags:
+      - Occupants
+  /condominiums:
+    get:
+      consumes:
+      - application/json
+      description: Retourne la liste de tous les condominiums avec leurs adresses
+        associées
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Liste des condominiums
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+        "500":
+          description: Erreur serveur
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Liste tous les condominiums
+      tags:
+      - Condominiums
+    post:
+      consumes:
+      - application/json
+      description: Permet de créer un condominium avec ses informations, adresses,
+        occupants et unités
+      parameters:
+      - description: Structure de la requête pour créer un condominium
+        in: body
+        name: condominium
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Condominium créé avec succès
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Données invalides
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Erreur serveur
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Crée un condominium
+      tags:
+      - Condominiums
+  /condominiums/check-uniqueness:
+    get:
+      consumes:
+      - application/json
+      description: Vérifie si un nom ou un préfixe existe déjà dans la base de données
+      parameters:
+      - description: Nom du condominium
+        in: query
+        name: name
+        type: string
+      - description: Préfixe du condominium
+        in: query
+        name: prefix
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Résultat de la vérification (true si pris, false sinon)
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Nom ou préfixe non fourni
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Erreur serveur
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Vérifie l'unicité d'un nom ou préfixe
+      tags:
+      - Condominiums
+  /units:
+    get:
+      consumes:
+      - application/json
+      description: Récupère la liste des unités avec leurs références cadastrales,
+        étages, descriptions, quotas, et les détails des condominiums, adresses, et
+        types d'unités associés
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Liste des unités
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+        "500":
+          description: Erreur serveur
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Liste toutes les unités
+      tags:
+      - Units
+swagger: "2.0"

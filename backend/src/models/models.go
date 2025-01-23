@@ -13,47 +13,58 @@ type GormModel struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 }
 
+// Occupant représente un occupant dans une unité
+// @Description Modèle représentant un occupant
 type Occupant struct {
-	gorm.Model
-	Name                      string                  `json:"name" gorm:"not null"`
-	Surname                   string                  `json:"surname" gorm:"not null"`
-	Email                     string                  `json:"email"`
-	Corporation               bool                    `json:"corporation" gorm:"default:false"`
-	Phone                     string                  `json:"phone"`
-	Iban                      string                  `json:"iban"`
-	BirthDate                 time.Time               `json:"birth_date" gorm:"not null"`
-	CivilityID                int                     `json:"civility_id" gorm:"not null"`
+	gorm.Model                `swaggerignore:"true"`
+	Name                      string                  `json:"name" gorm:"not null" example:"Jean"`
+	Surname                   string                  `json:"surname" gorm:"not null" example:"Dupont"`
+	Email                     string                  `json:"email" example:"jean.dupont@example.com"`
+	Corporation               bool                    `json:"corporation" gorm:"default:false" example:"false"`
+	Phone                     string                  `json:"phone" example:"+330123456789"`
+	Iban                      string                  `json:"iban" example:"FR7630006000011234567890189"`
+	BirthDate                 time.Time               `json:"birth_date" gorm:"not null" example:"1990-01-01"`
+	CivilityID                int                     `json:"civility_id" gorm:"not null" example:"1"`
 	Civility                  Civility                `gorm:"foreignKey:CivilityID"`
-	DomicileAddressID         uint                    `json:"domicile_address_id" gorm:"not null"`
+	DomicileAddressID         uint                    `json:"domicile_address_id" gorm:"not null" example:"10"`
 	DomicileAddress           Address                 `gorm:"foreignKey:DomicileAddressID"`
-	DocumentReceivingMethodID int                     `json:"document_receiving_method_id" gorm:"default:0"`
+	DocumentReceivingMethodID int                     `json:"document_receiving_method_id" gorm:"default:0" example:"0"`
 	DocumentReceivingMethod   DocumentReceivingMethod `gorm:"foreignKey:DocumentReceivingMethodID"`
-	ReminderDelay             int                     `json:"reminder_delay" gorm:"default:10"`
-	ReminderReceivingMethodID int                     `json:"reminder_receiving_method_id" gorm:"default:0"`
-	ReminderReceivingMethod   ReminderReceivingMethod `gorm:"foreignKey:ReminderReceivingMethodID"`
+	ReminderDelay             int                     `json:"reminder_delay" gorm:"default:10" example:"10"`
+	ReminderReceivingMethodID int                     `json:"reminder_receiving_method_id" gorm:"default:0" example:"0"`
+	ReminderReceivingMethod   ReminderReceivingMethod `gorm:"foreignKey:ReminderReceivingMethodID" `
 }
 
+// Civility représente une civilité utilisée pour un occupant, par exemple "Monsieur", "Madame", etc.
+// @Description Modèle représentant une civilité
 type Civility struct {
-	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id"`
-	Type string `json:"type" gorm:"not null"`
+	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id" example:"1"`
+	Type string `json:"type" gorm:"not null" example:"Monsieur"`
 }
 
+// Address représente une adresse physique utilisée dans l'application
+// @Description Modèle représentant une adresse
 type Address struct {
-	gorm.Model
-	Street     string `json:"street" gorm:"not null"`
-	Complement string `json:"complement"`
-	City       string `json:"city" gorm:"not null"`
-	PostalCode string `json:"postal_code" gorm:"not null"`
-	Country    string `json:"country" gorm:"not null"`
+	gorm.Model `swaggerignore:"true"`
+	Street     string `json:"street" gorm:"not null" example:"10 rue des Lilas"`
+	Complement string `json:"complement" example:"Appartement 4B"`
+	City       string `json:"city" gorm:"not null" example:"Paris"`
+	PostalCode string `json:"postal_code" gorm:"not null" example:"75001"`
+	Country    string `json:"country" gorm:"not null" example:"France"`
 }
 
+// DocumentReceivingMethod représente une méthode de réception des documents, par exemple "Email" ou "Poste"
+// @Description Modèle représentant une méthode de réception des documents
 type DocumentReceivingMethod struct {
-	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id"`
-	Type string `json:"type" gorm:"not null"`
+	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id" example:"1"`
+	Type string `json:"type" gorm:"not null" example:"Email"`
 }
+
+// ReminderReceivingMethod représente une méthode de réception des rappels, par exemple "SMS" ou "Email"
+// @Description Modèle représentant une méthode de réception des rappels
 type ReminderReceivingMethod struct {
-	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id"`
-	Type string `json:"type" gorm:"not null"`
+	ID   uint   `gorm:"primaryKey;autoIncrement" json:"id" example:"1"`
+	Type string `json:"type" gorm:"not null" example:"SMS"`
 }
 
 type OccupantPossessionOnUnit struct {
@@ -73,7 +84,7 @@ type OccupantType struct {
 }
 
 type Unit struct {
-	gorm.Model
+	gorm.Model         `swaggerignore:"true"`
 	CondominiumID      uint             `json:"condominium_id" gorm:"not null"`
 	Condominium        Condominium      `gorm:"foreignKey:CondominiumID"`
 	AddressID          uint             `json:"address_id" gorm:"not null"`
@@ -89,7 +100,7 @@ type Unit struct {
 }
 
 type ElectricGazMeter struct {
-	gorm.Model
+	gorm.Model   `swaggerignore:"true"`
 	Number       string `json:"number" gorm:"not null"`
 	FtpImagePath string `json:"ftp_image_path" gorm:"not null"`
 }
@@ -100,7 +111,7 @@ type UnitType struct {
 }
 
 type Condominium struct {
-	gorm.Model
+	gorm.Model         `swaggerignore:"true"`
 	Name               string    `json:"name" gorm:"not null"`
 	AddressID          uint      `json:"address_id" gorm:"not null"`
 	Address            Address   `gorm:"foreignKey:AddressID"`
@@ -113,7 +124,7 @@ type Condominium struct {
 }
 
 type Exercice struct {
-	gorm.Model
+	gorm.Model    `swaggerignore:"true"`
 	CondominiumID uint        `json:"condominium_id" gorm:"not null"`
 	Condominium   Condominium `gorm:"foreignKey:CondominiumID"`
 	Date          time.Time   `json:"date" gorm:"not null"`
@@ -121,7 +132,7 @@ type Exercice struct {
 }
 
 type Contract struct {
-	gorm.Model
+	gorm.Model     `swaggerignore:"true"`
 	SupplierID     uint        `json:"supplier_id" gorm:"not null"`
 	Supplier       Supplier    `gorm:"foreignKey:SupplierID"`
 	CondominiumID  uint        `json:"condominium_id" gorm:"not null"`
@@ -135,7 +146,7 @@ type Contract struct {
 }
 
 type BankAccount struct {
-	gorm.Model
+	gorm.Model    `swaggerignore:"true"`
 	Iban          string          `json:"iban" gorm:"not null"`
 	TypeID        uint            `json:"type_id" gorm:"not null"`
 	Type          BankAccountType `gorm:"foreignKey:TypeID"`
@@ -152,7 +163,7 @@ type BankAccountType struct {
 }
 
 type AccountStatement struct {
-	gorm.Model
+	gorm.Model         `swaggerignore:"true"`
 	OperationDate      time.Time   `json:"operation_date" gorm:"not null"`
 	ValueDate          time.Time   `json:"value_date" gorm:"not null"`
 	Description        string      `json:"description" gorm:"not null"`
@@ -172,7 +183,7 @@ type AccountStatementOccupant struct {
 }
 
 type GeneralAssembly struct {
-	gorm.Model
+	gorm.Model    `swaggerignore:"true"`
 	CondominiumID uint        `json:"condominium_id" gorm:"not null"`
 	Condominium   Condominium `gorm:"foreignKey:CondominiumID"`
 	FtpFilePath   string      `json:"ftp_file_path" gorm:"not null"`
@@ -196,7 +207,7 @@ type CondoSupplier struct {
 }
 
 type Supplier struct {
-	gorm.Model
+	gorm.Model  `swaggerignore:"true"`
 	Name        string           `json:"name" gorm:"not null"`
 	AddressID   uint             `json:"address_id" gorm:"not null"`
 	Address     Address          `gorm:"foreignKey:AddressID"`
@@ -216,7 +227,7 @@ type SupplierCategory struct {
 }
 
 type Invoice struct {
-	gorm.Model
+	gorm.Model        `swaggerignore:"true"`
 	InvoiceType       bool        `json:"invoice_type" gorm:"not null default:true"`
 	InvoiceNumber     string      `json:"invoice_number" gorm:"not null"`
 	InternalReference string      `json:"internal_reference" gorm:"not null"`
@@ -244,7 +255,7 @@ type AccountStatementInvoice struct {
 }
 
 type Remender struct {
-	gorm.Model
+	gorm.Model   `swaggerignore:"true"`
 	InvoicedID   uint      `json:"invoiced_id" gorm:"not null"`
 	Date         time.Time `json:"date" gorm:"not null"`
 	ReminderFees float64   `json:"reminder_fees" gorm:"not null"`

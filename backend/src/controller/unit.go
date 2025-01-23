@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetUnits retourne la liste des unités avec leurs informations associées
+// @Summary Liste toutes les unités
+// @Description Récupère la liste des unités avec leurs références cadastrales, étages, descriptions, quotas, et les détails des condominiums, adresses, et types d'unités associés
+// @Tags Units
+// @Accept json
+// @Produce json
+// @Success 200 {array} map[string]interface{} "Liste des unités"
+// @Failure 500 {object} map[string]string "Erreur serveur"
+// @Router /units [get]
 func GetUnits(c *gin.Context) {
 	db := config.DB
 

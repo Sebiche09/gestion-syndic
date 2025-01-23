@@ -6,6 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Récupère la liste des occupants
+// @Description Retourne tous les occupants enregistrés
+// @Tags Occupants
+// @Produce json
+// @Success 200 {array} models.Occupant
+// @Router /api/occupants [get]
 func GetOccupant(c *gin.Context) {
 	occupants := []models.Occupant{}
 	config.DB.Find(&occupants)

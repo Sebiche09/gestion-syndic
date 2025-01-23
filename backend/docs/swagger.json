@@ -1,0 +1,347 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/occupants": {
+            "get": {
+                "description": "Retourne tous les occupants enregistrés",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Occupants"
+                ],
+                "summary": "Récupère la liste des occupants",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Occupant"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/condominiums": {
+            "get": {
+                "description": "Retourne la liste de tous les condominiums avec leurs adresses associées",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Condominiums"
+                ],
+                "summary": "Liste tous les condominiums",
+                "responses": {
+                    "200": {
+                        "description": "Liste des condominiums",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Permet de créer un condominium avec ses informations, adresses, occupants et unités",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Condominiums"
+                ],
+                "summary": "Crée un condominium",
+                "parameters": [
+                    {
+                        "description": "Structure de la requête pour créer un condominium",
+                        "name": "condominium",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Condominium créé avec succès",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/condominiums/check-uniqueness": {
+            "get": {
+                "description": "Vérifie si un nom ou un préfixe existe déjà dans la base de données",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Condominiums"
+                ],
+                "summary": "Vérifie l'unicité d'un nom ou préfixe",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Nom du condominium",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Préfixe du condominium",
+                        "name": "prefix",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Résultat de la vérification (true si pris, false sinon)",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Nom ou préfixe non fourni",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/units": {
+            "get": {
+                "description": "Récupère la liste des unités avec leurs références cadastrales, étages, descriptions, quotas, et les détails des condominiums, adresses, et types d'unités associés",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Units"
+                ],
+                "summary": "Liste toutes les unités",
+                "responses": {
+                    "200": {
+                        "description": "Liste des unités",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Address": {
+            "description": "Modèle représentant une adresse",
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "example": "Paris"
+                },
+                "complement": {
+                    "type": "string",
+                    "example": "Appartement 4B"
+                },
+                "country": {
+                    "type": "string",
+                    "example": "France"
+                },
+                "postal_code": {
+                    "type": "string",
+                    "example": "75001"
+                },
+                "street": {
+                    "type": "string",
+                    "example": "10 rue des Lilas"
+                }
+            }
+        },
+        "models.Civility": {
+            "description": "Modèle représentant une civilité",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "type": {
+                    "type": "string",
+                    "example": "Monsieur"
+                }
+            }
+        },
+        "models.DocumentReceivingMethod": {
+            "description": "Modèle représentant une méthode de réception des documents",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "type": {
+                    "type": "string",
+                    "example": "Email"
+                }
+            }
+        },
+        "models.Occupant": {
+            "description": "Modèle représentant un occupant",
+            "type": "object",
+            "properties": {
+                "birth_date": {
+                    "type": "string",
+                    "example": "1990-01-01"
+                },
+                "civility": {
+                    "$ref": "#/definitions/models.Civility"
+                },
+                "civility_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "corporation": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "documentReceivingMethod": {
+                    "$ref": "#/definitions/models.DocumentReceivingMethod"
+                },
+                "document_receiving_method_id": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "domicileAddress": {
+                    "$ref": "#/definitions/models.Address"
+                },
+                "domicile_address_id": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "email": {
+                    "type": "string",
+                    "example": "jean.dupont@example.com"
+                },
+                "iban": {
+                    "type": "string",
+                    "example": "FR7630006000011234567890189"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Jean"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+330123456789"
+                },
+                "reminderReceivingMethod": {
+                    "$ref": "#/definitions/models.ReminderReceivingMethod"
+                },
+                "reminder_delay": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "reminder_receiving_method_id": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "surname": {
+                    "type": "string",
+                    "example": "Dupont"
+                }
+            }
+        },
+        "models.ReminderReceivingMethod": {
+            "description": "Modèle représentant une méthode de réception des rappels",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "type": {
+                    "type": "string",
+                    "example": "SMS"
+                }
+            }
+        }
+    }
+}
