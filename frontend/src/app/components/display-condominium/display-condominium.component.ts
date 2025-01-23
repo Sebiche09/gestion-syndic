@@ -28,14 +28,13 @@ export class DisplayCondominiumComponent implements OnInit {
       this.condominiumService.getAllCondominiums().subscribe(
         (data: any) => {
           this.condominiums = data;
-          console.log('Données des condominiums:', this.condominiums);
         },
         (error) => {
           console.error('Erreur lors de la récupération des données:', error);
         }
       );
     }
-    
+
     openDialog(): void {
         this.displayDialog = true;
     }

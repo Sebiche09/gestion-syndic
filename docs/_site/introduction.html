@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Table des matières | Documentation du projet SOGIM-syndic</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Table des matières" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Ce site est la documentation du projet SOGIM-syndic" />
+<meta property="og:description" content="Ce site est la documentation du projet SOGIM-syndic" />
+<link rel="canonical" href="http://0.0.0.0:4000/introduction.html" />
+<meta property="og:url" content="http://0.0.0.0:4000/introduction.html" />
+<meta property="og:site_name" content="Documentation du projet SOGIM-syndic" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Table des matières" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Ce site est la documentation du projet SOGIM-syndic","headline":"Table des matières","url":"http://0.0.0.0:4000/introduction.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Table des matières</h1>
+          <h2>Ce site est la documentation du projet SOGIM-syndic</h2>
+        </header>
+        <section id="downloads" class="clearfix">
+          
+	
+        </section>
+        <hr>
+        <section id="main_content">
+          <h1 id="table-des-matières">Table des matières</h1>
+<ul>
+  <li><a href="/functions/overview">Aperçu des fonctions</a></li>
+  <li><a href="/api">Documentation API</a></li>
+</ul>
+
+<h1 id="introduction-à-gestion-syndic">Introduction à Gestion-Syndic</h1>
+
+<p><strong>Gestion-Syndic</strong> est une application web complète permettant de gérer efficacement les syndicats de copropriété. Ce projet repose sur une architecture modulaire et scalable, combinant un frontend moderne avec Angular et un backend robuste développé en Go.</p>
+
+<hr />
+
+<h2 id="objectifs-du-projet">Objectifs du projet</h2>
+
+<p>Le projet vise à :</p>
+<ol>
+  <li><strong>Simplifier la gestion des syndicats</strong> :
+    <ul>
+      <li>Gestion des occupants et des copropriétaires.</li>
+      <li>Gestion des unités (logements, bureaux, etc.) et des informations associées.</li>
+    </ul>
+  </li>
+  <li><strong>Automatiser les tâches</strong> :
+    <ul>
+      <li>Traitement des documents grâce à l’intégration d’une solution OCR.</li>
+      <li>Chargement et gestion de fichiers via FTP sécurisé.</li>
+    </ul>
+  </li>
+  <li><strong>Fournir un environnement collaboratif</strong> :
+    <ul>
+      <li>Interface web intuitive.</li>
+      <li>API backend permettant des intégrations tierces.</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="fonctionnalités-principales">Fonctionnalités principales</h2>
+
+<ol>
+  <li><strong>Gestion des données</strong> :
+    <ul>
+      <li>Création, modification et suppression des copropriétaires, unités, et informations associées.</li>
+      <li>Organisation des informations liées aux immeubles.</li>
+    </ul>
+  </li>
+  <li><strong>OCR et traitement des fichiers</strong> :
+    <ul>
+      <li>Extraction automatique des données à partir de documents téléversés.</li>
+      <li>Gestion des fichiers via un serveur FTP intégré.</li>
+    </ul>
+  </li>
+  <li><strong>Scalabilité et sécurité</strong> :
+    <ul>
+      <li>Architecture conteneurisée avec Docker pour faciliter le déploiement.</li>
+      <li>Sécurisation des accès aux données sensibles.</li>
+    </ul>
+  </li>
+  <li><strong>Interface utilisateur</strong> :
+    <ul>
+      <li>Application Angular intuitive avec navigation optimisée.</li>
+      <li>Visualisation des données en temps réel.</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="architecture-du-projet">Architecture du projet</h2>
+
+<h3 id="structure-générale">Structure générale</h3>
+<p>Le projet suit une architecture en trois tiers :</p>
+<ol>
+  <li><strong>Frontend</strong> :
+    <ul>
+      <li>Développé avec Angular.</li>
+      <li>Propose une interface utilisateur moderne et responsive.</li>
+    </ul>
+  </li>
+  <li><strong>Backend</strong> :
+    <ul>
+      <li>Écrit en Go pour garantir des performances élevées.</li>
+      <li>Gère la logique métier et les connexions à la base de données PostgreSQL.</li>
+    </ul>
+  </li>
+  <li><strong>Services complémentaires</strong> :
+    <ul>
+      <li>Serveur FTP pour le stockage des fichiers.</li>
+      <li>OCR intégré pour automatiser le traitement des documents.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="organisation-des-conteneurs">Organisation des conteneurs</h3>
+<p>Le projet utilise Docker et <code class="language-plaintext highlighter-rouge">docker-compose</code> pour orchestrer les services :</p>
+<ul>
+  <li><strong>PostgreSQL</strong> : Base de données relationnelle.</li>
+  <li><strong>Angular</strong> : Frontend hébergé sur un serveur Node.js.</li>
+  <li><strong>Go API</strong> : Backend exposant des API REST.</li>
+  <li><strong>OCR</strong> : Service de traitement des documents.</li>
+  <li><strong>FTP</strong> : Serveur de gestion des fichiers.</li>
+</ul>
+
+<hr />
+
+<h2 id="technologies-utilisées">Technologies utilisées</h2>
+
+<ul>
+  <li><strong>Frontend</strong> : Angular (TypeScript, SCSS).</li>
+  <li><strong>Backend</strong> : Go (Golang).</li>
+  <li><strong>Base de données</strong> : PostgreSQL.</li>
+  <li><strong>Infrastructure</strong> : Docker, Docker Compose.</li>
+  <li><strong>Autres</strong> :
+    <ul>
+      <li>Compodoc pour la documentation Angular.</li>
+      <li>Air pour le rechargement à chaud du backend.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="à-qui-sadresse-ce-projet-">À qui s’adresse ce projet ?</h2>
+
+<p>Ce projet est conçu pour :</p>
+<ul>
+  <li>Les gestionnaires de syndic de copropriété cherchant une solution digitale.</li>
+  <li>Les développeurs souhaitant contribuer à une application modulaire.</li>
+  <li>Toute organisation cherchant à automatiser la gestion des documents et des données liées aux copropriétés.</li>
+</ul>
+
+<hr />
+
+<h2 id="ressources-supplémentaires">Ressources supplémentaires</h2>
+
+<ul>
+  <li><a href="https://github.com/Sebiche09/gestion-syndic">GitHub officiel</a></li>
+</ul>
+
+        </section>
+
+        <footer>
+        
+          Documentation du projet SOGIM-syndic is maintained by <a href="https://github.com/Sebiche09">Sebiche09</a><br>
+        
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.
+        </footer>
+
+      </div>
+    </div>
+  </body>
+</html>

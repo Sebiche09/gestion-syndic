@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Gestion des Condominiums | Documentation du projet SOGIM-syndic</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Gestion des Condominiums" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Ce site est la documentation du projet SOGIM-syndic" />
+<meta property="og:description" content="Ce site est la documentation du projet SOGIM-syndic" />
+<link rel="canonical" href="http://0.0.0.0:4000/functions/backend/condominium.html" />
+<meta property="og:url" content="http://0.0.0.0:4000/functions/backend/condominium.html" />
+<meta property="og:site_name" content="Documentation du projet SOGIM-syndic" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Gestion des Condominiums" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Ce site est la documentation du projet SOGIM-syndic","headline":"Gestion des Condominiums","url":"http://0.0.0.0:4000/functions/backend/condominium.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Gestion des Condominiums</h1>
+          <h2>Ce site est la documentation du projet SOGIM-syndic</h2>
+        </header>
+        <section id="downloads" class="clearfix">
+          
+	
+        </section>
+        <hr>
+        <section id="main_content">
+          <h1 id="gestion-des-condominiums">Gestion des Condominiums</h1>
+
+<p>Ce fichier contient les fonctions liées à la gestion des condominiums, notamment la récupération, la création, et la vérification d’unicité. Voici une explication détaillée de chaque fonction.</p>
+
+<hr />
+
+<h2 id="1-getallcondominiums">1. <code class="language-plaintext highlighter-rouge">GetAllCondominiums</code></h2>
+
+<h3 id="description">Description</h3>
+<p>Cette fonction récupère la liste de tous les condominiums enregistrés dans la base de données, ainsi que leurs adresses associées.</p>
+
+<h3 id="code-">Code :</h3>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">GetAllCondominiums</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">gin</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">db</span> <span class="o">:=</span> <span class="n">config</span><span class="o">.</span><span class="n">DB</span>
+
+    <span class="k">var</span> <span class="n">condominiums</span> <span class="p">[]</span><span class="n">models</span><span class="o">.</span><span class="n">Condominium</span>
+
+    <span class="c">// Chargement de tous les condominiums avec leurs adresses associées</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">db</span><span class="o">.</span><span class="n">Preload</span><span class="p">(</span><span class="s">"Address"</span><span class="p">)</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="o">&amp;</span><span class="n">condominiums</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to fetch condominiums"</span><span class="p">})</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="c">// Construire la réponse avec les champs nécessaires</span>
+    <span class="n">response</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">condo</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">condominiums</span> <span class="p">{</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span>
+            <span class="s">"name"</span><span class="o">:</span>   <span class="n">condo</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span>
+            <span class="s">"prefix"</span><span class="o">:</span> <span class="n">condo</span><span class="o">.</span><span class="n">Prefix</span><span class="p">,</span>
+            <span class="s">"city"</span><span class="o">:</span>   <span class="n">condo</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">City</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<hr />
+
+<h3 id="explications">Explications</h3>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">db</span> <span class="o">:=</span> <span class="n">config</span><span class="o">.</span><span class="n">DB</span>
+</code></pre></div></div>
+<ul>
+  <li>Récupère l’instance de la base de données configurée dans config.DB.</li>
+  <li>Cela permet d’exécuter des opérations sur la base de données.</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">condominiums</span> <span class="p">[]</span><span class="n">models</span><span class="o">.</span><span class="n">Condominium</span>
+</code></pre></div></div>
+<ul>
+  <li>Déclare une variable condominiums comme un tableau de structures models.Condominium</li>
+  <li>Cette variable stockera les résultats de la requête à la base de données.</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">db</span><span class="o">.</span><span class="n">Preload</span><span class="p">(</span><span class="s">"Address"</span><span class="p">)</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="o">&amp;</span><span class="n">condominiums</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span><span class="p">{</span>
+</code></pre></div></div>
+<ul>
+  <li>Effectue une requête pour récupérer tous les condominiums depuis la base de données.</li>
+  <li>La méthode Preload(“Address”) charge également les adresses associées à chaque condominium (relation hasOne ou hasMany dans GORM)</li>
+  <li>Si une erreur survient pendant la requête, elle est stockée dans la variable err.</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to fetch condominiums"</span><span class="p">})</span>
+        <span class="k">return</span>
+</code></pre></div></div>
+<ul>
+  <li>Si err n’est pas nil (c’est-à-dire si une erreur s’est produite), cette ligne envoie une réponse HTTP avec un code d’erreur 500 Internal Server Error.</li>
+  <li>La réponse contient un message JSON précisant que la récupération des condominiums a échoué.</li>
+  <li>La fonction retourne immédiatement, arrêtant son exécution.</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">response</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{}</span>
+</code></pre></div></div>
+<ul>
+  <li>Initialise une liste vide de type []gin.H qui servira à construire la réponse JSON.</li>
+  <li>Chaque élément de cette liste représentera un condominium sous forme de map clé-valeur.</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">condo</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">condominiums</span> <span class="p">{</span>
+</code></pre></div></div>
+<ul>
+  <li>Parcourt chaque élément de la liste condominiums retournée par la base de données.</li>
+  <li>condo représente un condominium individuel pour chaque itération.</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">response</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span>
+            <span class="s">"name"</span><span class="o">:</span>   <span class="n">condo</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span>
+            <span class="s">"prefix"</span><span class="o">:</span> <span class="n">condo</span><span class="o">.</span><span class="n">Prefix</span><span class="p">,</span>
+            <span class="s">"city"</span><span class="o">:</span>   <span class="n">condo</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">City</span><span class="p">,</span>
+        <span class="p">})</span>
+</code></pre></div></div>
+<ul>
+  <li>Ajoute un nouvel élément à la liste response.</li>
+  <li>Cet élément est une map (gin.H) contenant :
+    <ul>
+      <li>name : Le nom du condominium (condo.Name).</li>
+      <li>prefix : Le préfixe unique du condominium (condo.Prefix).</li>
+      <li>city : La ville de l’adresse associée au condominium (condo.Address.City).</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>Envoie une réponse HTTP avec un code 200 OK.</li>
+  <li>Le corps de la réponse contient la liste JSON response, représentant tous les condominiums avec leurs informations pertinentes.</li>
+</ul>
+
+<h2 id="2-createcondominium">2. <code class="language-plaintext highlighter-rouge">CreateCondominium</code></h2>
+
+<h3 id="description-1">Description</h3>
+<p>Cette fonction crée un nouveau condominium avec ses adresses, occupants et unités associés</p>
+
+<h3 id="code--1">Code :</h3>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">CreateCondominium</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">gin</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">requestData</span> <span class="k">struct</span> <span class="p">{</span>
+		<span class="n">Informations</span> <span class="k">struct</span> <span class="p">{</span>
+			<span class="n">Name</span>        <span class="kt">string</span> <span class="s">`json:"name"`</span>
+			<span class="n">Prefix</span>      <span class="kt">string</span> <span class="s">`json:"prefix"`</span>
+			<span class="n">Description</span> <span class="kt">string</span> <span class="s">`json:"description"`</span>
+		<span class="p">}</span> <span class="s">`json:"informations"`</span>
+		<span class="n">Address</span> <span class="k">struct</span> <span class="p">{</span>
+			<span class="n">Street</span>            <span class="kt">string</span> <span class="s">`json:"street"`</span>
+			<span class="n">AddressComplement</span> <span class="kt">string</span> <span class="s">`json:"address_complement"`</span>
+			<span class="n">City</span>              <span class="kt">string</span> <span class="s">`json:"city"`</span>
+			<span class="n">PostalCode</span>        <span class="kt">string</span> <span class="s">`json:"postal_code"`</span>
+			<span class="n">Country</span>           <span class="kt">string</span> <span class="s">`json:"country"`</span>
+		<span class="p">}</span> <span class="s">`json:"address"`</span>
+		<span class="n">Occupants</span> <span class="p">[]</span><span class="k">struct</span> <span class="p">{</span>
+			<span class="n">Name</span>                    <span class="kt">string</span> <span class="s">`json:"name"`</span>
+			<span class="n">Surname</span>                 <span class="kt">string</span> <span class="s">`json:"surname"`</span>
+			<span class="n">Email</span>                   <span class="kt">string</span> <span class="s">`json:"email"`</span>
+			<span class="n">Corporation</span>             <span class="kt">bool</span>   <span class="s">`json:"corporation"`</span>
+			<span class="n">IsConcierge</span>             <span class="kt">bool</span>   <span class="s">`json:"isConcierge"`</span>
+			<span class="n">Phone</span>                   <span class="kt">string</span> <span class="s">`json:"phone"`</span>
+			<span class="n">Iban</span>                    <span class="kt">string</span> <span class="s">`json:"iban"`</span>
+			<span class="n">BirthDate</span>               <span class="kt">string</span> <span class="s">`json:"birthdate"`</span>
+			<span class="n">Civility</span>                <span class="kt">string</span> <span class="s">`json:"civility"`</span>
+			<span class="n">DocumentReceivingMethod</span> <span class="kt">string</span> <span class="s">`json:"document_receiving_method"`</span>
+			<span class="n">ReminderDelay</span>           <span class="kt">int</span>    <span class="s">`json:"reminder_delay"`</span>
+			<span class="n">ReminderReceivingMethod</span> <span class="kt">string</span> <span class="s">`json:"reminder_receiving_method"`</span>
+			<span class="n">Address</span>                 <span class="k">struct</span> <span class="p">{</span>
+				<span class="n">Street</span>            <span class="kt">string</span> <span class="s">`json:"street"`</span>
+				<span class="n">AddressComplement</span> <span class="kt">string</span> <span class="s">`json:"address_complement"`</span>
+				<span class="n">City</span>              <span class="kt">string</span> <span class="s">`json:"city"`</span>
+				<span class="n">PostalCode</span>        <span class="kt">string</span> <span class="s">`json:"postal_code"`</span>
+				<span class="n">Country</span>           <span class="kt">string</span> <span class="s">`json:"country"`</span>
+			<span class="p">}</span> <span class="s">`json:"address"`</span>
+		<span class="p">}</span> <span class="s">`json:"occupants"`</span>
+		<span class="n">Units</span> <span class="p">[]</span><span class="k">struct</span> <span class="p">{</span>
+			<span class="n">CadastralReference</span> <span class="kt">string</span> <span class="s">`json:"cadastralReference"`</span>
+			<span class="n">Status</span>             <span class="kt">string</span> <span class="s">`json:"status"`</span>
+			<span class="n">UnitType</span>           <span class="kt">string</span> <span class="s">`json:"unitType"`</span>
+			<span class="n">Floor</span>              <span class="kt">uint8</span>  <span class="s">`json:"floor"`</span>
+			<span class="n">Description</span>        <span class="kt">string</span> <span class="s">`json:"description"`</span>
+			<span class="n">UnitAddress</span>        <span class="k">struct</span> <span class="p">{</span>
+				<span class="n">Street</span>     <span class="kt">string</span> <span class="s">`json:"street"`</span>
+				<span class="n">Complement</span> <span class="kt">string</span> <span class="s">`json:"complement"`</span>
+				<span class="n">City</span>       <span class="kt">string</span> <span class="s">`json:"city"`</span>
+				<span class="n">PostalCode</span> <span class="kt">string</span> <span class="s">`json:"postal_code"`</span>
+				<span class="n">Country</span>    <span class="kt">string</span> <span class="s">`json:"country"`</span>
+			<span class="p">}</span> <span class="s">`json:"unitAddress"`</span>
+			<span class="n">Owners</span> <span class="p">[]</span><span class="k">struct</span> <span class="p">{</span>
+				<span class="n">Name</span>          <span class="kt">string</span> <span class="s">`json:"name"`</span>
+				<span class="n">Surname</span>       <span class="kt">string</span> <span class="s">`json:"surname"`</span>
+				<span class="n">Title</span>         <span class="kt">string</span> <span class="s">`json:"title"`</span>
+				<span class="n">Quota</span>         <span class="kt">int</span>    <span class="s">`json:"quota"`</span>
+				<span class="n">Administrator</span> <span class="kt">bool</span>   <span class="s">`json:"administrator"`</span>
+			<span class="p">}</span> <span class="s">`json:"owners"`</span>
+		<span class="p">}</span> <span class="s">`json:"units"`</span>
+	<span class="p">}</span>
+
+	<span class="c">// Validation des données reçues</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="n">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="n">requestData</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusBadRequest</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Invalid request data"</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="n">db</span> <span class="o">:=</span> <span class="n">config</span><span class="o">.</span><span class="n">DB</span>
+
+	<span class="c">// Transaction pour garantir la cohérence des données</span>
+	<span class="n">tx</span> <span class="o">:=</span> <span class="n">db</span><span class="o">.</span><span class="n">Begin</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">r</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="n">r</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+		<span class="p">}</span>
+	<span class="p">}()</span>
+
+	<span class="c">// Ajouter l'adresse principale</span>
+	<span class="n">address</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Address</span><span class="p">{</span>
+		<span class="n">Street</span><span class="o">:</span>     <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">Street</span><span class="p">,</span>
+		<span class="n">Complement</span><span class="o">:</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">AddressComplement</span><span class="p">,</span>
+		<span class="n">City</span><span class="o">:</span>       <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">City</span><span class="p">,</span>
+		<span class="n">PostalCode</span><span class="o">:</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">PostalCode</span><span class="p">,</span>
+		<span class="n">Country</span><span class="o">:</span>    <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">Country</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">address</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+		<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create address"</span><span class="p">})</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="k">var</span> <span class="n">conciergeID</span> <span class="o">*</span><span class="kt">uint</span>
+
+	<span class="c">// Ajouter les occupants</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">occupantData</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Occupants</span> <span class="p">{</span>
+		<span class="c">// Ajouter l'adresse du domicile de l'occupant</span>
+		<span class="n">domicileAddress</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Address</span><span class="p">{</span>
+			<span class="n">Street</span><span class="o">:</span>     <span class="n">occupantData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">Street</span><span class="p">,</span>
+			<span class="n">Complement</span><span class="o">:</span> <span class="n">occupantData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">AddressComplement</span><span class="p">,</span>
+			<span class="n">City</span><span class="o">:</span>       <span class="n">occupantData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">City</span><span class="p">,</span>
+			<span class="n">PostalCode</span><span class="o">:</span> <span class="n">occupantData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">PostalCode</span><span class="p">,</span>
+			<span class="n">Country</span><span class="o">:</span>    <span class="n">occupantData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">Country</span><span class="p">,</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">domicileAddress</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+			<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create occupant address"</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+
+		<span class="c">// Ajouter l'occupant</span>
+		<span class="n">occupant</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Occupant</span><span class="p">{</span>
+			<span class="n">Name</span><span class="o">:</span>                      <span class="n">occupantData</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span>
+			<span class="n">Surname</span><span class="o">:</span>                   <span class="n">occupantData</span><span class="o">.</span><span class="n">Surname</span><span class="p">,</span>
+			<span class="n">Email</span><span class="o">:</span>                     <span class="n">occupantData</span><span class="o">.</span><span class="n">Email</span><span class="p">,</span>
+			<span class="n">Corporation</span><span class="o">:</span>               <span class="n">occupantData</span><span class="o">.</span><span class="n">Corporation</span><span class="p">,</span>
+			<span class="n">Phone</span><span class="o">:</span>                     <span class="n">occupantData</span><span class="o">.</span><span class="n">Phone</span><span class="p">,</span>
+			<span class="n">Iban</span><span class="o">:</span>                      <span class="n">occupantData</span><span class="o">.</span><span class="n">Iban</span><span class="p">,</span>
+			<span class="n">BirthDate</span><span class="o">:</span>                 <span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">(),</span>
+			<span class="n">CivilityID</span><span class="o">:</span>                <span class="m">1</span><span class="p">,</span>
+			<span class="n">DomicileAddressID</span><span class="o">:</span>         <span class="n">domicileAddress</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+			<span class="n">DocumentReceivingMethodID</span><span class="o">:</span> <span class="m">1</span><span class="p">,</span>
+			<span class="n">ReminderDelay</span><span class="o">:</span>             <span class="n">occupantData</span><span class="o">.</span><span class="n">ReminderDelay</span><span class="p">,</span>
+			<span class="n">ReminderReceivingMethodID</span><span class="o">:</span> <span class="m">1</span><span class="p">,</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">occupant</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+			<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create occupant"</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">occupantData</span><span class="o">.</span><span class="n">IsConcierge</span> <span class="p">{</span>
+			<span class="n">conciergeID</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">occupant</span><span class="o">.</span><span class="n">ID</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// Ajouter le condominium</span>
+	<span class="n">condominium</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Condominium</span><span class="p">{</span>
+		<span class="n">Name</span><span class="o">:</span>        <span class="n">requestData</span><span class="o">.</span><span class="n">Informations</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span>
+		<span class="n">Prefix</span><span class="o">:</span>      <span class="n">requestData</span><span class="o">.</span><span class="n">Informations</span><span class="o">.</span><span class="n">Prefix</span><span class="p">,</span>
+		<span class="n">Description</span><span class="o">:</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Informations</span><span class="o">.</span><span class="n">Description</span><span class="p">,</span>
+		<span class="n">AddressID</span><span class="o">:</span>   <span class="n">address</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+		<span class="n">ConciergeID</span><span class="o">:</span> <span class="n">conciergeID</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">condominium</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+		<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create condominium: "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()</span> <span class="o">+</span> <span class="s">" Address ID: "</span> <span class="o">+</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprint</span><span class="p">(</span><span class="n">address</span><span class="o">.</span><span class="n">ID</span><span class="p">)})</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="c">// Ajouter les unités</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">unitData</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Units</span> <span class="p">{</span>
+		<span class="c">// Ajouter l'adresse de l'unité</span>
+		<span class="n">unitAddress</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Address</span><span class="p">{</span>
+			<span class="n">Street</span><span class="o">:</span>     <span class="n">unitData</span><span class="o">.</span><span class="n">UnitAddress</span><span class="o">.</span><span class="n">Street</span><span class="p">,</span>
+			<span class="n">Complement</span><span class="o">:</span> <span class="n">unitData</span><span class="o">.</span><span class="n">UnitAddress</span><span class="o">.</span><span class="n">Complement</span><span class="p">,</span>
+			<span class="n">City</span><span class="o">:</span>       <span class="n">unitData</span><span class="o">.</span><span class="n">UnitAddress</span><span class="o">.</span><span class="n">City</span><span class="p">,</span>
+			<span class="n">PostalCode</span><span class="o">:</span> <span class="n">unitData</span><span class="o">.</span><span class="n">UnitAddress</span><span class="o">.</span><span class="n">PostalCode</span><span class="p">,</span>
+			<span class="n">Country</span><span class="o">:</span>    <span class="n">unitData</span><span class="o">.</span><span class="n">UnitAddress</span><span class="o">.</span><span class="n">Country</span><span class="p">,</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">unitAddress</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+			<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create unit address"</span><span class="p">})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+
+		<span class="k">var</span> <span class="n">unitType</span> <span class="n">models</span><span class="o">.</span><span class="n">UnitType</span>
+		<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Where</span><span class="p">(</span><span class="s">"label = ?"</span><span class="p">,</span> <span class="n">unitData</span><span class="o">.</span><span class="n">UnitType</span><span class="p">)</span><span class="o">.</span><span class="n">First</span><span class="p">(</span><span class="o">&amp;</span><span class="n">unitType</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+			<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to find unit type: "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+
+		<span class="c">// Ajouter l'unité</span>
+		<span class="n">unit</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Unit</span><span class="p">{</span>
+			<span class="n">CondominiumID</span><span class="o">:</span>      <span class="n">condominium</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+			<span class="n">AddressID</span><span class="o">:</span>          <span class="n">unitAddress</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+			<span class="n">CadastralReference</span><span class="o">:</span> <span class="n">unitData</span><span class="o">.</span><span class="n">CadastralReference</span><span class="p">,</span>
+			<span class="n">UnitTypeID</span><span class="o">:</span>         <span class="n">unitType</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+			<span class="n">Floor</span><span class="o">:</span>              <span class="n">unitData</span><span class="o">.</span><span class="n">Floor</span><span class="p">,</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">unit</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+			<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create unit"</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+
+		<span class="c">// Ajouter les propriétaires de l'unité</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">ownerData</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">unitData</span><span class="o">.</span><span class="n">Owners</span> <span class="p">{</span>
+			<span class="n">label</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">getOccupantTypeLabel</span><span class="p">(</span><span class="n">ownerData</span><span class="o">.</span><span class="n">Title</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+				<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+				<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusBadRequest</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Invalid occupant type: "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+				<span class="k">return</span>
+			<span class="p">}</span>
+
+			<span class="k">var</span> <span class="n">occupantType</span> <span class="n">models</span><span class="o">.</span><span class="n">OccupantType</span>
+			<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Where</span><span class="p">(</span><span class="s">"label = ?"</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">First</span><span class="p">(</span><span class="o">&amp;</span><span class="n">occupantType</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+				<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+				<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to find unit type: "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+				<span class="k">return</span>
+			<span class="p">}</span>
+			<span class="k">var</span> <span class="n">occupant</span> <span class="n">models</span><span class="o">.</span><span class="n">Occupant</span>
+			<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Where</span><span class="p">(</span><span class="s">"name = ? AND surname = ?"</span><span class="p">,</span> <span class="n">ownerData</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">ownerData</span><span class="o">.</span><span class="n">Surname</span><span class="p">)</span><span class="o">.</span><span class="n">First</span><span class="p">(</span><span class="o">&amp;</span><span class="n">occupant</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+				<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+				<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to find occupant: "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+				<span class="k">return</span>
+			<span class="p">}</span>
+
+			<span class="n">owner</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">OccupantPossessionOnUnit</span><span class="p">{</span>
+				<span class="n">OccupantID</span><span class="o">:</span>     <span class="n">occupant</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+				<span class="n">UnitID</span><span class="o">:</span>         <span class="n">unit</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+				<span class="n">Quota</span><span class="o">:</span>          <span class="kt">float64</span><span class="p">(</span><span class="n">ownerData</span><span class="o">.</span><span class="n">Quota</span><span class="p">),</span>
+				<span class="n">Administrator</span><span class="o">:</span>  <span class="n">ownerData</span><span class="o">.</span><span class="n">Administrator</span><span class="p">,</span>
+				<span class="n">OccupantTypeID</span><span class="o">:</span> <span class="n">occupantType</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+			<span class="p">}</span>
+
+			<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">owner</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+				<span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+				<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create unit owner"</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+				<span class="k">return</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// Commit de la transaction</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Commit</span><span class="p">()</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to commit transaction"</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"message"</span><span class="o">:</span> <span class="s">"Condominium created successfully"</span><span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="explications-1">Explications</h3>
+
+<h4 id="1-définition-de-la-structure-de-données-pour-la-requête">1. Définition de la structure de données pour la requête</h4>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">requestData</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+<p>La structure requestData est utilisée pour mapper les données JSON de la requête HTTP. Cela inclut :</p>
+<ul>
+  <li>Informations : Contient les détails de base du condominium (nom, préfixe, description).</li>
+  <li>Address : L’adresse principale du condominium.</li>
+  <li>Occupants : Une liste des occupants avec leurs informations personnelles et leurs adresses.</li>
+  <li>Units : Une liste des unités avec leurs détails (adresse, propriétaires, etc.).</li>
+</ul>
+
+<h4 id="2-validation-des-données-reçues">2. Validation des données reçues</h4>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="n">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="n">requestData</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusBadRequest</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Invalid request data"</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">Error</span><span class="p">()})</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>La fonction ShouldBindJSON vérifie que les données reçues sont conformes à la structure définie dans requestData.</li>
+  <li>Si la validation échoue, une réponse HTTP avec le code 400 Bad Request est envoyée avec un message d’erreur.</li>
+</ul>
+
+<h4 id="3-initialisation-de-la-transaction">3. Initialisation de la transaction</h4>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">db</span> <span class="o">:=</span> <span class="n">config</span><span class="o">.</span><span class="n">DB</span>
+<span class="n">tx</span> <span class="o">:=</span> <span class="n">db</span><span class="o">.</span><span class="n">Begin</span><span class="p">()</span>
+<span class="k">defer</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="n">r</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}()</span>
+</code></pre></div></div>
+<ul>
+  <li>Récupère l’instance de la base de données via config.DB.</li>
+  <li>Démarre une transaction (tx) pour garantir que toutes les opérations liées à la création du condominium se déroulent de manière atomique.</li>
+  <li>Si une erreur survient ou si la fonction panique, la transaction est annulée avec Rollback.</li>
+</ul>
+
+<h4 id="4-création-de-ladresse-principale">4. Création de l’adresse principale</h4>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">address</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Address</span><span class="p">{</span>
+    <span class="n">Street</span><span class="o">:</span>     <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">Street</span><span class="p">,</span>
+    <span class="n">Complement</span><span class="o">:</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">AddressComplement</span><span class="p">,</span>
+    <span class="n">City</span><span class="o">:</span>       <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">City</span><span class="p">,</span>
+    <span class="n">PostalCode</span><span class="o">:</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">PostalCode</span><span class="p">,</span>
+    <span class="n">Country</span><span class="o">:</span>    <span class="n">requestData</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">Country</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">address</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create address"</span><span class="p">})</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Une structure Address est créée avec les données de l’adresse principale fournies dans la requête.</li>
+  <li>La méthode tx.Create insère cette adresse dans la base de données.</li>
+  <li>Si l’opération échoue, la transaction est annulée et une erreur HTTP 500 Internal Server Error est renvoyée.</li>
+</ul>
+
+<h4 id="5-ajout-des-occupants">5. Ajout des occupants</h4>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">occupantData</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Occupants</span> <span class="p">{</span>
+    <span class="n">domicileAddress</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Address</span><span class="p">{</span>
+        <span class="c">// Données de l'adresse du domicile</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">domicileAddress</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create occupant address"</span><span class="p">})</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="n">occupant</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Occupant</span><span class="p">{</span>
+        <span class="n">Name</span><span class="o">:</span>          <span class="n">occupantData</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span>
+        <span class="n">Surname</span><span class="o">:</span>       <span class="n">occupantData</span><span class="o">.</span><span class="n">Surname</span><span class="p">,</span>
+        <span class="n">DomicileAddressID</span><span class="o">:</span> <span class="n">domicileAddress</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+        <span class="c">// Autres champs</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">occupant</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create occupant"</span><span class="p">})</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">occupantData</span><span class="o">.</span><span class="n">IsConcierge</span> <span class="p">{</span>
+        <span class="n">conciergeID</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">occupant</span><span class="o">.</span><span class="n">ID</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Pour chaque occupant, une nouvelle adresse de domicile est créée et insérée dans la base de données.</li>
+  <li>Chaque occupant est ensuite créé avec une référence à l’adresse de son domicile.</li>
+  <li>Si un occupant est marqué comme concierge (IsConcierge), son ID est enregistré.</li>
+</ul>
+
+<h4 id="6-création-du-condominium">6. Création du condominium</h4>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">condominium</span> <span class="o">:=</span> <span class="n">models</span><span class="o">.</span><span class="n">Condominium</span><span class="p">{</span>
+    <span class="n">Name</span><span class="o">:</span>        <span class="n">requestData</span><span class="o">.</span><span class="n">Informations</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span>
+    <span class="n">Prefix</span><span class="o">:</span>      <span class="n">requestData</span><span class="o">.</span><span class="n">Informations</span><span class="o">.</span><span class="n">Prefix</span><span class="p">,</span>
+    <span class="n">Description</span><span class="o">:</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Informations</span><span class="o">.</span><span class="n">Description</span><span class="p">,</span>
+    <span class="n">AddressID</span><span class="o">:</span>   <span class="n">address</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+    <span class="n">ConciergeID</span><span class="o">:</span> <span class="n">conciergeID</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">condominium</span><span class="p">)</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="n">tx</span><span class="o">.</span><span class="n">Rollback</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to create condominium"</span><span class="p">})</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Crée une nouvelle instance de Condominium avec les informations fournies.</li>
+  <li>L’adresse principale (AddressID) et l’ID du concierge (ConciergeID) sont associés.</li>
+</ul>
+
+<h4 id="7--ajout-des-unités-et-propriétaires">7.  Ajout des unités et propriétaires</h4>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">unitData</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">requestData</span><span class="o">.</span><span class="n">Units</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">ownerData</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">unitData</span><span class="o">.</span><span class="n">Owners</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Chaque unité est insérée dans la base de données avec une adresse unique.</li>
+  <li>Les propriétaires de chaque unité sont également insérés avec leurs quotas et rôles.</li>
+</ul>
+
+<h4 id="8-validation-et-retour-de-la-réponse">8. Validation et retour de la réponse</h4>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">tx</span><span class="o">.</span><span class="n">Commit</span><span class="p">()</span><span class="o">.</span><span class="n">Error</span><span class="p">;</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Failed to commit transaction"</span><span class="p">})</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+
+<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"message"</span><span class="o">:</span> <span class="s">"Condominium created successfully"</span><span class="p">})</span>
+</code></pre></div></div>
+<ul>
+  <li>Si toutes les étapes ont réussi, la transaction est validée avec Commit.</li>
+  <li>Une réponse HTTP avec le code 200 OK est renvoyée pour confirmer la création du condominium.</li>
+</ul>
+
+<h2 id="3-checkuniqueness">3. <code class="language-plaintext highlighter-rouge">CheckUniqueness</code></h2>
+
+<h3 id="description-2">Description</h3>
+<p>Cette fonction vérifie si un nom ou un préfixe est déjà utilisé pour un condominium</p>
+
+<h3 id="code--2">Code :</h3>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">CheckUniqueness</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span><span class="n">gin</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">db</span> <span class="o">:=</span> <span class="n">config</span><span class="o">.</span><span class="n">DB</span>
+
+	<span class="c">// Récupérer les paramètres de la requête</span>
+	<span class="n">name</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="s">"name"</span><span class="p">)</span>
+	<span class="n">prefix</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="s">"prefix"</span><span class="p">)</span>
+
+	<span class="k">var</span> <span class="n">exists</span> <span class="kt">bool</span>
+	<span class="k">var</span> <span class="n">err</span> <span class="kt">error</span>
+
+	<span class="c">// Vérifier l'unicité du nom</span>
+	<span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s">""</span> <span class="p">{</span>
+		<span class="n">conditions</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{}{</span>
+			<span class="s">"name"</span><span class="o">:</span> <span class="n">name</span><span class="p">,</span>
+		<span class="p">}</span>
+		<span class="n">exists</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">CheckIfExists</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">"condominia"</span><span class="p">,</span> <span class="n">conditions</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Error checking name uniqueness"</span><span class="p">})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"isTaken"</span><span class="o">:</span> <span class="n">exists</span><span class="p">})</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="c">// Vérifier l'unicité du préfixe</span>
+	<span class="k">if</span> <span class="n">prefix</span> <span class="o">!=</span> <span class="s">""</span> <span class="p">{</span>
+		<span class="n">conditions</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{}{</span>
+			<span class="s">"prefix"</span><span class="o">:</span> <span class="n">prefix</span><span class="p">,</span>
+		<span class="p">}</span>
+		<span class="n">exists</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">CheckIfExists</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">"condominia"</span><span class="p">,</span> <span class="n">conditions</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Error checking prefix uniqueness"</span><span class="p">})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"isTaken"</span><span class="o">:</span> <span class="n">exists</span><span class="p">})</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="c">// Si ni `name` ni `prefix` n'ont été fournis</span>
+	<span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusBadRequest</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Either name or prefix must be provided"</span><span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="explications-2">Explications</h3>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">db</span> <span class="o">:=</span> <span class="n">config</span><span class="o">.</span><span class="n">DB</span>
+</code></pre></div></div>
+<ul>
+  <li>Récupère l’instance de la base de données configurée dans config.DB. Cette connexion est utilisée pour interroger la table condominia.</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">name</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="s">"name"</span><span class="p">)</span>
+<span class="n">prefix</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="s">"prefix"</span><span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>Lit les paramètres de la requête HTTP (name et prefix), qui sont passés dans l’URL sous la forme de ?name=…&amp;prefix=….</li>
+  <li>Ces paramètres sont utilisés pour vérifier l’unicité dans la base de données.</li>
+  <li>Cas possibles:
+    <ul>
+      <li>Si name est fourni, la vérification s’effectuera sur le champ name.</li>
+      <li>Si prefix est fourni, la vérification s’effectuera sur le champ prefix.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">var</span> <span class="n">exists</span> <span class="kt">bool</span>
+<span class="k">var</span> <span class="n">err</span> <span class="kt">error</span>
+</code></pre></div></div>
+<ul>
+  <li>exists : Indique si la valeur recherchée existe dans la base de données (true ou false).</li>
+  <li>err : Capture les éventuelles erreurs lors de l’interrogation de la base de données</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s">""</span> <span class="p">{</span>
+    <span class="n">conditions</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{}{</span>
+        <span class="s">"name"</span><span class="o">:</span> <span class="n">name</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">exists</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">CheckIfExists</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">"condominia"</span><span class="p">,</span> <span class="n">conditions</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Error checking name uniqueness"</span><span class="p">})</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"isTaken"</span><span class="o">:</span> <span class="n">exists</span><span class="p">})</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Si le paramètre name est fourni, on crée une map de conditions avec la clé name.</li>
+  <li>La fonction utilitaire CheckIfExists est appelée pour vérifier si une entrée correspondante existe dans la table condominia.</li>
+  <li>Gestion des erreurs :
+    <ul>
+      <li>Si CheckIfExists retourne une erreur (err n’est pas nil), une réponse HTTP 500 Internal Server Error est envoyée avec un message d’erreur.µ</li>
+    </ul>
+  </li>
+  <li>Réponse :
+    <ul>
+      <li>Si la vérification réussit, une réponse HTTP 200 OK est envoyée avec un champ isTaken indiquant si le nom est pris (true ou false).</li>
+    </ul>
+  </li>
+  <li>Après avoir traité name, la fonction retourne immédiatement.</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">prefix</span> <span class="o">!=</span> <span class="s">""</span> <span class="p">{</span>
+    <span class="n">conditions</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{}{</span>
+        <span class="s">"prefix"</span><span class="o">:</span> <span class="n">prefix</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">exists</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">CheckIfExists</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">"condominia"</span><span class="p">,</span> <span class="n">conditions</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Error checking prefix uniqueness"</span><span class="p">})</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"isTaken"</span><span class="o">:</span> <span class="n">exists</span><span class="p">})</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Si le paramètre prefix est fourni, le processus est similaire à celui de name :
+    <ul>
+      <li>Une map de conditions est créée avec la clé prefix.</li>
+      <li>La fonction CheckIfExists vérifie si une entrée correspondante existe dans la table condominia.</li>
+    </ul>
+  </li>
+  <li>Gestion des erreurs :
+    <ul>
+      <li>Si une erreur survient, la réponse HTTP 500 est renvoyée.</li>
+    </ul>
+  </li>
+  <li>Réponse :
+    <ul>
+      <li>Retourne une réponse HTTP 200 OK avec un champ isTaken.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusBadRequest</span><span class="p">,</span> <span class="n">gin</span><span class="o">.</span><span class="n">H</span><span class="p">{</span><span class="s">"error"</span><span class="o">:</span> <span class="s">"Either name or prefix must be provided"</span><span class="p">})</span>
+</code></pre></div></div>
+<ul>
+  <li>Si ni name ni prefix ne sont fournis, une réponse HTTP 400 Bad Request est envoyée avec un message d’erreur.</li>
+  <li>Cela garantit que l’API ne tente pas de vérifier sans avoir les informations nécessaires.</li>
+</ul>
+
+<h2 id="4-checkifexists">4. <code class="language-plaintext highlighter-rouge">CheckIfExists</code></h2>
+
+<h3 id="description-3">Description</h3>
+<p>Cette fonction vérifie si une valeur existe déjà dans une table donnée.</p>
+
+<h3 id="code--3">Code :</h3>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">CheckIfExists</span><span class="p">(</span><span class="n">db</span> <span class="o">*</span><span class="n">gorm</span><span class="o">.</span><span class="n">DB</span><span class="p">,</span> <span class="n">tableName</span> <span class="kt">string</span><span class="p">,</span> <span class="n">conditions</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="k">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">count</span> <span class="kt">int64</span>
+	<span class="n">query</span> <span class="o">:=</span> <span class="n">db</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">tableName</span><span class="p">)</span><span class="o">.</span><span class="n">Where</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span><span class="o">.</span><span class="n">Count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">count</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">Error</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">Error</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">,</span> <span class="no">nil</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="explications-3">Explications</h3>
+
+<ol>
+  <li>Spécifie la table (tableName) et les conditions (conditions)</li>
+  <li>Exécute une requête COUNT pour compter les entrées correspondant aux conditions.</li>
+  <li>Retourne true si le compteur est supérieur à 0, sinon false.</li>
+</ol>
+
+<h2 id="5-getoccupanttypelabel">5. <code class="language-plaintext highlighter-rouge">getOccupantTypeLabel</code></h2>
+
+<h3 id="description-4">Description</h3>
+<p>Cette fonction retourne le label correspondant à une abréviation trouvée dans un titre.</p>
+
+<h3 id="code--4">Code :</h3>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">getOccupantTypeLabel</span><span class="p">(</span><span class="n">title</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c">// Mapping des abréviations aux labels</span>
+	<span class="n">abbreviationToLabel</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+		<span class="s">"PP"</span><span class="o">:</span>      <span class="s">"pleine propriete"</span><span class="p">,</span>
+		<span class="s">"NP"</span><span class="o">:</span>      <span class="s">"nue propriete"</span><span class="p">,</span>
+		<span class="s">"US"</span><span class="o">:</span>      <span class="s">"usufruit"</span><span class="p">,</span>
+		<span class="s">"SUPERF"</span><span class="o">:</span>  <span class="s">"superficiaire"</span><span class="p">,</span>
+		<span class="s">"USA/HAB"</span><span class="o">:</span> <span class="s">"usage/habitation"</span><span class="p">,</span>
+		<span class="s">"emph"</span><span class="o">:</span>    <span class="s">"emphyteote"</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="c">// Vérification si le titre contient une des abréviations</span>
+	<span class="k">for</span> <span class="n">abbreviation</span><span class="p">,</span> <span class="n">label</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">abbreviationToLabel</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">strings</span><span class="o">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">strings</span><span class="o">.</span><span class="n">ToUpper</span><span class="p">(</span><span class="n">title</span><span class="p">),</span> <span class="n">abbreviation</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="n">label</span><span class="p">,</span> <span class="no">nil</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// Retourner une erreur si aucune correspondance n'est trouvée</span>
+	<span class="k">return</span> <span class="s">""</span><span class="p">,</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"no matching occupant type for title: %s"</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="explications-4">Explications</h3>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">abbreviationToLabel</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+    <span class="s">"PP"</span><span class="o">:</span>      <span class="s">"pleine propriete"</span><span class="p">,</span>
+    <span class="s">"NP"</span><span class="o">:</span>      <span class="s">"nue propriete"</span><span class="p">,</span>
+    <span class="s">"US"</span><span class="o">:</span>      <span class="s">"usufruit"</span><span class="p">,</span>
+    <span class="s">"SUPERF"</span><span class="o">:</span>  <span class="s">"superficiaire"</span><span class="p">,</span>
+    <span class="s">"USA/HAB"</span><span class="o">:</span> <span class="s">"usage/habitation"</span><span class="p">,</span>
+    <span class="s">"emph"</span><span class="o">:</span>    <span class="s">"emphyteote"</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Une map (abbreviationToLabel) est utilisée pour associer des abréviations (clés) à leurs labels correspondants (valeurs).</li>
+  <li>Pourquoi une map ?
+    <ul>
+      <li>Une map est idéale pour rechercher rapidement une valeur à partir d’une clé.</li>
+      <li>Elle permet de réduire la complexité de recherche par rapport à une liste ou un tableau.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">abbreviation</span><span class="p">,</span> <span class="n">label</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">abbreviationToLabel</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">strings</span><span class="o">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">strings</span><span class="o">.</span><span class="n">ToUpper</span><span class="p">(</span><span class="n">title</span><span class="p">),</span> <span class="n">abbreviation</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">label</span><span class="p">,</span> <span class="no">nil</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>La boucle for parcourt chaque paire clé-valeur (abbreviation et label) de la map abbreviationToLabel.</li>
+  <li>La condition strings.Contains(strings.ToUpper(title), abbreviation) vérifie si l’abréviation actuelle est présente dans title :
+    <ul>
+      <li>strings.ToUpper(title) : Convertit le titre en majuscules pour rendre la recherche insensible à la casse.</li>
+      <li>strings.Contains : Vérifie si abbreviation est une sous-chaîne de title.</li>
+    </ul>
+  </li>
+  <li>Si une correspondance est trouvée, la fonction retourne immédiatement :
+    <ul>
+      <li>label : Le label correspondant à l’abréviation trouvée.</li>
+      <li>nil : Aucune erreur.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">return</span> <span class="s">""</span><span class="p">,</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"no matching occupant type for title: %s"</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>Si la boucle ne trouve aucune correspondance, la fonction retourne :
+    <ul>
+      <li>Une chaîne vide (“”) comme valeur pour le label.</li>
+      <li>Une erreur formatée avec fmt.Errorf contenant un message indiquant qu’aucun type correspondant n’a été trouvé, ainsi que le titre en question.</li>
+    </ul>
+  </li>
+</ul>
+
+
+        </section>
+
+        <footer>
+        
+          Documentation du projet SOGIM-syndic is maintained by <a href="https://github.com/Sebiche09">Sebiche09</a><br>
+        
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.
+        </footer>
+
+      </div>
+    </div>
+  </body>
+</html>

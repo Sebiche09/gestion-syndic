@@ -1,4 +1,23 @@
 services:
+  jekyll:
+    image: ruby:3.1
+    container_name: jekyll
+    working_dir: /usr/src/app
+    volumes:
+      - ./docs:/usr/src/app
+    ports:
+      - "4000:4000"
+    command: >
+      sh -c "
+      gem install bundler &&
+      bundle install &&
+      bundle exec jekyll serve --host 0.0.0.0"
+    networks:
+      - my_network
+    environment:
+      - JEKYLL_ENV=development
+    depends_on:
+      - db
   db:
     image: postgres
     container_name: postgres_db

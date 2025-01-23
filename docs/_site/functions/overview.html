@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" type="text/css" href="/assets/css/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Vue d’ensemble des fonctions | Documentation du projet SOGIM-syndic</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Vue d’ensemble des fonctions" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Ce site est la documentation du projet SOGIM-syndic" />
+<meta property="og:description" content="Ce site est la documentation du projet SOGIM-syndic" />
+<link rel="canonical" href="http://0.0.0.0:4000/functions/overview.html" />
+<meta property="og:url" content="http://0.0.0.0:4000/functions/overview.html" />
+<meta property="og:site_name" content="Documentation du projet SOGIM-syndic" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Vue d’ensemble des fonctions" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Ce site est la documentation du projet SOGIM-syndic","headline":"Vue d’ensemble des fonctions","url":"http://0.0.0.0:4000/functions/overview.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Vue d’ensemble des fonctions</h1>
+          <h2>Ce site est la documentation du projet SOGIM-syndic</h2>
+        </header>
+        <section id="downloads" class="clearfix">
+          
+	
+        </section>
+        <hr>
+        <section id="main_content">
+          <h1 id="vue-densemble-des-fonctions">Vue d’ensemble des fonctions</h1>
+
+<p>Ce document fournit une vue d’ensemble des fonctions implémentées dans le backend et le frontend du projet. Il détaille leur rôle principal, leur structure, et leurs interactions.</p>
+
+<hr />
+
+<h2 id="fonctions-backend"><strong>Fonctions Backend</strong></h2>
+<p>Le backend gère la logique métier, les interactions avec la base de données, et expose des endpoints via une API REST.</p>
+
+<h3 id="1-condominiumgo">1. <a href="/functions/backend/condominium">condominium.go</a></h3>
+<ul>
+  <li><strong>Description :</strong> Contient les fonctions liées à la gestion des condominiums.</li>
+  <li><strong>Fonctions principales :</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">GetAllCondominiums</code> : Récupère tous les condominiums avec leurs adresses associées.</li>
+      <li><code class="language-plaintext highlighter-rouge">CreateCondominium</code> : Crée un nouveau condominium avec ses occupants et ses unités.</li>
+      <li><code class="language-plaintext highlighter-rouge">CheckUniqueness</code> : Vérifie si un nom ou un préfixe est unique dans la base de données.</li>
+      <li><code class="language-plaintext highlighter-rouge">ChecjIfExists</code> : Vérifie si une valeur existe déjà dans une table donnée.</li>
+      <li><code class="language-plaintext highlighter-rouge">getOccupantTypeLabel</code> : Retourne le label correspondant à une abréviation trouvée dans un titre.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="2-unitgo">2. <a href="/functions/backend/unit">unit.go</a></h3>
+<ul>
+  <li><strong>Description :</strong> Gère les unités associées aux condominiums.</li>
+  <li><strong>Fonctions principales :</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">GetUnits</code> : Retourne les informations détaillées sur toutes les unités.</li>
+      <li><code class="language-plaintext highlighter-rouge">CreateUnit</code> : Ajoute une nouvelle unité au condominium.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="3-occupantgo">3. <a href="/functions/backend/occupant">occupant.go</a></h3>
+<ul>
+  <li><strong>Description :</strong> Traite les occupants associés aux condominiums.</li>
+  <li><strong>Fonctions principales :</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">GetOccupants</code> : Liste les occupants associés à un condominium.</li>
+      <li><code class="language-plaintext highlighter-rouge">AddOccupant</code> : Ajoute un nouvel occupant avec ses informations personnelles et professionnelles.</li>
+    </ul>
+  </li>
+</ul>
+
+        </section>
+
+        <footer>
+        
+          Documentation du projet SOGIM-syndic is maintained by <a href="https://github.com/Sebiche09">Sebiche09</a><br>
+        
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.
+        </footer>
+
+      </div>
+    </div>
+  </body>
+</html>
